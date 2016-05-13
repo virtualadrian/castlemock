@@ -16,9 +16,12 @@
 
 package com.castlemock.core.mock.websocket.stomp.model.project.dto;
 
+import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
 import org.dozer.Mapping;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Karl Dahlgren
@@ -34,6 +37,8 @@ public class WebSocketStompApplicationDto {
 
     @Mapping("resources")
     private List<WebSocketStompResourceDto> resources;
+
+    private Map<WebSocketStompResourceStatus, Integer> statusCount = new HashMap<WebSocketStompResourceStatus, Integer>();
 
     public String getId() {
         return id;
@@ -57,5 +62,13 @@ public class WebSocketStompApplicationDto {
 
     public void setResources(List<WebSocketStompResourceDto> resources) {
         this.resources = resources;
+    }
+
+    public Map<WebSocketStompResourceStatus, Integer> getStatusCount() {
+        return statusCount;
+    }
+
+    public void setStatusCount(Map<WebSocketStompResourceStatus, Integer> statusCount) {
+        this.statusCount = statusCount;
     }
 }

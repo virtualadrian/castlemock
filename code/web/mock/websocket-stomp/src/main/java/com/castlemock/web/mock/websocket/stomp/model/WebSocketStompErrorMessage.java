@@ -32,13 +32,13 @@ public class WebSocketStompErrorMessage {
     private String message;
 
     /**
-     * The default constructor for the SoapErrorMessage.
+     * The default constructor for the WebSocketErrorMessage.
      */
     public WebSocketStompErrorMessage() {
     }
 
     /**
-     * SoapErrorMessage constructor
+     * WebSocketErrorMessage constructor
      * @param message The error message that will be displayed to the service consumer
      */
     public WebSocketStompErrorMessage(final String message) {

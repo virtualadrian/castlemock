@@ -34,6 +34,7 @@ public class WebSocketStompResource implements Saveable<String> {
     private String name;
     private String uri;
     private List<WebSocketStompMockResponse> mockResponses;
+    private WebSocketStompResourceStatus status;
 
     @Override
     @XmlElement
@@ -71,5 +72,14 @@ public class WebSocketStompResource implements Saveable<String> {
 
     public void setMockResponses(List<WebSocketStompMockResponse> mockResponses) {
         this.mockResponses = mockResponses;
+    }
+
+    @XmlElement
+    public WebSocketStompResourceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(WebSocketStompResourceStatus status) {
+        this.status = status;
     }
 }

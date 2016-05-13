@@ -26,17 +26,17 @@ import com.castlemock.core.basis.model.validation.NotNull;
 public class DeleteWebSocketStompProjectInput implements Input{
 
     @NotNull
-    private String websocketStompProjectId;
+    private String webSocketStompProjectId;
 
-    public DeleteWebSocketStompProjectInput(String websocketStompProjectId) {
-        this.websocketStompProjectId = websocketStompProjectId;
+    public DeleteWebSocketStompProjectInput(String webSocketStompProjectId) {
+        this.webSocketStompProjectId = webSocketStompProjectId;
     }
 
-    public String getWebsocketStompProjectId() {
-        return websocketStompProjectId;
+    public String getWebSocketStompProjectId() {
+        return webSocketStompProjectId;
     }
 
-    public void setWebsocketStompProjectId(String websocketStompProjectId) {
-        this.websocketStompProjectId = websocketStompProjectId;
+    public void setWebSocketStompProjectId(String webSocketStompProjectId) {
+        this.webSocketStompProjectId = webSocketStompProjectId;
     }
 }

@@ -20,7 +20,7 @@
 	<artifactId>castlemock-core-mock-websocket-stomp</artifactId>
 	<packaging>jar</packaging>
 	<version>1.5</version>
-    <name>Castle mock core - mock stomp</name>
+    <name>Castle mock core - mock WebSocket stomp</name>
 	<url>http://www.castlemock.com</url>
 	<description>The core module contains the core package for Castle Mock</description>
 

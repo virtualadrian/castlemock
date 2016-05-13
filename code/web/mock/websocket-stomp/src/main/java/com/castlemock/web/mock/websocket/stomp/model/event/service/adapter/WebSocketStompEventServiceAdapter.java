@@ -52,7 +52,7 @@ public class WebSocketStompEventServiceAdapter implements EventServiceAdapter<We
 
     @Autowired
     private ServiceProcessor serviceProcessor;
-    private WebSocketStompTypeIdentifier SOAP_TYPE_IDENTIFIER = new WebSocketStompTypeIdentifier();
+    private WebSocketStompTypeIdentifier WEBSOCKET_STOMP_TYPE_IDENTIFIER = new WebSocketStompTypeIdentifier();
 
     /**
      * The method provides the functionality to create and store a DTO instance to a specific service.
@@ -128,7 +128,7 @@ public class WebSocketStompEventServiceAdapter implements EventServiceAdapter<We
      */
     @Override
     public TypeIdentifier getTypeIdentifier() {
-         return SOAP_TYPE_IDENTIFIER;
+         return WEBSOCKET_STOMP_TYPE_IDENTIFIER;
     }
 
     /**

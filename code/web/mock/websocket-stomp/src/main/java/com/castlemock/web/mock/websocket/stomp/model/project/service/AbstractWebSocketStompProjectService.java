@@ -17,8 +17,15 @@
 package com.castlemock.web.mock.websocket.stomp.model.project.service;
 
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompProject;
+import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompProjectDto;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
 import com.castlemock.web.basis.model.AbstractService;
+import com.google.common.base.Preconditions;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Karl Dahlgren
@@ -26,6 +33,23 @@ import com.castlemock.web.basis.model.AbstractService;
  */
 public abstract class AbstractWebSocketStompProjectService extends AbstractService<WebSocketStompProject, WebSocketStompProjectDto, String> {
 
+    /**
+     * Count the operation statuses
+     * @param webSocketStompResources The list of resources, which status will be counted
+     * @return The result of the status count
+     */
+    protected Map<WebSocketStompResourceStatus, Integer> getWebSocketStompResourceStatusCount(final List<WebSocketStompResourceDto> webSocketStompResources){
+        Preconditions.checkNotNull(webSocketStompResources, "The resource list cannot be null");
+        final Map<WebSocketStompResourceStatus, Integer> statuses = new HashMap<WebSocketStompResourceStatus, Integer>();
 
+        for(WebSocketStompResourceStatus webSocketStompResourceStatus : WebSocketStompResourceStatus.values()){
+            statuses.put(webSocketStompResourceStatus, 0);
+        }
+        for(WebSocketStompResourceDto webSocketStompResourceDto : webSocketStompResources){
+            WebSocketStompResourceStatus webSocketStompResourceStatus = webSocketStompResourceDto.getStatus();
+            statuses.put(webSocketStompResourceStatus, statuses.get(webSocketStompResourceStatus)+1);
+        }
+        return statuses;
+    }
 
 }

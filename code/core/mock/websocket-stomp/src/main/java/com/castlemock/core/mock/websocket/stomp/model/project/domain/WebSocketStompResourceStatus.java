@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.castlemock.web.mock.websocket.stomp.model.event.service;
+package com.castlemock.core.mock.websocket.stomp.model.project.domain;
 
-import com.castlemock.core.mock.websocket.stomp.model.event.domain.WebSocketStompEvent;
-import com.castlemock.core.mock.websocket.stomp.model.event.dto.WebSocketStompEventDto;
-import com.castlemock.web.basis.model.event.service.AbstractEventService;
-
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlType;
 
 /**
- * The WebSocket Stomp event service is responsible for all the functionality related to the WebSocket Stomp events.
  * @author Karl Dahlgren
  * @since 1.5
  */
-public class AbstractWebSocketStompEventService extends AbstractEventService<WebSocketStompEvent, WebSocketStompEventDto> {
-
-
-
+@XmlType
+@XmlEnum(String.class)
+public enum WebSocketStompResourceStatus {
+    MOCKED, DISABLED, FORWARDED, RECORDING, RECORD_ONCE
 }
 

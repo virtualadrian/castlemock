@@ -26,7 +26,7 @@ import com.castlemock.core.mock.websocket.stomp.model.event.service.message.outp
 import java.util.List;
 
 /**
- * The service provides the functionality to retrieve all stored SOAP events in the SOAP event repository.
+ * The service provides the functionality to retrieve all stored WebSocket Stomp events in the WebSocket Stomp event repository.
  * @author Karl Dahlgren
  * @since 1.5
  */
