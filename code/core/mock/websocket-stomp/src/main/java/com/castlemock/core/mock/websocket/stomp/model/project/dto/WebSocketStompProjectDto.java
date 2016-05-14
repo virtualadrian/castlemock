@@ -19,6 +19,7 @@ package com.castlemock.core.mock.websocket.stomp.model.project.dto;
 import com.castlemock.core.basis.model.project.dto.ProjectDto;
 import org.dozer.Mapping;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ import java.util.List;
 public class WebSocketStompProjectDto extends ProjectDto {
 
     @Mapping("applications")
-    private List<WebSocketStompApplicationDto> applications;
+    private List<WebSocketStompApplicationDto> applications = new LinkedList<WebSocketStompApplicationDto>();
 
     /**
      * The default WebSocket stomp project constructor

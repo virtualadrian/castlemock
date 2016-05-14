@@ -19,6 +19,7 @@ package com.castlemock.core.mock.websocket.stomp.model.project.dto;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
 import org.dozer.Mapping;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class WebSocketStompResourceDto {
     private String uri;
 
     @Mapping("mockResponses")
-    private List<WebSocketStompMockResponseDto> mockResponses;
+    private List<WebSocketStompMockResponseDto> mockResponses = new LinkedList<WebSocketStompMockResponseDto>();
 
     @Mapping("status")
     private WebSocketStompResourceStatus status;

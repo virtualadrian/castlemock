@@ -23,6 +23,7 @@ import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStomp
 import com.castlemock.web.basis.model.AbstractService;
 import com.google.common.base.Preconditions;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,4 +53,37 @@ public abstract class AbstractWebSocketStompProjectService extends AbstractServi
         return statuses;
     }
 
+    /**
+     * The save method saves a project to the database
+     * @param project Project that will be saved to the database
+     * @return The saved project
+     */
+    @Override
+    public WebSocketStompProjectDto save(final WebSocketStompProjectDto project){
+        Preconditions.checkNotNull(project, "Project cannot be null");
+        Preconditions.checkArgument(!project.getName().isEmpty(), "Invalid project name. Project name cannot be empty");
+        final WebSocketStompProjectDto projectInDatebase = findWebSocketStompProject(project.getName());
+        Preconditions.checkArgument(projectInDatebase == null, "Project name is already taken");
+        project.setUpdated(new Date());
+        project.setCreated(new Date());
+        return super.save(project);
+    }
+
+
+    /**
+     * Finds a project by a given name
+     * @param name The name of the project that should be retrieved
+     * @return Returns a project with the provided name
+     * @see WebSocketStompProjectDto
+     */
+    public WebSocketStompProjectDto findWebSocketStompProject(final String name) {
+        Preconditions.checkNotNull(name, "Project name cannot be null");
+        Preconditions.checkArgument(!name.isEmpty(), "Project name cannot be empty");
+        for(WebSocketStompProject webSocketStompProject : findAllTypes()){
+            if(webSocketStompProject.getName().equalsIgnoreCase(name)) {
+                return toDto(webSocketStompProject);
+            }
+        }
+        return null;
+    }
 }

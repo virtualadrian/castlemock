@@ -31,8 +31,8 @@ import com.castlemock.core.basis.model.TypeIdentifier;
  */
 public class WebSocketStompTypeIdentifier implements TypeIdentifier {
 
-    private static final String WEBSOCKET_STOMP_TYPE = "WEBSOCKET_STOMP";
-    private static final String WEBSOCKET_STOMP_TYPE_URL = "websocket-stomp";
+    private static final String WEBSOCKET_STOMP_TYPE = "WebSocket Stomp";
+    private static final String WEBSOCKET_STOMP_TYPE_URL = "wss"; // WebSocketStomp
 
     /**
      * The type variable is used to identify a specific class by a type name.

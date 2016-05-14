@@ -20,6 +20,7 @@ import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketSt
 import org.dozer.Mapping;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class WebSocketStompApplicationDto {
     private String name;
 
     @Mapping("resources")
-    private List<WebSocketStompResourceDto> resources;
+    private List<WebSocketStompResourceDto> resources = new LinkedList<WebSocketStompResourceDto>();
 
     private Map<WebSocketStompResourceStatus, Integer> statusCount = new HashMap<WebSocketStompResourceStatus, Integer>();
 
