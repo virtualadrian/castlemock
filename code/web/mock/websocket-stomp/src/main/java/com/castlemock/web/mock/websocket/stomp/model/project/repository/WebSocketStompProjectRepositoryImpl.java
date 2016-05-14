@@ -69,7 +69,7 @@ public class WebSocketStompProjectRepositoryImpl extends RepositoryImpl<WebSocke
      * initialized.
      * @see #initialize
      * @see WebSocketStompProject
-     * @since 1.4
+     * @since 1.5
      */
     @Override
     protected void postInitiate() {

@@ -36,6 +36,8 @@ public class AbstractWebSocketStompViewController extends AbstractViewController
     protected static final String WEBSOCKET_STOMP_PROJECT_ID = "webSocketStompProjectId";
     protected static final String WEBSOCKET_STOMP_RESOURCE_STATUSES = "webSocketStompResourceStatuses";
     protected static final String WEBSOCKET_STOMP_RESOURCES = "webSocketStompResources";
+    protected static final String WEBSOCKET_STOMP_APPLICATION = "webSocketStompApplication";
+    protected static final String WEBSOCKET_STOMP_RESOURCE_ID = "webSocketStompResourceId";
 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractWebSocketStompViewController.class);

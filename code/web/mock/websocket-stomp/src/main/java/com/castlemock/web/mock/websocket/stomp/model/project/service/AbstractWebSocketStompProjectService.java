@@ -16,7 +16,9 @@
 
 package com.castlemock.web.mock.websocket.stomp.model.project.service;
 
+import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompProject;
+import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResource;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompProjectDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
@@ -33,6 +35,10 @@ import java.util.Map;
  * @since 1.5
  */
 public abstract class AbstractWebSocketStompProjectService extends AbstractService<WebSocketStompProject, WebSocketStompProjectDto, String> {
+
+    protected static final String SLASH = "/";
+    protected static final String START_BRACKET = "{";
+    protected static final String END_BRACKET = "}";
 
     /**
      * Count the operation statuses
@@ -85,5 +91,80 @@ public abstract class AbstractWebSocketStompProjectService extends AbstractServi
             }
         }
         return null;
+    }
+
+    protected WebSocketStompApplication findWebSocketStompApplicationType(final String webSocketStompProjectId, final String webSocketStompApplicationId) {
+        Preconditions.checkNotNull(webSocketStompProjectId, "Project id cannot be null");
+        Preconditions.checkNotNull(webSocketStompApplicationId, "Application id cannot be null");
+        final WebSocketStompProject webSocketStompProject = findType(webSocketStompProjectId);
+
+        if(webSocketStompProject == null){
+            throw new IllegalArgumentException("Unable to find a WebSocket Stomp project with id " + webSocketStompProjectId);
+        }
+
+        for(WebSocketStompApplication webSocketStompApplication : webSocketStompProject.getApplications()){
+            if(webSocketStompApplication.getId().equals(webSocketStompApplicationId)){
+                return webSocketStompApplication;
+            }
+        }
+        throw new IllegalArgumentException("Unable to find a WebSocket Stomp application with id " + webSocketStompApplicationId);
+    }
+
+    protected WebSocketStompResource findWebSocketStompResourceType(final String webSocketStompProjectId, final String webSocketStompApplicationId, final String webSocketStompResourceId){
+        Preconditions.checkNotNull(webSocketStompResourceId, "Resource id cannot be null");
+        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(webSocketStompProjectId, webSocketStompApplicationId);
+        for(WebSocketStompResource webSocketStompResource : webSocketStompApplication.getResources()){
+            if(webSocketStompResource.getId().equals(webSocketStompResourceId)){
+                return webSocketStompResource;
+            }
+        }
+        throw new IllegalArgumentException("Unable to find a WebSocket Stomp resource with id " + webSocketStompResourceId);
+    }
+
+    /**
+     * Find a WebSocket Stomp resource with a project id, application id and a set of resource parts
+     * @param webSocketStompProjectId The id of the project that the resource belongs to
+     * @param webSocketStompApplicationId The id of the application that the resource belongs to
+     * @param otherWebSocketStompResourceUriParts The set of resources that will be used to identify the WebSocket Stomp resource
+     * @return A WebSocket Stomp resource that matches the search criteria. Null otherwise
+     */
+    protected WebSocketStompResource findWebSocketStompResourceType(final String webSocketStompProjectId, final String webSocketStompApplicationId, final String[] otherWebSocketStompResourceUriParts) {
+        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(webSocketStompProjectId, webSocketStompApplicationId);
+
+        for(WebSocketStompResource webSocketStompResource : webSocketStompApplication.getResources()){
+            final String[] webSocketStompResourceUriParts = webSocketStompResource.getUri().split(SLASH);
+
+            if(compareWebSocketStompResourceUri(webSocketStompResourceUriParts, otherWebSocketStompResourceUriParts)){
+                return webSocketStompResource;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * The method provides the functionality to compare two sets of WebSocket Stomp resource URI parts.
+     * @param webSocketStompResourceUriParts THe first set of resource URI parts
+     * @param otherWebSocketStompResourceUriParts The second set of resource URI parts
+     * @return True if the provided URIs are matching. False otherwise
+     */
+    protected boolean compareWebSocketStompResourceUri(final String[] webSocketStompResourceUriParts, final String[] otherWebSocketStompResourceUriParts){
+        if(webSocketStompResourceUriParts.length != otherWebSocketStompResourceUriParts.length){
+            return false;
+        }
+
+        for(int index = 0; index < webSocketStompResourceUriParts.length; index++){
+            final String webSocketStompResourceUriPart = webSocketStompResourceUriParts[index];
+            final String otherWebSocketStompResourceUriPart = otherWebSocketStompResourceUriParts[index];
+
+            if(webSocketStompResourceUriPart.startsWith(START_BRACKET) && webSocketStompResourceUriPart.endsWith(END_BRACKET)){
+                continue;
+            }
+
+            if(!webSocketStompResourceUriPart.equalsIgnoreCase(otherWebSocketStompResourceUriPart)){
+                return false;
+            }
+        }
+        return true;
     }
 }

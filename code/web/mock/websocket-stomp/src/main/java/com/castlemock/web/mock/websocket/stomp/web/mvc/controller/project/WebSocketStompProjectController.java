@@ -16,13 +16,9 @@
 
 package com.castlemock.web.mock.websocket.stomp.web.mvc.controller.project;
 
-import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
-import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompApplicationDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompProjectDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.ReadWebSocketStompProjectInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.ReadWebSocketStompProjectOutput;
-import com.castlemock.web.mock.websocket.stomp.web.mvc.command.application.DeleteWebSocketStompApplicationsCommand;
-import com.castlemock.web.mock.websocket.stomp.web.mvc.command.application.UpdateWebSocketStompApplicationsEndpointCommand;
 import com.castlemock.web.mock.websocket.stomp.web.mvc.command.application.WebSocketStompApplicationModifierCommand;
 import com.castlemock.web.mock.websocket.stomp.web.mvc.controller.AbstractWebSocketStompViewController;
 import org.apache.log4j.Logger;
@@ -30,9 +26,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The project controller provides functionality to retrieve a specific project
