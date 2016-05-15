@@ -43,6 +43,8 @@ public class WebSocketStompResourceDto {
     @Mapping("status")
     private WebSocketStompResourceStatus status;
 
+    private String invokeAddress;
+
     public String getId() {
         return id;
     }
@@ -81,5 +83,13 @@ public class WebSocketStompResourceDto {
 
     public void setStatus(WebSocketStompResourceStatus status) {
         this.status = status;
+    }
+
+    public String getInvokeAddress() {
+        return invokeAddress;
+    }
+
+    public void setInvokeAddress(String invokeAddress) {
+        this.invokeAddress = invokeAddress;
     }
 }

@@ -52,8 +52,8 @@ public class CreateWebSocketStompApplicationController extends AbstractWebSocket
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/{projectId}/create/application", method = RequestMethod.POST)
-    public ModelAndView createProject(@PathVariable final String projectId, @ModelAttribute final WebSocketStompApplicationDto restApplicationDto) {
-        final CreateWebSocketStompApplicationOutput output = serviceProcessor.process(new CreateWebSocketStompApplicationInput(projectId, restApplicationDto));
+    public ModelAndView createProject(@PathVariable final String projectId, @ModelAttribute final WebSocketStompApplicationDto webSocketStompApplicationDto) {
+        final CreateWebSocketStompApplicationOutput output = serviceProcessor.process(new CreateWebSocketStompApplicationInput(projectId, webSocketStompApplicationDto));
         return redirect("/wss/project/" + projectId + "/application/" + output.getSavedWebSocketStompApplication().getId());
     }
 

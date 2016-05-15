@@ -16,9 +16,16 @@
 
 package com.castlemock.web.mock.websocket.stomp.web.mvc.controller.project;
 
+import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompApplicationDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompProjectDto;
+import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.ReadWebSocketStompApplicationInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.ReadWebSocketStompProjectInput;
+import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.UpdateWebSocketStompApplicationsStatusInput;
+import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.ReadWebSocketStompApplicationOutput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.ReadWebSocketStompProjectOutput;
+import com.castlemock.web.mock.websocket.stomp.web.mvc.command.application.DeleteWebSocketStompApplicationsCommand;
+import com.castlemock.web.mock.websocket.stomp.web.mvc.command.application.UpdateWebSocketStompApplicationsEndpointCommand;
 import com.castlemock.web.mock.websocket.stomp.web.mvc.command.application.WebSocketStompApplicationModifierCommand;
 import com.castlemock.web.mock.websocket.stomp.web.mvc.controller.AbstractWebSocketStompViewController;
 import org.apache.log4j.Logger;
@@ -26,6 +33,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The project controller provides functionality to retrieve a specific project
@@ -38,13 +48,13 @@ public class WebSocketStompProjectController extends AbstractWebSocketStompViewC
 
     private static final String PAGE = "mock/websocket/stomp/project/webSocketStompProject";
     private static final String DELETE_WEBSOCKET_STOMP_APPLICATIONS_PAGE = "mock/websocket/stomp/application/deleteWebSocketStompApplications";
-    private static final String UPDATE_WEBSOCKET_STOMP_APPLICATIONS_ENDPOINT_PAGE = "mock/websocket/stomp/application/updateWebSocketStompApplicationEndpoint";
+    private static final String UPDATE_WEBSOCKET_STOMP_APPLICATIONS_ENDPOINT_PAGE = "mock/websocket/stomp/application/updateWebSocketStompApplicationsEndpoint";
     private static final String UPDATE_STATUS = "update";
     private static final String DELETE_WEBSOCKET_STOPM_APPLICATION = "delete";
     private static final String UPDATE_ENDPOINTS = "update-endpoint";
-    private static final String DELETE_WEBSOCKET_STOMP_PORTS_COMMAND = "deleteWebSocketStompApplicationsCommand";
+    private static final String DELETE_WEBSOCKET_STOMP_APPLICATIONS_COMMAND = "deleteWebSocketStompApplicationsCommand";
     private static final String WEBSOCKET_STOMP_APPLICATION_MODIFIER_COMMAND = "webSocketStompApplicationModifierCommand";
-    private static final String UPDATE_WEBSOCKET_STOMP_PORTS_ENDPOINT_COMMAND = "updateWebSocketStompApplicationsEndpointCommand";
+    private static final String UPDATE_WEBSOCKET_STOMP_APPLICATIONS_ENDPOINT_COMMAND = "updateWebSocketStompApplicationsEndpointCommand";
     private static final Logger LOGGER = Logger.getLogger(WebSocketStompProjectController.class);
 
     /**
@@ -66,21 +76,20 @@ public class WebSocketStompProjectController extends AbstractWebSocketStompViewC
     }
 
     /**
-     * The method projectFunctionality provides multiple functionalities: Update ports' status
-     * and delete ports. Both of the functionalities involves a set of ports that belongs
+     * The method projectFunctionality provides multiple functionalities: Update applications status
+     * and delete applications. Both of the functionalities involves a set of applications that belongs
      * to a specific project
-     * @param projectId The id of the project that the ports belong to
+     * @param projectId The id of the project that the applications belong to
      * @param action The name of the action that should be executed (delete or update).
-     * @param webSocketStompApplicationModifierCommand The command object that contains the list of ports that get affected by the executed action.
+     * @param webSocketStompApplicationModifierCommand The command object that contains the list of applications that get affected by the executed action.
      * @return Redirects the user back to the main page for the project with the provided id.
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/{projectId}", method = RequestMethod.POST)
     public ModelAndView projectFunctionality(@PathVariable final String projectId, @RequestParam final String action, @ModelAttribute final WebSocketStompApplicationModifierCommand webSocketStompApplicationModifierCommand) {
         LOGGER.debug("Requested WebSocket Stomp project action requested: " + action);
-        /*
         if(UPDATE_STATUS.equalsIgnoreCase(action)){
-            final WebSocketStompResourceStatus webSocketStompResourceStatus = WebSocketStompResourceStatus.valueOf(webSocketStompApplicationModifierCommand.getWebSocketStompApplicationStatus());
+            final WebSocketStompResourceStatus webSocketStompResourceStatus = WebSocketStompResourceStatus.valueOf(webSocketStompApplicationModifierCommand.getWebSocketStompResourceStatus());
             for(String websocketStompApplicationId : webSocketStompApplicationModifierCommand.getWebSocketStompApplicationIds()){
                 serviceProcessor.process(new UpdateWebSocketStompApplicationsStatusInput(projectId, websocketStompApplicationId, webSocketStompResourceStatus));
             }
@@ -90,10 +99,10 @@ public class WebSocketStompProjectController extends AbstractWebSocketStompViewC
                 final ReadWebSocketStompApplicationOutput output = serviceProcessor.process(new ReadWebSocketStompApplicationInput(projectId, websocketStompApplicationId));
                 webSocketStompApplicationDtos.add(output.getWebSocketStompApplication());
             }
-            final ModelAndView model = createPartialModelAndView(DELETE_WEBSOCKET_STOMP_PORTS_PAGE);
+            final ModelAndView model = createPartialModelAndView(DELETE_WEBSOCKET_STOMP_APPLICATIONS_PAGE);
             model.addObject(WEBSOCKET_STOMP_PROJECT_ID, projectId);
-            model.addObject(WEBSOCKET_STOMP_RESOURCES, webSocketStompApplicationDtos);
-            model.addObject(DELETE_WEBSOCKET_STOMP_PORTS_COMMAND, new DeleteWebSocketStompApplicationsCommand());
+            model.addObject(WEBSOCKET_STOMP_APPLICATIONS, webSocketStompApplicationDtos);
+            model.addObject(DELETE_WEBSOCKET_STOMP_APPLICATIONS_COMMAND, new DeleteWebSocketStompApplicationsCommand());
             return model;
         } else if(UPDATE_ENDPOINTS.equalsIgnoreCase(action)){
             final List<WebSocketStompApplicationDto> webSocketStompApplicationDtos = new ArrayList<WebSocketStompApplicationDto>();
@@ -101,15 +110,13 @@ public class WebSocketStompProjectController extends AbstractWebSocketStompViewC
                 final ReadWebSocketStompApplicationOutput output = serviceProcessor.process(new ReadWebSocketStompApplicationInput(projectId, websocketStompApplicationId));
                 webSocketStompApplicationDtos.add(output.getWebSocketStompApplication());
             }
-            final ModelAndView model = createPartialModelAndView(UPDATE_WEBSOCKET_STOMP_PORTS_ENDPOINT_PAGE);
+            final ModelAndView model = createPartialModelAndView(UPDATE_WEBSOCKET_STOMP_APPLICATIONS_ENDPOINT_PAGE);
             model.addObject(WEBSOCKET_STOMP_PROJECT_ID, projectId);
-            model.addObject(WEBSOCKET_STOMP_RESOURCES, webSocketStompApplicationDtos);
-            model.addObject(UPDATE_WEBSOCKET_STOMP_PORTS_ENDPOINT_COMMAND, new UpdateWebSocketStompApplicationsEndpointCommand());
+            model.addObject(WEBSOCKET_STOMP_APPLICATIONS, webSocketStompApplicationDtos);
+            model.addObject(UPDATE_WEBSOCKET_STOMP_APPLICATIONS_ENDPOINT_COMMAND, new UpdateWebSocketStompApplicationsEndpointCommand());
             return model;
         }
-        */
-
-        return redirect("/websocket-stomp/project/" + projectId);
+        return redirect("/wss/project/" + projectId);
     }
 
 

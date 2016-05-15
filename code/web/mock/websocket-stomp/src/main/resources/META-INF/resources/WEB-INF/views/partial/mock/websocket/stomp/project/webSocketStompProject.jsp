@@ -16,7 +16,7 @@
 
 <%@ include file="../../../../../includes.jspf"%>
 
-<c:url var="websocket_stomp_resource_update_url"  value="/web/wss/project/${webSocketStompProject.id}" />
+<c:url var="websocket_stomp_application_update_url"  value="/web/wss/project/${webSocketStompProject.id}" />
 <div class="content-top">
     <div class="title">
         <h1><spring:message code="websocket.stomp.websocketstompproject.header.project" arguments="${webSocketStompProject.name}"/></h1>
@@ -24,6 +24,7 @@
     <div class="menu" align="right">
         <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
         <a class="button-success pure-button" href="<c:url value="/web/wss/project/${webSocketStompProject.id}/update"/>"><i class="fa fa-file"></i> <span><spring:message code="websocket.stomp.websocketstompproject.button.updateproject"/></span></a>
+        <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketStompProject.id}/create/application"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.stomp.websocketstompproject.button.createapplication"/></span></a>
         <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketStompProject.id}/export"/>"><i class="fa fa-cloud-download"></i> <span><spring:message code="websocket.stomp.websocketstompproject.button.export"/></span></a>
         <a class="button-error pure-button" href="<c:url value="/web/wss/project/${webSocketStompProject.id}/delete"/>"><i class="fa fa-trash"></i> <span><spring:message code="websocket.stomp.websocketstompproject.button.delete"/></span></a>
         </sec:authorize>
@@ -48,19 +49,19 @@
 <h2 class="decorated"><span><spring:message code="websocket.stomp.websocketstompproject.header.applications"/></span></h2>
 <c:choose>
     <c:when test="${webSocketStompProject.applications.size() > 0}">
-        <form:form action="${websocket_stomp_resource_update_url}/" method="POST"  commandName="webSocketStompApplicationsModifierCommand">
+        <form:form action="${websocket_stomp_application_update_url}/" method="POST"  commandName="webSocketStompApplicationModifierCommand">
             <div class="table-frame">
                 <table class="entityTable">
                     <tr>
                         <th><spring:message code="websocket.stomp.websocketstompproject.column.selected"/></th>
                         <th><spring:message code="websocket.stomp.websocketstompproject.column.application"/></th>
-                        <c:forEach items="${webSocketStompResourceStatus}" var="webSocketStompResourceStatus">
-                            <th><spring:message code="websocket.stomp.type.websocketstompresourcestatus.${websocketStompResourceStatus}"/></th>
+                        <c:forEach items="${webSocketStompResourceStatuses}" var="webSocketStompResourceStatus">
+                            <th><spring:message code="websocket.stomp.type.websocketstompresourcestatus.${webSocketStompResourceStatus}"/></th>
                         </c:forEach>
                     </tr>
                     <c:forEach items="${webSocketStompProject.applications}" var="webSocketStompApplication" varStatus="loopStatus">
                         <tr class="${loopStatus.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><form:checkbox path="websocketStompApplicationIds" name="${webSocketStompApplication.id}" value="${webSocketStompApplication.id}"/></td>
+                            <td><form:checkbox path="webSocketStompApplicationIds" name="${webSocketStompApplication.id}" value="${webSocketStompApplication.id}"/></td>
                             <td><a href="<c:url value="/web/wss/project/${webSocketStompProject.id}/application/${webSocketStompApplication.id}"/>">${webSocketStompApplication.name}</a></td>
                             <c:forEach items="${webSocketStompResourceStatuses}" var="webSocketStompResourceStatus">
                                 <td>${webSocketStompApplication.statusCount[webSocketStompResourceStatus]}</td>
@@ -72,7 +73,7 @@
             <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
                 <form:select path="webSocketStompResourceStatus">
                     <c:forEach items="${webSocketStompResourceStatuses}" var="webSocketStompResourceStatus">
-                        <form:option value="${webSocketStompResourceStatus}"><spring:message code="websocket.stomp.type.webSocketStompResourceStatus.${webSocketStompResourceStatus}"/></form:option>
+                        <form:option value="${webSocketStompResourceStatus}"><spring:message code="websocket.stomp.type.websocketstompresourcestatus.${webSocketStompResourceStatus}"/></form:option>
                     </c:forEach>
                 </form:select>
                 <button class="button-success pure-button" type="submit" name="action" value="update"><i class="fa fa-check-circle"></i> <span><spring:message code="websocket.stomp.websocketstompproject.button.update"/></span></button>

@@ -61,8 +61,8 @@ public class CreateWebSocketStompEventServiceTest {
 
         final ServiceTask<CreateWebSocketStompEventInput> serviceTask = new ServiceTask<CreateWebSocketStompEventInput>(input);
         final ServiceResult<CreateWebSocketStompEventOutput> serviceResult = service.process(serviceTask);
-        final CreateWebSocketStompEventOutput createRestApplicationOutput = serviceResult.getOutput();
-        final WebSocketStompEventDto returnedWebSocketStompEventDto = createRestApplicationOutput.getCreatedWebSocketStompEvent();
+        final CreateWebSocketStompEventOutput createWebSocketStompApplicationOutput = serviceResult.getOutput();
+        final WebSocketStompEventDto returnedWebSocketStompEventDto = createWebSocketStompApplicationOutput.getCreatedWebSocketStompEvent();
 
         Assert.assertEquals(webSocketStompEvent.getApplicationId(), returnedWebSocketStompEventDto.getApplicationId());
         Assert.assertEquals(webSocketStompEvent.getResourceId(), returnedWebSocketStompEventDto.getResourceId());

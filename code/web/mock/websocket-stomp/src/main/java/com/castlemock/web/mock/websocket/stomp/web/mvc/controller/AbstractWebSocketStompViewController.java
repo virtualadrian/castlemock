@@ -31,13 +31,17 @@ import java.util.List;
  */
 public class AbstractWebSocketStompViewController extends AbstractViewController {
 
-    protected static final String WEBSOCKET_STOMP = "websocket-stomp";
+    protected static final String APPLICATION = "application";
+    protected static final String WEBSOCKET_STOMP = "wss";
     protected static final String WEBSOCKET_STOMP_PROJECT = "webSocketStompProject";
     protected static final String WEBSOCKET_STOMP_PROJECT_ID = "webSocketStompProjectId";
     protected static final String WEBSOCKET_STOMP_RESOURCE_STATUSES = "webSocketStompResourceStatuses";
     protected static final String WEBSOCKET_STOMP_RESOURCES = "webSocketStompResources";
     protected static final String WEBSOCKET_STOMP_APPLICATION = "webSocketStompApplication";
     protected static final String WEBSOCKET_STOMP_RESOURCE_ID = "webSocketStompResourceId";
+    protected static final String WEBSOCKET_STOMP_APPLICATION_ID = "webSocketStompApplicationId";
+    protected static final String WEBSOCKET_STOMP_RESOURCE = "webSocketStompResource";
+    protected static final String WEBSOCKET_STOMP_APPLICATIONS = "webSocketStompApplications";
 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractWebSocketStompViewController.class);
@@ -50,10 +54,10 @@ public class AbstractWebSocketStompViewController extends AbstractViewController
      * @param urlPath The URL path (The end of the URL, which is used to identify the WebSocket Stomp service)
      * @return A URL based on all the incoming parameters
      */
-    protected String getWebSocketStompInvokeAddress(final String protocol, int serverPort, final String projectId, final String urlPath){
+    protected String getWebSocketStompInvokeAddress(final String protocol, int serverPort, final String projectId, final String applicationId, final String urlPath){
         try {
             final String hostAddress = getHostAddress();
-            return protocol + hostAddress + ":" + serverPort + getContext() + SLASH + MOCK + SLASH + WEBSOCKET_STOMP + SLASH + PROJECT + SLASH + projectId + SLASH + urlPath;
+            return protocol + hostAddress + ":" + serverPort + getContext() + SLASH + MOCK + SLASH + WEBSOCKET_STOMP + SLASH + PROJECT + SLASH + projectId + SLASH + APPLICATION + SLASH + applicationId + urlPath;
         } catch (Exception exception) {
             LOGGER.error("Unable to generate invoke URL", exception);
             throw new IllegalStateException("Unable to generate invoke URL for " + projectId);

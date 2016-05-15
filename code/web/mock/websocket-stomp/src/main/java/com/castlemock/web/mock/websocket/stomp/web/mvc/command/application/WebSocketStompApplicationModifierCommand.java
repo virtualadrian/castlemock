@@ -25,7 +25,7 @@ package com.castlemock.web.mock.websocket.stomp.web.mvc.command.application;
 public class WebSocketStompApplicationModifierCommand {
 
     private String[] webSocketStompApplicationIds;
-    private String webSocketStompApplicationStatus;
+    private String webSocketStompResourceStatus;
 
     public String[] getWebSocketStompApplicationIds() {
         return webSocketStompApplicationIds;
@@ -35,11 +35,11 @@ public class WebSocketStompApplicationModifierCommand {
         this.webSocketStompApplicationIds = webSocketStompApplicationIds;
     }
 
-    public String getWebSocketStompApplicationStatus() {
-        return webSocketStompApplicationStatus;
+    public String getWebSocketStompResourceStatus() {
+        return webSocketStompResourceStatus;
     }
 
-    public void setWebSocketStompApplicationStatus(String webSocketStompApplicationStatus) {
-        this.webSocketStompApplicationStatus = webSocketStompApplicationStatus;
+    public void setWebSocketStompResourceStatus(String webSocketStompResourceStatus) {
+        this.webSocketStompResourceStatus = webSocketStompResourceStatus;
     }
 }

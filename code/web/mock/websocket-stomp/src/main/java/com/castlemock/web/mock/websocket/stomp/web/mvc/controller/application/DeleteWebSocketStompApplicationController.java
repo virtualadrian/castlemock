@@ -43,28 +43,28 @@ public class DeleteWebSocketStompApplicationController extends AbstractWebSocket
 
 
     @PreAuthorize("hasAuthority('READER') or hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{restProjectId}/application/{restApplicationId}/delete", method = RequestMethod.GET)
-    public ModelAndView defaultPage(@PathVariable final String restProjectId, @PathVariable final String restApplicationId) {
-        final ReadWebSocketStompApplicationOutput ouput = serviceProcessor.process(new ReadWebSocketStompApplicationInput(restProjectId, restApplicationId));
+    @RequestMapping(value = "/{webSocketStompProjectId}/application/{webSocketStompApplicationId}/delete", method = RequestMethod.GET)
+    public ModelAndView defaultPage(@PathVariable final String webSocketStompProjectId, @PathVariable final String webSocketStompApplicationId) {
+        final ReadWebSocketStompApplicationOutput ouput = serviceProcessor.process(new ReadWebSocketStompApplicationInput(webSocketStompProjectId, webSocketStompApplicationId));
         ModelAndView model = createPartialModelAndView(PAGE);
-        model.addObject(WEBSOCKET_STOMP_PROJECT_ID, restProjectId);
+        model.addObject(WEBSOCKET_STOMP_PROJECT_ID, webSocketStompProjectId);
         model.addObject(WEBSOCKET_STOMP_APPLICATION, ouput.getWebSocketStompApplication());
         return model;
     }
 
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{restProjectId}/application/{restApplicationId}/delete/confirm", method = RequestMethod.GET)
-    public ModelAndView confirm(@PathVariable final String restProjectId, @PathVariable final String restApplicationId) {
-        serviceProcessor.process(new DeleteWebSocketStompApplicationInput(restProjectId, restApplicationId));
-        return redirect("/wss/project/" + restProjectId);
+    @RequestMapping(value = "/{webSocketStompProjectId}/application/{webSocketStompApplicationId}/delete/confirm", method = RequestMethod.GET)
+    public ModelAndView confirm(@PathVariable final String webSocketStompProjectId, @PathVariable final String webSocketStompApplicationId) {
+        serviceProcessor.process(new DeleteWebSocketStompApplicationInput(webSocketStompProjectId, webSocketStompApplicationId));
+        return redirect("/wss/project/" + webSocketStompProjectId);
     }
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{restProjectId}/application/delete/confirm", method = RequestMethod.POST)
-    public ModelAndView confirmDeletationOfMultpleProjects(@PathVariable final String restProjectId, @ModelAttribute final DeleteWebSocketStompApplicationsCommand deleteWebSocketStompApplicationsCommand) {
-        serviceProcessor.process(new DeleteWebSocketStompApplicationsInput(restProjectId, deleteWebSocketStompApplicationsCommand.getWebSocketStompApplications()));
-        return redirect("/wss/project/" + restProjectId);
+    @RequestMapping(value = "/{webSocketStompProjectId}/application/delete/confirm", method = RequestMethod.POST)
+    public ModelAndView confirmDeletationOfMultpleProjects(@PathVariable final String webSocketStompProjectId, @ModelAttribute final DeleteWebSocketStompApplicationsCommand deleteWebSocketStompApplicationsCommand) {
+        serviceProcessor.process(new DeleteWebSocketStompApplicationsInput(webSocketStompProjectId, deleteWebSocketStompApplicationsCommand.getWebSocketStompApplications()));
+        return redirect("/wss/project/" + webSocketStompProjectId);
     }
 
 

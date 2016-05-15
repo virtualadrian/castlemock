@@ -56,8 +56,8 @@ public class UpdateWebSocketStompApplicationController extends AbstractWebSocket
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/{projectId}/application/{applicationId}/update", method = RequestMethod.POST)
-    public ModelAndView update(@PathVariable final String projectId, @PathVariable final String applicationId,  @ModelAttribute final WebSocketStompApplicationDto restApplicationDto) {
-        serviceProcessor.process(new UpdateWebSocketStompApplicationInput(projectId, applicationId, restApplicationDto));
+    public ModelAndView update(@PathVariable final String projectId, @PathVariable final String applicationId,  @ModelAttribute final WebSocketStompApplicationDto webSocketStompApplicationDto) {
+        serviceProcessor.process(new UpdateWebSocketStompApplicationInput(projectId, applicationId, webSocketStompApplicationDto));
         return redirect("/wss/project/" + projectId + "/application/" + applicationId);
     }
 

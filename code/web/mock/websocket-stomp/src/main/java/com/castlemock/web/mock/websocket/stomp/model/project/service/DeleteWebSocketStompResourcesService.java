@@ -21,17 +21,17 @@ import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResource;
-import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResourceStatus;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
-import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.CreateWebSocketStompResourceInput;
-import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.CreateWebSocketStompResourceOutput;
+import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.DeleteWebSocketStompResourcesInput;
+import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.DeleteWebSocketStompResourcesOutput;
+
 
 /**
  * @author Karl Dahlgren
  * @since 1.5
  */
 @org.springframework.stereotype.Service
-public class CreateWebSocketStompResourceService extends AbstractWebSocketStompProjectService implements Service<CreateWebSocketStompResourceInput, CreateWebSocketStompResourceOutput> {
+public class DeleteWebSocketStompResourcesService extends AbstractWebSocketStompProjectService implements Service<DeleteWebSocketStompResourcesInput, DeleteWebSocketStompResourcesOutput> {
 
     /**
      * The process message is responsible for processing an incoming serviceTask and generate
@@ -42,14 +42,15 @@ public class CreateWebSocketStompResourceService extends AbstractWebSocketStompP
      * @see ServiceResult
      */
     @Override
-    public ServiceResult<CreateWebSocketStompResourceOutput> process(final ServiceTask<CreateWebSocketStompResourceInput> serviceTask) {
-        final CreateWebSocketStompResourceInput input = serviceTask.getInput();
+    public ServiceResult<DeleteWebSocketStompResourcesOutput> process(final ServiceTask<DeleteWebSocketStompResourcesInput> serviceTask) {
+        final DeleteWebSocketStompResourcesInput input = serviceTask.getInput();
         final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        final WebSocketStompResource webSocketStompResource = mapper.map(input.getWebSocketStompResource(), WebSocketStompResource.class);
-        // Default status for a new ly created WebSocket Stomp resource
-        webSocketStompResource.setStatus(WebSocketStompResourceStatus.MOCKED);
-        webSocketStompApplication.getResources().add(webSocketStompResource);
+        for(final WebSocketStompResourceDto webSocketStompResourceDto : input.getWebSocketStompResources()){
+            final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), webSocketStompResourceDto.getId());
+            webSocketStompApplication.getResources().remove(webSocketStompResource);
+        }
+
         save(input.getWebSocketStompProjectId());
-        return createServiceResult(new CreateWebSocketStompResourceOutput(mapper.map(webSocketStompResource, WebSocketStompResourceDto.class)));
+        return createServiceResult(new DeleteWebSocketStompResourcesOutput());
     }
 }
