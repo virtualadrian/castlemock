@@ -15,27 +15,27 @@
   ~ limitations under the License.
   --%>
 
-<c:url var="update_websocketstomp_resource_url"  value="/web/wss/project/${webSocketStompProjectId}/application/${webSocketStompApplicationId}/resource/${websocketstompResource.id}/update" />
+<c:url var="update_websocketstomp_resource_url"  value="/web/wss/project/${webSocketStompProjectId}/application/${webSocketStompApplicationId}/resource/${webSocketStompResource.id}/update" />
 <div class="content-top">
-    <h1><spring:message code="websocket.stomp.updateresource.header.updateresource" arguments="${websocketstompResource.name}"/></h1>
+    <h1><spring:message code="websocket.stomp.updateresource.header.updateresource" arguments="${webSocketStompResource.name}"/></h1>
 </div>
-<form:form action="${update_websocketstomp_resource_url}" method="POST" commandName="websocketstompResource">
+<form:form action="${update_websocketstomp_resource_url}" method="POST" commandName="webSocketStompResource">
     <table class="formTable">
         <tr>
             <td class="column1"><label path="name"><spring:message code="websocket.stomp.updateresource.label.name"/></label></td>
-            <td class="column2"><form:input path="name" id="websocketstompResourceNameInput" value="${websocketstompResource.name}"/></td>
+            <td class="column2"><form:input path="name" id="webSocketStompResourceNameInput" value="${webSocketStompResource.name}"/></td>
         </tr>
         <tr>
             <td class="column1"><label path="name"><spring:message code="websocket.stomp.updateresource.label.uri"/></label></td>
-            <td class="column2"><form:input path="uri" id="websocketstompResourceUriInput" value="${websocketstompResource.uri}"/></td>
+            <td class="column2"><form:input path="uri" id="webSocketStompResourceUriInput" value="${webSocketStompResource.uri}"/></td>
         </tr>
     </table>
     
     <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-check-circle"></i><spring:message code="websocket.stomp.updateresource.button.updateresource"/></button>
-    <a href="<c:url value="/web/wss/project/${webSocketStompProjectId}/application/${webSocketStompApplicationId}/resource/${websocketstompResource.id}"/>" class="button-error pure-button"><i class="fa fa-times"></i><spring:message code="websocket.stomp.updateresource.button.cancel"/></a>
+    <a href="<c:url value="/web/wss/project/${webSocketStompProjectId}/application/${webSocketStompApplicationId}/resource/${webSocketStompResource.id}"/>" class="button-error pure-button"><i class="fa fa-times"></i><spring:message code="websocket.stomp.updateresource.button.cancel"/></a>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form:form>
 <script>
-    $("#websocketstompResourceNameInput").attr('required', '');
-    $("#websocketstompResourceUriInput").attr('required', '');
+    $("#webSocketStompResourceNameInput").attr('required', '');
+    $("#webSocketStompResourceUriInput").attr('required', '');
 </script>
