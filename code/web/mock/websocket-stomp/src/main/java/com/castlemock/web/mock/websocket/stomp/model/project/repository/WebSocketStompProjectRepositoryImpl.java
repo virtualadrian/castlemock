@@ -19,6 +19,8 @@ package com.castlemock.web.mock.websocket.stomp.model.project.repository;
 import com.castlemock.core.basis.model.SearchQuery;
 import com.castlemock.core.basis.model.SearchResult;
 import com.castlemock.core.basis.model.SearchValidator;
+import com.castlemock.core.mock.websocket.stomp.model.event.domain.WebSocketStompResponse;
+import com.castlemock.core.mock.websocket.stomp.model.event.dto.WebSocketStompResponseDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompMockResponse;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompProject;
@@ -35,6 +37,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Repository;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -210,6 +213,20 @@ public class WebSocketStompProjectRepositoryImpl extends RepositoryImpl<WebSocke
         throw new IllegalArgumentException("Unable to find a WebSocket Stomp resource with id " + webSocketStompResourceId);
     }
 
+    public WebSocketStompMockResponse findWebSocketStompMockResponseType(final String webSocketStompProjectId, final String webSocketStompApplicationId, final String webSocketStompResourceId, final String webSocketStompMockResponseId){
+        Preconditions.checkNotNull(webSocketStompResourceId, "Resource id cannot be null");
+        final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(webSocketStompProjectId, webSocketStompApplicationId, webSocketStompResourceId);
+        for(WebSocketStompMockResponse webSocketStompMockResponse : webSocketStompResource.getMockResponses()){
+            if(webSocketStompMockResponse.getId().equals(webSocketStompMockResponseId)){
+                return webSocketStompMockResponse;
+            }
+        }
+        throw new IllegalArgumentException("Unable to find a WebSocket Stomp mock response with id " + webSocketStompMockResponseId);
+    }
+
+
+
+
     /**
      * Find a WebSocket Stomp resource with a project id, application id and a set of resource parts
      * @param webSocketStompProjectId The id of the project that the resource belongs to
@@ -260,32 +277,50 @@ public class WebSocketStompProjectRepositoryImpl extends RepositoryImpl<WebSocke
 
     @Override
     public WebSocketStompApplicationDto findWebSocketStompApplication(String webSocketStompProjectId, String webSocketStompApplicationId) {
-        return null;
+        Preconditions.checkNotNull(webSocketStompApplicationId, "Application id cannot be null");
+        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(webSocketStompProjectId, webSocketStompApplicationId);
+        return mapper.map(webSocketStompApplication, WebSocketStompApplicationDto.class);
     }
 
     @Override
     public WebSocketStompResourceDto findWebSocketStompResource(String webSocketStompProjectId, String webSocketStompApplicationId, String webSocketStompResourceId) {
-        return null;
+        Preconditions.checkNotNull(webSocketStompResourceId, "Resource id cannot be null");
+        final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(webSocketStompProjectId, webSocketStompApplicationId, webSocketStompResourceId);
+        return mapper.map(webSocketStompResource, WebSocketStompResourceDto.class);
     }
 
     @Override
     public WebSocketStompMockResponseDto findWebSocketStompMockResponse(String webSocketStompProjectId, String webSocketStompApplicationId, String webSocketStompResourceId, String webSocketStompMockResponseId) {
-        return null;
+        Preconditions.checkNotNull(webSocketStompResourceId, "Mock response id cannot be null");
+        final WebSocketStompMockResponse webSocketStompMockResponse = findWebSocketStompMockResponseType(webSocketStompProjectId, webSocketStompApplicationId, webSocketStompResourceId, webSocketStompMockResponseId);
+        return mapper.map(webSocketStompMockResponse, WebSocketStompMockResponseDto.class);
     }
 
     @Override
     public WebSocketStompApplicationDto saveWebSocketStompApplication(String webSocketStompProjectId, WebSocketStompApplicationDto webSocketStompApplicationDto) {
-        return null;
+        WebSocketStompProject webSocketStompProject = collection.get(webSocketStompProjectId);
+        WebSocketStompApplication webSocketStompApplication = mapper.map(webSocketStompApplicationDto, WebSocketStompApplication.class);
+        webSocketStompProject.getApplications().add(webSocketStompApplication);
+        save(webSocketStompProjectId);
+        return mapper.map(webSocketStompApplication, WebSocketStompApplicationDto.class);
     }
 
     @Override
-    public WebSocketStompResourceDto saveWebSocketStompResource(String webSocketStompProjectId, String webSocketStompApplicationId, WebSocketStompResourceDto webSocketStompResource) {
-        return null;
+    public WebSocketStompResourceDto saveWebSocketStompResource(String webSocketStompProjectId, String webSocketStompApplicationId, WebSocketStompResourceDto webSocketStompResourceDto) {
+        WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(webSocketStompProjectId, webSocketStompApplicationId);
+        WebSocketStompResource webSocketStompResource = mapper.map(webSocketStompResourceDto, WebSocketStompResource.class);
+        webSocketStompApplication.getResources().add(webSocketStompResource);
+        save(webSocketStompProjectId);
+        return mapper.map(webSocketStompResource, WebSocketStompResourceDto.class);
     }
 
     @Override
     public WebSocketStompMockResponseDto saveWebSocketStompMockResponse(String webSocketStompProjectId, String webSocketStompApplicationId, String webSocketStompResourceId, WebSocketStompMockResponseDto webSocketStompMockResponseDto) {
-        return null;
+        WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(webSocketStompProjectId, webSocketStompApplicationId, webSocketStompResourceId);
+        WebSocketStompMockResponse webSocketStompMockResponse = mapper.map(webSocketStompMockResponseDto, WebSocketStompMockResponse.class);
+        webSocketStompResource.getMockResponses().add(webSocketStompMockResponse);
+        save(webSocketStompProjectId);
+        return mapper.map(webSocketStompMockResponse, WebSocketStompMockResponseDto.class);
     }
 
     @Override
@@ -306,22 +341,69 @@ public class WebSocketStompProjectRepositoryImpl extends RepositoryImpl<WebSocke
 
     @Override
     public WebSocketStompMockResponseDto updateWebSocketStompMockResponse(String webSocketStompProjectId, String webSocketStompApplicationId, String webSocketStompResourceId, String webSocketStompMockResponseId, WebSocketStompMockResponseDto webSocketStompMockResponseDto) {
-        return null;
+        WebSocketStompMockResponse webSocketStompMockResponse = findWebSocketStompMockResponseType(webSocketStompProjectId, webSocketStompApplicationId, webSocketStompResourceId, webSocketStompMockResponseId);
+        webSocketStompMockResponse.setName(webSocketStompMockResponseDto.getName());
+        webSocketStompMockResponse.setBody(webSocketStompMockResponseDto.getBody());
+        webSocketStompMockResponse.setHttpStatusCode(webSocketStompMockResponseDto.getHttpStatusCode());
+        webSocketStompMockResponse.setStatus(webSocketStompMockResponseDto.getStatus());
+        return webSocketStompMockResponseDto;
     }
 
     @Override
     public WebSocketStompApplicationDto deleteWebSocketStompApplication(String webSocketStompProjectId, String webSocketStompApplicationId) {
-        return null;
+        WebSocketStompProject webSocketStompProject = collection.get(webSocketStompProjectId);
+        Iterator<WebSocketStompApplication> webSocketStompApplicationIterator = webSocketStompProject.getApplications().iterator();
+        WebSocketStompApplication deletedWebSocketStompApplication = null;
+        while(webSocketStompApplicationIterator.hasNext()){
+            deletedWebSocketStompApplication = webSocketStompApplicationIterator.next();
+            if(webSocketStompApplicationId.equals(deletedWebSocketStompApplication.getId())){
+                webSocketStompApplicationIterator.remove();
+                break;
+            }
+        }
+
+        if(deletedWebSocketStompApplication != null){
+            save(webSocketStompProjectId);
+        }
+        return deletedWebSocketStompApplication != null ? mapper.map(deletedWebSocketStompApplication, WebSocketStompApplicationDto.class) : null;
     }
 
     @Override
     public WebSocketStompResourceDto deleteWebSocketStompResource(String webSocketStompProjectId, String webSocketStompApplicationId, String webSocketStompResourceId) {
-        return null;
+        WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(webSocketStompProjectId, webSocketStompApplicationId);
+        Iterator<WebSocketStompResource> webSocketStompResourceIterator = webSocketStompApplication.getResources().iterator();
+        WebSocketStompResource deletedWebSocketStompResource = null;
+        while(webSocketStompResourceIterator.hasNext()){
+            deletedWebSocketStompResource = webSocketStompResourceIterator.next();
+            if(webSocketStompApplicationId.equals(deletedWebSocketStompResource.getId())){
+                webSocketStompResourceIterator.remove();
+                break;
+            }
+        }
+
+        if(deletedWebSocketStompResource != null){
+            save(webSocketStompProjectId);
+        }
+        return deletedWebSocketStompResource != null ? mapper.map(deletedWebSocketStompResource, WebSocketStompResourceDto.class) : null;
     }
 
     @Override
     public WebSocketStompMockResponseDto deleteWebSocketStompMockResponse(String webSocketStompProjectId, String webSocketStompApplicationId, String webSocketStompResourceId, String webSocketStompMockResponseId) {
-        return null;
+        WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(webSocketStompProjectId, webSocketStompApplicationId, webSocketStompResourceId);
+        Iterator<WebSocketStompMockResponse> webSocketStompMockResponseIterator = webSocketStompResource.getMockResponses().iterator();
+        WebSocketStompMockResponse deletedWebSocketStompMockResponse = null;
+        while(webSocketStompMockResponseIterator.hasNext()){
+            deletedWebSocketStompMockResponse = webSocketStompMockResponseIterator.next();
+            if(webSocketStompApplicationId.equals(deletedWebSocketStompMockResponse.getId())){
+                webSocketStompMockResponseIterator.remove();
+                break;
+            }
+        }
+
+        if(deletedWebSocketStompMockResponse != null){
+            save(webSocketStompProjectId);
+        }
+        return deletedWebSocketStompMockResponse != null ? mapper.map(deletedWebSocketStompMockResponse, WebSocketStompMockResponseDto.class) : null;
     }
 
 

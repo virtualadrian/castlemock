@@ -39,54 +39,54 @@ public class WebSocketStompEventRepositoryTest {
 
     @Test
     public void testInitialize(){
-        List<WebSocketStompEvent> WebSocketStompEvents = new ArrayList<WebSocketStompEvent>();
-        WebSocketStompEvent WebSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEvent();
-        WebSocketStompEvents.add(WebSocketStompEvent);
-        Mockito.when(fileRepositorySupport.load(WebSocketStompEvent.class, DIRECTORY, EXTENSION)).thenReturn(WebSocketStompEvents);
+        List<WebSocketStompEvent> webSocketStompEvents = new ArrayList<WebSocketStompEvent>();
+        WebSocketStompEvent webSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEvent();
+        webSocketStompEvents.add(webSocketStompEvent);
+        Mockito.when(fileRepositorySupport.load(WebSocketStompEvent.class, DIRECTORY, EXTENSION)).thenReturn(webSocketStompEvents);
         repository.initialize();
         Mockito.verify(fileRepositorySupport, Mockito.times(1)).load(WebSocketStompEvent.class, DIRECTORY, EXTENSION);
     }
 
     @Test
     public void testFindOne(){
-        final WebSocketStompEventDto WebSocketStompEvent = save();
-        final WebSocketStompEventDto returnedWebSocketStompEvent = repository.findOne(WebSocketStompEvent.getId());
-        Assert.assertEquals(WebSocketStompEvent.getId(), returnedWebSocketStompEvent.getId());
+        final WebSocketStompEventDto webSocketStompEvent = save();
+        final WebSocketStompEventDto returnedWebSocketStompEvent = repository.findOne(webSocketStompEvent.getId());
+        Assert.assertEquals(webSocketStompEvent.getId(), returnedWebSocketStompEvent.getId());
     }
 
     @Test
     public void testFindAll(){
-        final WebSocketStompEventDto WebSocketStompEvent = save();
-        final List<WebSocketStompEventDto> WebSocketStompEvents = repository.findAll();
-        Assert.assertEquals(WebSocketStompEvents.size(), 1);
-        Assert.assertEquals(WebSocketStompEvents.get(0).getId(), WebSocketStompEvent.getId());
+        final WebSocketStompEventDto webSocketStompEvent = save();
+        final List<WebSocketStompEventDto> webSocketStompEvents = repository.findAll();
+        Assert.assertEquals(webSocketStompEvents.size(), 1);
+        Assert.assertEquals(webSocketStompEvents.get(0).getId(), webSocketStompEvent.getId());
     }
 
     @Test
     public void testSave(){
-        final WebSocketStompEventDto WebSocketStompEvent = save();
+        final WebSocketStompEventDto webSocketStompEvent = save();
         // TODO: Check verify
         //Mockito.verify(fileRepositorySupport, Mockito.times(1)).save(Mockito.isA(WebSocketStompEvent.class), DIRECTORY + File.separator + WebSocketStompEvent.getId() + EXTENSION);
     }
 
     @Test
     public void testDelete(){
-        final WebSocketStompEventDto WebSocketStompEvent = save();
-        repository.delete(WebSocketStompEvent.getId());
-        Mockito.verify(fileRepositorySupport, Mockito.times(1)).delete(DIRECTORY + File.separator + WebSocketStompEvent.getId() + EXTENSION);
+        final WebSocketStompEventDto webSocketStompEvent = save();
+        repository.delete(webSocketStompEvent.getId());
+        Mockito.verify(fileRepositorySupport, Mockito.times(1)).delete(DIRECTORY + File.separator + webSocketStompEvent.getId() + EXTENSION);
     }
 
     @Test
     public void testCount(){
-        final WebSocketStompEventDto WebSocketStompEvent = save();
+        final WebSocketStompEventDto webSocketStompEvent = save();
         final Integer count = repository.count();
         Assert.assertEquals(new Integer(1), count);
     }
 
     private WebSocketStompEventDto save(){
-        final WebSocketStompEventDto WebSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto();
-        repository.save(WebSocketStompEvent);
-        return WebSocketStompEvent;
+        final WebSocketStompEventDto webSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto();
+        repository.save(webSocketStompEvent);
+        return webSocketStompEvent;
     }
 
 }
