@@ -16,11 +16,11 @@
 
 package com.castlemock.web.mock.soap.web.mvc.controller.project;
 
-import com.castlemock.core.mock.soap.model.project.dto.SoapPortDto;
 import com.castlemock.core.mock.soap.model.project.service.message.input.CreateSoapPortsInput;
-import com.castlemock.web.mock.soap.manager.WSDLComponent;
+import com.castlemock.web.basis.manager.FileManager;
 import com.castlemock.web.mock.soap.web.mvc.command.project.WSDLFileUploadForm;
 import com.castlemock.web.mock.soap.web.mvc.controller.AbstractSoapViewController;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +28,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -44,9 +46,10 @@ public class SoapAddWSDLController extends AbstractSoapViewController {
     private static final String PAGE = "mock/soap/project/soapAddWSDL";
     private static final String TYPE_LINK = "link";
     private static final String TYPE_FILE = "file";
+    private static final Logger LOGGER = Logger.getLogger(SoapAddWSDLController.class);
 
     @Autowired
-    private WSDLComponent wsdlComponent;
+    private FileManager fileManager;
 
     /**
      * The method returns a view which is used to upload a WSDL file for a specific project
@@ -73,16 +76,30 @@ public class SoapAddWSDLController extends AbstractSoapViewController {
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value="/{projectId}/add/wsdl", method=RequestMethod.POST)
-    public ModelAndView uploadWSDL(@PathVariable final String projectId, @RequestParam final String type, @ModelAttribute("uploadForm") final WSDLFileUploadForm uploadForm){
-        List<SoapPortDto> soapPorts = null;
+    public ModelAndView uploadWSDL(@PathVariable final String projectId, @RequestParam final String type, @ModelAttribute("uploadForm") final WSDLFileUploadForm uploadForm) throws IOException {
+        List<File> uploadedFiles;
 
         if(TYPE_FILE.equals(type)){
-            soapPorts = wsdlComponent.createSoapPorts(uploadForm.getFiles(), uploadForm.isGenerateResponse());
+            uploadedFiles = fileManager.uploadFiles(uploadForm.getFiles());
         } else if(TYPE_LINK.equals(type)){
-            soapPorts = wsdlComponent.createSoapPorts(uploadForm.getLink(), uploadForm.isGenerateResponse());
+            uploadedFiles = fileManager.uploadFiles(uploadForm.getLink());
+        } else {
+            throw new IllegalArgumentException("Invalid type: " + type);
         }
 
-        serviceProcessor.process(new CreateSoapPortsInput(projectId, soapPorts));
+        serviceProcessor.process(new CreateSoapPortsInput(projectId, uploadForm.isGenerateResponse(), uploadedFiles));
+
+        for(File uploadedFile : uploadedFiles){
+            boolean deletionResult = fileManager.deleteFile(uploadedFile);
+            if(deletionResult){
+                LOGGER.debug("Deleted the following WSDL file: " + uploadedFile.getName());
+            } else {
+                LOGGER.warn("Unable to delete the following WSDL file: " + uploadedFile.getName());
+            }
+
+        }
+
         return redirect("/soap/project/" + projectId);
     }
+
 }

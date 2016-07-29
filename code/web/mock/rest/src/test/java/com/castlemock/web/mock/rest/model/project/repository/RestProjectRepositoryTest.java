@@ -2,15 +2,14 @@ package com.castlemock.web.mock.rest.model.project.repository;
 
 
 import com.castlemock.core.mock.rest.model.project.domain.RestProject;
+import com.castlemock.core.mock.rest.model.project.dto.RestProjectDto;
 import com.castlemock.web.basis.support.FileRepositorySupport;
 import com.castlemock.web.mock.rest.model.project.RestProjectDtoGenerator;
+import org.dozer.DozerBeanMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.File;
@@ -25,7 +24,8 @@ public class RestProjectRepositoryTest {
 
     @Mock
     private FileRepositorySupport fileRepositorySupport;
-
+    @Spy
+    private DozerBeanMapper mapper;
     @InjectMocks
     private RestProjectRepositoryImpl repository;
     private static final String DIRECTORY = "/directory";
@@ -50,41 +50,45 @@ public class RestProjectRepositoryTest {
 
     @Test
     public void testFindOne(){
-        final RestProject restProject = save();
-        final RestProject returnedRestEvent = repository.findOne(restProject.getId());
-        Assert.assertEquals(restProject, returnedRestEvent);
+        final RestProjectDto restProject = save();
+        final RestProjectDto returnedRestEvent = repository.findOne(restProject.getId());
+        Assert.assertEquals(returnedRestEvent.getId(), restProject.getId());
+        Assert.assertEquals(returnedRestEvent.getDescription(), restProject.getDescription());
+        Assert.assertEquals(returnedRestEvent.getName(), restProject.getName());
     }
 
     @Test
     public void testFindAll(){
-        final RestProject restProject = save();
-        final List<RestProject> restProjects = repository.findAll();
+        final RestProjectDto restProject = save();
+        final List<RestProjectDto> restProjects = repository.findAll();
         Assert.assertEquals(restProjects.size(), 1);
-        Assert.assertEquals(restProjects.get(0), restProject);
+        Assert.assertEquals(restProjects.get(0).getId(), restProject.getId());
+        Assert.assertEquals(restProjects.get(0).getDescription(), restProject.getDescription());
+        Assert.assertEquals(restProjects.get(0).getName(), restProject.getName());
     }
 
     @Test
     public void testSave(){
-        final RestProject restProject = save();
-        Mockito.verify(fileRepositorySupport, Mockito.times(1)).save(restProject, DIRECTORY + File.separator + restProject.getId() + EXTENSION);
+        final RestProjectDto restProject = save();
+        Mockito.verify(fileRepositorySupport, Mockito.times(1)).save(Mockito.any(RestProject.class), Mockito.anyString());
     }
 
     @Test
     public void testDelete(){
-        final RestProject restProject = save();
+        final RestProjectDto restProject = save();
         repository.delete(restProject.getId());
         Mockito.verify(fileRepositorySupport, Mockito.times(1)).delete(DIRECTORY + File.separator + restProject.getId() + EXTENSION);
     }
 
     @Test
     public void testCount(){
-        final RestProject restProject = save();
+        final RestProjectDto restProject = save();
         final Integer count = repository.count();
         Assert.assertEquals(new Integer(1), count);
     }
 
-    private RestProject save(){
-        RestProject restProject = RestProjectDtoGenerator.generateFullRestProject();
+    private RestProjectDto save(){
+        RestProjectDto restProject = RestProjectDtoGenerator.generateFullRestProjectDto();
         repository.save(restProject);
         return restProject;
     }

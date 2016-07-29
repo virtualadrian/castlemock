@@ -19,7 +19,6 @@ package com.castlemock.web.mock.rest.model.event.service;
 import com.castlemock.core.basis.model.Repository;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.event.domain.RestEvent;
 import com.castlemock.core.mock.rest.model.event.dto.RestEventDto;
 import com.castlemock.core.mock.rest.model.event.service.message.input.ReadRestEventInput;
 import com.castlemock.core.mock.rest.model.event.service.message.output.ReadRestEventOutput;
@@ -53,7 +52,7 @@ public class ReadRestEventServiceTest {
 
     @Test
     public void testProcess(){
-        final RestEvent restEvent = RestEventDtoGenerator.generateRestEvent();
+        final RestEventDto restEvent = RestEventDtoGenerator.generateRestEventDto();
         Mockito.when(repository.findOne(restEvent.getId())).thenReturn(restEvent);
 
         final ReadRestEventInput input = new ReadRestEventInput(restEvent.getId());

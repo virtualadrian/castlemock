@@ -19,7 +19,6 @@ package com.castlemock.web.mock.soap.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.soap.model.project.domain.SoapPort;
 import com.castlemock.core.mock.soap.model.project.dto.SoapPortDto;
 import com.castlemock.core.mock.soap.model.project.service.message.input.UpdateSoapPortInput;
 import com.castlemock.core.mock.soap.model.project.service.message.output.UpdateSoapPortOutput;
@@ -42,10 +41,7 @@ public class UpdateSoapPortService extends AbstractSoapProjectService implements
     @Override
     public ServiceResult<UpdateSoapPortOutput> process(final ServiceTask<UpdateSoapPortInput> serviceTask) {
         final UpdateSoapPortInput input = serviceTask.getInput();
-        final SoapPortDto updatedSoapPort = input.getUpdatedSoapPort();
-        final SoapPort soapPort = findSoapPortType(input.getSoapProjectId(), input.getSoapPortId());
-        soapPort.setUri(updatedSoapPort.getUri());
-        save(input.getSoapProjectId());
+        final SoapPortDto updatedSoapPort = repository.updateSoapPort(input.getSoapProjectId(), input.getSoapPortId(), input.getUpdatedSoapPort());
         return createServiceResult(new UpdateSoapPortOutput(updatedSoapPort));
     }
 }

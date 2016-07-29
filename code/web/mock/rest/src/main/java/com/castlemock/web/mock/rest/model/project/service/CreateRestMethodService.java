@@ -19,9 +19,7 @@ package com.castlemock.web.mock.rest.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.project.domain.RestMethod;
 import com.castlemock.core.mock.rest.model.project.domain.RestMethodStatus;
-import com.castlemock.core.mock.rest.model.project.domain.RestResource;
 import com.castlemock.core.mock.rest.model.project.domain.RestResponseStrategy;
 import com.castlemock.core.mock.rest.model.project.dto.RestMethodDto;
 import com.castlemock.core.mock.rest.model.project.service.message.input.CreateRestMethodInput;
@@ -53,10 +51,8 @@ public class CreateRestMethodService extends AbstractRestProjectService implemen
             restMethod.setResponseStrategy(RestResponseStrategy.RANDOM);
         }
 
-        final RestResource restResource = findRestResourceType(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId());
-        final RestMethod createdRestMethod = mapper.map(restMethod, RestMethod.class);
-        restResource.getMethods().add(createdRestMethod);
-        save(input.getRestProjectId());
-        return createServiceResult(new CreateRestMethodOutput(mapper.map(createdRestMethod, RestMethodDto.class)));
+        final RestMethodDto createdRestMethod = repository.saveRestMethod(input.getRestProjectId(),
+                input.getRestApplicationId(), input.getRestResourceId(), input.getRestMethod());
+        return createServiceResult(new CreateRestMethodOutput(createdRestMethod));
     }
 }

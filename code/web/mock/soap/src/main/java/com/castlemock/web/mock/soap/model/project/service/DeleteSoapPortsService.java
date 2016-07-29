@@ -19,8 +19,6 @@ package com.castlemock.web.mock.soap.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.soap.model.project.domain.SoapPort;
-import com.castlemock.core.mock.soap.model.project.domain.SoapProject;
 import com.castlemock.core.mock.soap.model.project.dto.SoapPortDto;
 import com.castlemock.core.mock.soap.model.project.service.message.input.DeleteSoapPortsInput;
 import com.castlemock.core.mock.soap.model.project.service.message.output.DeleteSoapPortsOutput;
@@ -43,13 +41,9 @@ public class DeleteSoapPortsService extends AbstractSoapProjectService implement
     @Override
     public ServiceResult<DeleteSoapPortsOutput> process(final ServiceTask<DeleteSoapPortsInput> serviceTask) {
         final DeleteSoapPortsInput input = serviceTask.getInput();
-        final SoapProject soapProject = findType(input.getSoapProjectId());
         for(final SoapPortDto soapPortDto : input.getSoapPorts()){
-            final SoapPort soapPort = findSoapPortType(input.getSoapProjectId(), soapPortDto.getId());
-            soapProject.getPorts().remove(soapPort);
+            repository.deleteSoapPort(input.getSoapProjectId(), soapPortDto.getId());
         }
-
-        save(input.getSoapProjectId());
         return createServiceResult(new DeleteSoapPortsOutput());
     }
 }

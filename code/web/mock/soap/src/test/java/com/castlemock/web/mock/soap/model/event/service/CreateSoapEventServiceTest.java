@@ -19,7 +19,6 @@ package com.castlemock.web.mock.soap.model.event.service;
 import com.castlemock.core.basis.model.Repository;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.soap.model.event.domain.SoapEvent;
 import com.castlemock.core.mock.soap.model.event.dto.SoapEventDto;
 import com.castlemock.core.mock.soap.model.event.service.message.input.CreateSoapEventInput;
 import com.castlemock.core.mock.soap.model.event.service.message.output.CreateSoapEventOutput;
@@ -55,7 +54,7 @@ public class CreateSoapEventServiceTest {
     @Test
     public void testProcess(){
         final SoapEventDto soapEventDto = SoapEventDtoGenerator.generateSoapEventDto();
-        Mockito.when(repository.save(Mockito.any(SoapEvent.class))).thenReturn(SoapEventDtoGenerator.generateSoapEvent());
+        Mockito.when(repository.save(Mockito.any(SoapEventDto.class))).thenReturn(soapEventDto);
 
         final CreateSoapEventInput input = new CreateSoapEventInput(soapEventDto);
         input.setSoapEvent(soapEventDto);

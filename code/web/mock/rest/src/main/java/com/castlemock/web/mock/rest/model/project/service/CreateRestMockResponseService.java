@@ -19,8 +19,6 @@ package com.castlemock.web.mock.rest.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.project.domain.RestMethod;
-import com.castlemock.core.mock.rest.model.project.domain.RestMockResponse;
 import com.castlemock.core.mock.rest.model.project.dto.RestMockResponseDto;
 import com.castlemock.core.mock.rest.model.project.service.message.input.CreateRestMockResponseInput;
 import com.castlemock.core.mock.rest.model.project.service.message.output.CreateRestMockResponseOutput;
@@ -43,10 +41,8 @@ public class CreateRestMockResponseService extends AbstractRestProjectService im
     @Override
     public ServiceResult<CreateRestMockResponseOutput> process(final ServiceTask<CreateRestMockResponseInput> serviceTask) {
         final CreateRestMockResponseInput input = serviceTask.getInput();
-        final RestMethod restMethod = findRestMethodType(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId(), input.getRestMethodId());
-        final RestMockResponse restMockResponse = mapper.map(input.getRestMockResponse(), RestMockResponse.class);
-        restMethod.getMockResponses().add(restMockResponse);
-        save(input.getRestProjectId());
-        return createServiceResult(new CreateRestMockResponseOutput(mapper.map(restMockResponse, RestMockResponseDto.class)));
+        final RestMockResponseDto createdMockResponse = repository.saveRestMockResponse(input.getRestProjectId(), input.getRestApplicationId(),
+                input.getRestResourceId(), input.getRestMethodId(), input.getRestMockResponse());
+        return createServiceResult(new CreateRestMockResponseOutput(createdMockResponse));
     }
 }

@@ -19,13 +19,9 @@ package com.castlemock.web.mock.rest.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.basis.model.http.domain.HttpHeader;
-import com.castlemock.core.mock.rest.model.project.domain.RestMockResponse;
 import com.castlemock.core.mock.rest.model.project.dto.RestMockResponseDto;
 import com.castlemock.core.mock.rest.model.project.service.message.input.UpdateRestMockResponseInput;
 import com.castlemock.core.mock.rest.model.project.service.message.output.UpdateRestMockResponseOutput;
-
-import java.util.List;
 
 /**
  * The service provides the functionality to update an already existing REST mock response.
@@ -47,13 +43,8 @@ public class UpdateRestMockResponseService extends AbstractRestProjectService im
     public ServiceResult<UpdateRestMockResponseOutput> process(final ServiceTask<UpdateRestMockResponseInput> serviceTask) {
         final UpdateRestMockResponseInput input = serviceTask.getInput();
         final RestMockResponseDto updatedRestMockResponse = input.getRestMockResponse();
-        final List<HttpHeader> headers = toDtoList(updatedRestMockResponse.getHttpHeaders(), HttpHeader.class);
-        final RestMockResponse restMockResponse = findRestMockResponseType(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId(), input.getRestMethodId(), input.getRestMockResponseId());
-        restMockResponse.setName(updatedRestMockResponse.getName());
-        restMockResponse.setBody(updatedRestMockResponse.getBody());
-        restMockResponse.setHttpStatusCode(updatedRestMockResponse.getHttpStatusCode());
-        restMockResponse.setHttpHeaders(headers);
-        save(input.getRestProjectId());
+        repository.updateRestMockResponse(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId(),
+                input.getRestMethodId(), input.getRestMockResponseId(), updatedRestMockResponse);
         return createServiceResult(new UpdateRestMockResponseOutput(updatedRestMockResponse));
     }
 }

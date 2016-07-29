@@ -19,13 +19,9 @@ package com.castlemock.web.mock.soap.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.basis.model.http.domain.HttpHeader;
-import com.castlemock.core.mock.soap.model.project.domain.SoapMockResponse;
 import com.castlemock.core.mock.soap.model.project.dto.SoapMockResponseDto;
 import com.castlemock.core.mock.soap.model.project.service.message.input.UpdateSoapMockResponseInput;
 import com.castlemock.core.mock.soap.model.project.service.message.output.UpdateSoapMockResponseOutput;
-
-import java.util.List;
 
 /**
  * The service provides functionality to update a specific SOAP mock response.
@@ -48,14 +44,9 @@ public class UpdateSoapMockResponseService extends AbstractSoapProjectService im
     @Override
     public ServiceResult<UpdateSoapMockResponseOutput> process(final ServiceTask<UpdateSoapMockResponseInput> serviceTask) {
         final UpdateSoapMockResponseInput input = serviceTask.getInput();
-        final SoapMockResponseDto updatedSoapMockResponse = input.getSoapMockResponseDto();
-        final List<HttpHeader> headers = toDtoList(updatedSoapMockResponse.getHttpHeaders(), HttpHeader.class);
-        final SoapMockResponse soapMockResponse = findSoapMockResponseType(input.getSoapProjectId(), input.getSoapPortId(), input.getSoapOperationId(), input.getSoapMockResponseId());
-        soapMockResponse.setName(updatedSoapMockResponse.getName());
-        soapMockResponse.setBody(updatedSoapMockResponse.getBody());
-        soapMockResponse.setHttpStatusCode(updatedSoapMockResponse.getHttpStatusCode());
-        soapMockResponse.setHttpHeaders(headers);
-        save(input.getSoapProjectId());
+        final SoapMockResponseDto updatedSoapMockResponse = repository.updateSoapMockResponse(input.getSoapProjectId(),
+                input.getSoapPortId(), input.getSoapOperationId(),
+                input.getSoapMockResponseId(), input.getSoapMockResponseDto());
         return createServiceResult(new UpdateSoapMockResponseOutput(updatedSoapMockResponse));
     }
 }

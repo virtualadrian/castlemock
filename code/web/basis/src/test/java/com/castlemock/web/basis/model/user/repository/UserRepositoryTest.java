@@ -2,15 +2,14 @@ package com.castlemock.web.basis.model.user.repository;
 
 
 import com.castlemock.core.basis.model.user.domain.User;
+import com.castlemock.core.basis.model.user.dto.UserDto;
 import com.castlemock.web.basis.model.user.dto.UserDtoGenerator;
 import com.castlemock.web.basis.support.FileRepositorySupport;
+import org.dozer.DozerBeanMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.File;
@@ -25,9 +24,11 @@ public class UserRepositoryTest {
 
     @Mock
     private FileRepositorySupport fileRepositorySupport;
-
+    @Spy
+    private DozerBeanMapper mapper;
     @InjectMocks
     private UserRepositoryImpl repository;
+
     private static final String DIRECTORY = "/directory";
     private static final String EXTENSION = ".extension";
 
@@ -50,41 +51,46 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindOne(){
-        final User user = save();
-        final User returnedUser = repository.findOne(user.getId());
-        Assert.assertEquals(user, returnedUser);
+        final UserDto user = save();
+        final UserDto returnedUser = repository.findOne(user.getId());
+        Assert.assertEquals(user.getId(), returnedUser.getId());
+        Assert.assertEquals(user.getEmail(), returnedUser.getEmail());
+        Assert.assertEquals(user.getPassword(), returnedUser.getPassword());
+        Assert.assertEquals(user.getRole(), returnedUser.getRole());
+        Assert.assertEquals(user.getStatus(), returnedUser.getStatus());
+        Assert.assertEquals(user.getUsername(), returnedUser.getUsername());
     }
 
     @Test
     public void testFindAll(){
-        final User user = save();
-        final List<User> users = repository.findAll();
+        final UserDto user = save();
+        final List<UserDto> users = repository.findAll();
         Assert.assertEquals(users.size(), 1);
         Assert.assertEquals(users.get(0), user);
     }
 
     @Test
     public void testSave(){
-        final User user = save();
-        Mockito.verify(fileRepositorySupport, Mockito.times(1)).save(user, DIRECTORY + File.separator + user.getId() + EXTENSION);
+        final UserDto user = save();
+        Mockito.verify(fileRepositorySupport, Mockito.times(1)).save(Mockito.any(User.class), Mockito.anyString());
     }
 
     @Test
     public void testDelete(){
-        final User user = save();
+        final UserDto user = save();
         repository.delete(user.getId());
         Mockito.verify(fileRepositorySupport, Mockito.times(1)).delete(DIRECTORY + File.separator + user.getId() + EXTENSION);
     }
 
     @Test
     public void testCount(){
-        final User user = save();
+        final UserDto user = save();
         final Integer count = repository.count();
         Assert.assertEquals(new Integer(1), count);
     }
 
-    private User save(){
-        final User user = UserDtoGenerator.generateUser();
+    private UserDto save(){
+        final UserDto user = UserDtoGenerator.generateUserDto();
         repository.save(user);
         return user;
     }

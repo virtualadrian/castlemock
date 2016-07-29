@@ -19,8 +19,6 @@ package com.castlemock.web.basis.model.configuration.service;
 import com.castlemock.core.basis.model.Repository;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.basis.model.configuration.domain.Configuration;
-import com.castlemock.core.basis.model.configuration.domain.ConfigurationGroup;
 import com.castlemock.core.basis.model.configuration.domain.ConfigurationType;
 import com.castlemock.core.basis.model.configuration.dto.ConfigurationDto;
 import com.castlemock.core.basis.model.configuration.dto.ConfigurationGroupDto;
@@ -57,12 +55,12 @@ public class ReadAllConfigurationGroupsServiceTest {
 
     @Test
     public void testProcess(){
-        List<ConfigurationGroup> configurationGroups = new ArrayList<ConfigurationGroup>();
-        ConfigurationGroup configurationGroup = new ConfigurationGroup();
+        List<ConfigurationGroupDto> configurationGroups = new ArrayList<ConfigurationGroupDto>();
+        ConfigurationGroupDto configurationGroup = new ConfigurationGroupDto();
         configurationGroup.setId(new String());
         configurationGroup.setName("Configuration group");
-        configurationGroup.setConfigurations(new ArrayList<Configuration>());
-        Configuration configuration = new Configuration();
+        configurationGroup.setConfigurations(new ArrayList<ConfigurationDto>());
+        ConfigurationDto configuration = new ConfigurationDto();
         configuration.setKey("Key");
         configuration.setValue("Value");
         configuration.setType(ConfigurationType.BOOLEAN);

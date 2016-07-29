@@ -19,8 +19,6 @@ package com.castlemock.web.mock.rest.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.project.domain.RestMethod;
-import com.castlemock.core.mock.rest.model.project.domain.RestResource;
 import com.castlemock.core.mock.rest.model.project.service.message.input.DeleteRestMethodInput;
 import com.castlemock.core.mock.rest.model.project.service.message.output.DeleteRestMethodOutput;
 
@@ -42,10 +40,8 @@ public class DeleteRestMethodService extends AbstractRestProjectService implemen
     @Override
     public ServiceResult<DeleteRestMethodOutput> process(final ServiceTask<DeleteRestMethodInput> serviceTask) {
         final DeleteRestMethodInput input = serviceTask.getInput();
-        final RestResource restResource = findRestResourceType(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId());
-        final RestMethod restMethod = findRestMethodType(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId(), input.getRestMethodId());
-        restResource.getMethods().remove(restMethod);
-        save(input.getRestProjectId());
+        repository.deleteRestMethod(input.getRestProjectId(), input.getRestApplicationId(),
+                input.getRestResourceId(), input.getRestMethodId());
         return createServiceResult(new DeleteRestMethodOutput());
     }
 }

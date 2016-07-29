@@ -19,7 +19,6 @@ package com.castlemock.web.mock.rest.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.project.domain.RestApplication;
 import com.castlemock.core.mock.rest.model.project.domain.RestMethodStatus;
 import com.castlemock.core.mock.rest.model.project.dto.RestApplicationDto;
 import com.castlemock.core.mock.rest.model.project.dto.RestResourceDto;
@@ -46,11 +45,10 @@ public class ReadRestApplicationService extends AbstractRestProjectService imple
     @Override
     public ServiceResult<ReadRestApplicationOutput> process(final ServiceTask<ReadRestApplicationInput> serviceTask) {
         final ReadRestApplicationInput input = serviceTask.getInput();
-        final RestApplication restApplication = findRestApplicationType(input.getRestProjectId(), input.getRestApplicationId());
-        final RestApplicationDto restApplicationDto = restApplication != null ? mapper.map(restApplication, RestApplicationDto.class) : null;
-        for(final RestResourceDto restResourceDto : restApplicationDto.getResources()){
-            final Map<RestMethodStatus, Integer> soapOperationStatusCount = getRestMethodStatusCount(restResourceDto);
-            restResourceDto.setStatusCount(soapOperationStatusCount);
+        final RestApplicationDto restApplicationDto = repository.findRestApplication(input.getRestProjectId(), input.getRestApplicationId());
+        for(RestResourceDto restResourceDto : restApplicationDto.getResources()){
+            Map<RestMethodStatus, Integer> restMethodStatusCount = getRestMethodStatusCount(restResourceDto);
+            restResourceDto.setStatusCount(restMethodStatusCount);
         }
         return createServiceResult(new ReadRestApplicationOutput(restApplicationDto));
     }

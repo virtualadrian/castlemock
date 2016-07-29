@@ -19,7 +19,6 @@ package com.castlemock.web.mock.rest.model.event.service;
 import com.castlemock.core.basis.model.Repository;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.event.domain.RestEvent;
 import com.castlemock.core.mock.rest.model.event.dto.RestEventDto;
 import com.castlemock.core.mock.rest.model.event.service.message.input.CreateRestEventInput;
 import com.castlemock.core.mock.rest.model.event.service.message.output.CreateRestEventOutput;
@@ -55,7 +54,7 @@ public class CreateRestEventServiceTest {
     @Test
     public void testProcess(){
         final RestEventDto restEventDto = RestEventDtoGenerator.generateRestEventDto();
-        Mockito.when(repository.save(Mockito.any(RestEvent.class))).thenReturn(RestEventDtoGenerator.generateRestEvent());
+        Mockito.when(repository.save(Mockito.any(RestEventDto.class))).thenReturn(RestEventDtoGenerator.generateRestEventDto());
 
         final CreateRestEventInput input = new CreateRestEventInput(restEventDto);
         input.setRestEvent(restEventDto);

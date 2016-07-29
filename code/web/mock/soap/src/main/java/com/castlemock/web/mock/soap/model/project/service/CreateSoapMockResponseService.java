@@ -19,8 +19,6 @@ package com.castlemock.web.mock.soap.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.soap.model.project.domain.SoapMockResponse;
-import com.castlemock.core.mock.soap.model.project.domain.SoapOperation;
 import com.castlemock.core.mock.soap.model.project.service.message.input.CreateSoapMockResponseInput;
 import com.castlemock.core.mock.soap.model.project.service.message.output.CreateSoapMockResponseOutput;
 
@@ -42,10 +40,7 @@ public class CreateSoapMockResponseService extends AbstractSoapProjectService im
     @Override
     public ServiceResult<CreateSoapMockResponseOutput> process(final ServiceTask<CreateSoapMockResponseInput> serviceTask) {
         final CreateSoapMockResponseInput input = serviceTask.getInput();
-        final SoapOperation soapOperation = findSoapOperationType(input.getSoapProjectId(), input.getSoapPortId(), input.getSoapOperationId());
-        final SoapMockResponse soapMockResponse = mapper.map(input.getSoapMockResponseDto(), SoapMockResponse.class);
-        soapOperation.getMockResponses().add(soapMockResponse);
-        save(input.getSoapProjectId());
+        repository.saveSoapMockResponse(input.getSoapProjectId(), input.getSoapPortId(), input.getSoapOperationId(), input.getSoapMockResponseDto());
         return createServiceResult(new CreateSoapMockResponseOutput());
     }
 }

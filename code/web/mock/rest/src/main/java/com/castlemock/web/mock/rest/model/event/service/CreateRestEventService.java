@@ -19,7 +19,6 @@ package com.castlemock.web.mock.rest.model.event.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.basis.model.event.dto.EventDto;
 import com.castlemock.core.mock.rest.model.event.dto.RestEventDto;
 import com.castlemock.core.mock.rest.model.event.service.message.input.CreateRestEventInput;
 import com.castlemock.core.mock.rest.model.event.service.message.output.CreateRestEventOutput;
@@ -47,8 +46,7 @@ public class CreateRestEventService extends AbstractRestEventService implements 
     public ServiceResult<CreateRestEventOutput> process(ServiceTask<CreateRestEventInput> serviceTask) {
         final CreateRestEventInput input = serviceTask.getInput();
         if(count() >= restMaxEventCount){
-            EventDto eventDto = getOldestEvent();
-            delete(eventDto.getId());
+            repository.deleteOldestEvent();
         }
         final RestEventDto createdRestEvent = save(input.getRestEvent());
         return createServiceResult(new CreateRestEventOutput(createdRestEvent));

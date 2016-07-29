@@ -19,7 +19,6 @@ package com.castlemock.web.mock.rest.model.event.service;
 import com.castlemock.core.basis.model.Repository;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.event.domain.RestEvent;
 import com.castlemock.core.mock.rest.model.event.dto.RestEventDto;
 import com.castlemock.core.mock.rest.model.event.service.message.input.ReadAllRestEventInput;
 import com.castlemock.core.mock.rest.model.event.service.message.output.ReadAllRestEventOutput;
@@ -56,9 +55,9 @@ public class ReadAllRestEventServiceTest {
 
     @Test
     public void testProcess(){
-        final List<RestEvent> restEvents = new ArrayList<RestEvent>();
+        final List<RestEventDto> restEvents = new ArrayList<RestEventDto>();
         for(int index = 0; index < 3; index++){
-            final RestEvent restEvent = RestEventDtoGenerator.generateRestEvent();
+            final RestEventDto restEvent = RestEventDtoGenerator.generateRestEventDto();
             restEvents.add(restEvent);
         }
 
@@ -72,7 +71,7 @@ public class ReadAllRestEventServiceTest {
         Assert.assertEquals(restEvents.size(), output.getRestEvents().size());
 
         for(int index = 0; index < 3; index++){
-            final RestEvent restEvent = restEvents.get(index);
+            final RestEventDto restEvent = restEvents.get(index);
             final RestEventDto returnedRestEvent = output.getRestEvents().get(index);
 
             Assert.assertEquals(restEvent.getId(), returnedRestEvent.getId());

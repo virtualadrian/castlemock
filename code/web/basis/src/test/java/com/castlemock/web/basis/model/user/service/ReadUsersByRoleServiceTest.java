@@ -21,7 +21,6 @@ import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.basis.model.user.domain.Role;
 import com.castlemock.core.basis.model.user.domain.Status;
-import com.castlemock.core.basis.model.user.domain.User;
 import com.castlemock.core.basis.model.user.dto.UserDto;
 import com.castlemock.core.basis.model.user.service.message.input.ReadUsersByRoleInput;
 import com.castlemock.core.basis.model.user.service.message.output.ReadUsersByRoleOutput;
@@ -56,8 +55,8 @@ public class ReadUsersByRoleServiceTest {
 
     @Test
     public void testProcess(){
-        List<User> users = new ArrayList<User>();
-        User user = new User();
+        List<UserDto> users = new ArrayList<UserDto>();
+        UserDto user = new UserDto();
         user.setId(new String());
         user.setUsername("Username");
         user.setStatus(Status.ACTIVE);

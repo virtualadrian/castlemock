@@ -16,11 +16,11 @@
 
 package com.castlemock.web.mock.rest.web.mvc.controller.project;
 
-import com.castlemock.core.mock.rest.model.project.dto.RestApplicationDto;
 import com.castlemock.core.mock.rest.model.project.service.message.input.CreateRestApplicationsInput;
-import com.castlemock.web.mock.rest.manager.WADLComponent;
+import com.castlemock.web.basis.manager.FileManager;
 import com.castlemock.web.mock.rest.web.mvc.command.project.WADLFileUploadForm;
 import com.castlemock.web.mock.rest.web.mvc.controller.AbstractRestViewController;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +28,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -44,9 +46,10 @@ public class RestAddWADLController extends AbstractRestViewController {
     private static final String PAGE = "mock/rest/project/restAddWADL";
     private static final String TYPE_LINK = "link";
     private static final String TYPE_FILE = "file";
+    private static final Logger LOGGER = Logger.getLogger(RestAddWADLController.class);
 
     @Autowired
-    private WADLComponent wadlComponent;
+    private FileManager fileManager;
 
     /**
      * The method returns a view which is used to upload a WADL file for a specific project
@@ -73,16 +76,30 @@ public class RestAddWADLController extends AbstractRestViewController {
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value="/{projectId}/add/wadl", method=RequestMethod.POST)
-    public ModelAndView uploadWADL(@PathVariable final String projectId, @RequestParam final String type, @ModelAttribute("uploadForm") final WADLFileUploadForm uploadForm){
-         List<RestApplicationDto> restApplicationDtos = null;
+    public ModelAndView uploadWADL(@PathVariable final String projectId, @RequestParam final String type, @ModelAttribute("uploadForm") final WADLFileUploadForm uploadForm) throws IOException {
+         List<File> files = null;
 
         if(TYPE_FILE.equals(type)){
-            restApplicationDtos = wadlComponent.createApplication(uploadForm.getFiles(), uploadForm.isGenerateResponse());
+            files = fileManager.uploadFiles(uploadForm.getFiles());
         } else if(TYPE_LINK.equals(type)){
-            restApplicationDtos = wadlComponent.createApplication(uploadForm.getLink(), uploadForm.isGenerateResponse());
+            files = fileManager.uploadFiles(uploadForm.getLink());
+        } else {
+            throw new IllegalArgumentException("Invalid type: " + type);
         }
 
-        serviceProcessor.process(new CreateRestApplicationsInput(projectId, restApplicationDtos));
+        serviceProcessor.process(new CreateRestApplicationsInput(projectId, files, uploadForm.isGenerateResponse()));
+
+
+        for(File uploadedFile : files){
+            boolean deletionResult = fileManager.deleteFile(uploadedFile);
+            if(deletionResult){
+                LOGGER.debug("Deleted the following WADL file: " + uploadedFile.getName());
+            } else {
+                LOGGER.warn("Unable to delete the following WADL file: " + uploadedFile.getName());
+            }
+
+        }
+
         return redirect("/rest/project/" + projectId);
     }
 }

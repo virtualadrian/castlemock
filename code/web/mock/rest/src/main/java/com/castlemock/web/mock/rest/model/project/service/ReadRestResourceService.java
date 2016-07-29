@@ -19,7 +19,6 @@ package com.castlemock.web.mock.rest.model.project.service;
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.project.domain.RestResource;
 import com.castlemock.core.mock.rest.model.project.dto.RestResourceDto;
 import com.castlemock.core.mock.rest.model.project.service.message.input.ReadRestResourceInput;
 import com.castlemock.core.mock.rest.model.project.service.message.output.ReadRestResourceOutput;
@@ -42,8 +41,7 @@ public class ReadRestResourceService extends AbstractRestProjectService implemen
     @Override
     public ServiceResult<ReadRestResourceOutput> process(final ServiceTask<ReadRestResourceInput> serviceTask) {
         final ReadRestResourceInput input = serviceTask.getInput();
-        final RestResource restResource = findRestResourceType(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId());
-        final RestResourceDto restResourceDto = restResource != null ? mapper.map(restResource, RestResourceDto.class) : null;
+        final RestResourceDto restResourceDto = repository.findRestResource(input.getRestProjectId(), input.getRestApplicationId(), input.getRestResourceId());
         return createServiceResult(new ReadRestResourceOutput(restResourceDto));
     }
 }
