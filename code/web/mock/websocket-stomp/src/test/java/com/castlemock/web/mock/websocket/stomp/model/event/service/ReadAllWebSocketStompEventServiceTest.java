@@ -56,9 +56,9 @@ public class ReadAllWebSocketStompEventServiceTest {
 
     @Test
     public void testProcess(){
-        final List<WebSocketStompEvent> webSocketStompEvents = new ArrayList<WebSocketStompEvent>();
+        final List<WebSocketStompEventDto> webSocketStompEvents = new ArrayList<WebSocketStompEventDto>();
         for(int index = 0; index < 3; index++){
-            final WebSocketStompEvent webSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEvent();
+            final WebSocketStompEventDto webSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto();
             webSocketStompEvents.add(webSocketStompEvent);
         }
 
@@ -72,13 +72,13 @@ public class ReadAllWebSocketStompEventServiceTest {
         Assert.assertEquals(webSocketStompEvents.size(), output.getWebSocketStompEvents().size());
 
         for(int index = 0; index < 3; index++){
-            final WebSocketStompEvent webSocketStompEvent = webSocketStompEvents.get(index);
+            final WebSocketStompEventDto webSocketStompEventDto = webSocketStompEvents.get(index);
             final WebSocketStompEventDto returnedWebSocketStompEvent = output.getWebSocketStompEvents().get(index);
 
-            Assert.assertEquals(webSocketStompEvent.getId(), returnedWebSocketStompEvent.getId());
-            Assert.assertEquals(webSocketStompEvent.getApplicationId(), returnedWebSocketStompEvent.getApplicationId());
-            Assert.assertEquals(webSocketStompEvent.getResourceId(), returnedWebSocketStompEvent.getResourceId());
-            Assert.assertEquals(webSocketStompEvent.getProjectId(), returnedWebSocketStompEvent.getProjectId());
+            Assert.assertEquals(webSocketStompEventDto.getId(), returnedWebSocketStompEvent.getId());
+            Assert.assertEquals(webSocketStompEventDto.getApplicationId(), returnedWebSocketStompEvent.getApplicationId());
+            Assert.assertEquals(webSocketStompEventDto.getResourceId(), returnedWebSocketStompEvent.getResourceId());
+            Assert.assertEquals(webSocketStompEventDto.getProjectId(), returnedWebSocketStompEvent.getProjectId());
         }
     }
 }

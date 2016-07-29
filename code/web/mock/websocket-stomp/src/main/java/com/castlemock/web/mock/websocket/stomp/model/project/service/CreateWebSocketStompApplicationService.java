@@ -43,11 +43,7 @@ public class CreateWebSocketStompApplicationService extends AbstractWebSocketSto
     @Override
     public ServiceResult<CreateWebSocketStompApplicationOutput> process(final ServiceTask<CreateWebSocketStompApplicationInput> serviceTask) {
         final CreateWebSocketStompApplicationInput input = serviceTask.getInput();
-        final WebSocketStompProject webSocketStompProject = findType(input.getWebSocketStompProjectId());
-        final WebSocketStompApplicationDto webSocketStompApplication = input.getWebSocketStompApplication();
-        final WebSocketStompApplication createdWebSocketStompApplication = mapper.map(webSocketStompApplication, WebSocketStompApplication.class);
-        webSocketStompProject.getApplications().add(createdWebSocketStompApplication);
-        save(input.getWebSocketStompProjectId());
-        return createServiceResult(new CreateWebSocketStompApplicationOutput(mapper.map(createdWebSocketStompApplication, WebSocketStompApplicationDto.class)));
+        final WebSocketStompApplicationDto webSocketStompApplication = repository.saveWebSocketStompApplication(input.getWebSocketStompProjectId(), input.getWebSocketStompApplication());
+        return createServiceResult(new CreateWebSocketStompApplicationOutput(webSocketStompApplication));
     }
 }

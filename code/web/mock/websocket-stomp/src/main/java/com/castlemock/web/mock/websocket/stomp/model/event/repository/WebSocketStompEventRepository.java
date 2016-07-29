@@ -19,6 +19,7 @@ package com.castlemock.web.mock.websocket.stomp.model.event.repository;
 
 import com.castlemock.core.basis.model.Repository;
 import com.castlemock.core.mock.websocket.stomp.model.event.domain.WebSocketStompEvent;
+import com.castlemock.core.mock.websocket.stomp.model.event.dto.WebSocketStompEventDto;
 
 /**
  * The WebSocket stomp event file repository provides the functionality to interact with the file system.
@@ -29,5 +30,12 @@ import com.castlemock.core.mock.websocket.stomp.model.event.domain.WebSocketStom
  * @see WebSocketStompEvent
  * @see Repository
  */
-public interface WebSocketStompEventRepository extends Repository<WebSocketStompEvent, String> {
+public interface WebSocketStompEventRepository extends Repository<WebSocketStompEvent, WebSocketStompEventDto, String> {
+
+    /**
+     * The service finds the oldest event
+     * @return The oldest event
+     */
+    WebSocketStompEventDto getOldestEvent();
+
 }

@@ -135,6 +135,6 @@ public class WebSocketStompEventServiceAdapterTest {
     public void testGenerateResourceLink(){
         final WebSocketStompEventDto websocketStompEventDto = WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto();
         final String generatedResourceLink = serviceAdapter.generateResourceLink(websocketStompEventDto);
-        Assert.assertEquals("/web/websocketStomp/project/" + websocketStompEventDto.getProjectId() + "/application/" + websocketStompEventDto.getApplicationId() + "/resource/" + websocketStompEventDto.getResourceId(), generatedResourceLink);
+        Assert.assertEquals("/web/websocket-stomp/project/" + websocketStompEventDto.getProjectId() + "/application/" + websocketStompEventDto.getApplicationId() + "/resource/" + websocketStompEventDto.getResourceId(), generatedResourceLink);
     }
 }

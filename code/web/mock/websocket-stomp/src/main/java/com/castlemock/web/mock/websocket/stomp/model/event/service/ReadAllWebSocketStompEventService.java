@@ -33,6 +33,14 @@ import java.util.List;
 @org.springframework.stereotype.Service
 public class ReadAllWebSocketStompEventService extends AbstractWebSocketStompEventService implements Service<ReadAllWebSocketStompEventInput, ReadAllWebSocketStompEventOutput> {
 
+    /**
+     * The process message is responsible for processing an incoming serviceTask and generate
+     * a response based on the incoming serviceTask input
+     * @param serviceTask The serviceTask that will be processed by the service
+     * @return A result based on the processed incoming serviceTask
+     * @see ServiceTask
+     * @see ServiceResult
+     */
     @Override
     public ServiceResult<ReadAllWebSocketStompEventOutput> process(final ServiceTask<ReadAllWebSocketStompEventInput> serviceTask) {
         final List<WebSocketStompEventDto> webSocketStompEvents = findAll();

@@ -42,10 +42,7 @@ public class DeleteWebSocketStompApplicationService extends AbstractWebSocketSto
     @Override
     public ServiceResult<DeleteWebSocketStompApplicationOutput> process(final ServiceTask<DeleteWebSocketStompApplicationInput> serviceTask) {
         final DeleteWebSocketStompApplicationInput input = serviceTask.getInput();
-        final WebSocketStompProject webSocketStompProject = findType(input.getWebSocketStompProjectId());
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        webSocketStompProject.getApplications().remove(webSocketStompApplication);
-        save(input.getWebSocketStompProjectId());
+        repository.deleteWebSocketStompApplication(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
         return createServiceResult(new DeleteWebSocketStompApplicationOutput());
     }
 }

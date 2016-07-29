@@ -42,11 +42,9 @@ public class UpdateWebSocketStompResourceService extends AbstractWebSocketStompP
     @Override
     public ServiceResult<UpdateWebSocketStompResourceOutput> process(final ServiceTask<UpdateWebSocketStompResourceInput> serviceTask) {
         final UpdateWebSocketStompResourceInput input = serviceTask.getInput();
-        final WebSocketStompResourceDto updatedWebSocketStompResource = input.getWebSocketStompResource();
-        final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
-        webSocketStompResource.setName(updatedWebSocketStompResource.getName());
-        webSocketStompResource.setUri(updatedWebSocketStompResource.getUri());
-        save(input.getWebSocketStompProjectId());
-        return createServiceResult(new UpdateWebSocketStompResourceOutput(updatedWebSocketStompResource));
+        final WebSocketStompResourceDto webSocketStompResource = repository.updateWebSocketStompResource(
+                input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(),
+                input.getWebSocketStompResourceId(), input.getWebSocketStompResource());
+        return createServiceResult(new UpdateWebSocketStompResourceOutput(webSocketStompResource));
     }
 }

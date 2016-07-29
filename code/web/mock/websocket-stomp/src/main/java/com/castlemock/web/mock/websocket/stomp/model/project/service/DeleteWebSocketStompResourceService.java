@@ -42,10 +42,7 @@ public class DeleteWebSocketStompResourceService extends AbstractWebSocketStompP
     @Override
     public ServiceResult<DeleteWebSocketStompResourceOutput> process(final ServiceTask<DeleteWebSocketStompResourceInput> serviceTask) {
         final DeleteWebSocketStompResourceInput input = serviceTask.getInput();
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
-        webSocketStompApplication.getResources().remove(webSocketStompResource);
-        save(input.getWebSocketStompProjectId());
+        repository.deleteWebSocketStompResource(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
         return createServiceResult(new DeleteWebSocketStompResourceOutput());
     }
 }

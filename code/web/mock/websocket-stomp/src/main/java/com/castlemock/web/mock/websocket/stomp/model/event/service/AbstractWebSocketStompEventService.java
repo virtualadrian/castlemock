@@ -19,6 +19,7 @@ package com.castlemock.web.mock.websocket.stomp.model.event.service;
 import com.castlemock.core.mock.websocket.stomp.model.event.domain.WebSocketStompEvent;
 import com.castlemock.core.mock.websocket.stomp.model.event.dto.WebSocketStompEventDto;
 import com.castlemock.web.basis.model.event.service.AbstractEventService;
+import com.castlemock.web.mock.websocket.stomp.model.event.repository.WebSocketStompEventRepository;
 
 
 /**
@@ -26,7 +27,7 @@ import com.castlemock.web.basis.model.event.service.AbstractEventService;
  * @author Karl Dahlgren
  * @since 1.5
  */
-public class AbstractWebSocketStompEventService extends AbstractEventService<WebSocketStompEvent, WebSocketStompEventDto> {
+public class AbstractWebSocketStompEventService extends AbstractEventService<WebSocketStompEvent, WebSocketStompEventDto, WebSocketStompEventRepository> {
 
 
 

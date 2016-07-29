@@ -22,6 +22,7 @@ import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompProject;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompApplicationDto;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompProjectDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.DeleteWebSocketStompApplicationsInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.DeleteWebSocketStompApplicationsOutput;
 
@@ -43,12 +44,9 @@ public class DeleteWebSocketStompApplicationsService extends AbstractWebSocketSt
     @Override
     public ServiceResult<DeleteWebSocketStompApplicationsOutput> process(final ServiceTask<DeleteWebSocketStompApplicationsInput> serviceTask) {
         final DeleteWebSocketStompApplicationsInput input = serviceTask.getInput();
-        final WebSocketStompProject webSocketStompProject = findType(input.getWebSocketStompProjectId());
         for(final WebSocketStompApplicationDto webSocketStompApplicationDto : input.getWebSocketStompApplications()){
-            final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), webSocketStompApplicationDto.getId());
-            webSocketStompProject.getApplications().remove(webSocketStompApplication);
+            repository.deleteWebSocketStompApplication(input.getWebSocketStompProjectId(), webSocketStompApplicationDto.getId());
         }
-        save(input.getWebSocketStompProjectId());
         return createServiceResult(new DeleteWebSocketStompApplicationsOutput());
     }
 }

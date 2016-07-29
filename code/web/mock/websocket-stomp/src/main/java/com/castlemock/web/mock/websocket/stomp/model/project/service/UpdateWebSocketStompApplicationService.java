@@ -42,10 +42,8 @@ public class UpdateWebSocketStompApplicationService extends AbstractWebSocketSto
     @Override
     public ServiceResult<UpdateWebSocketStompApplicationOutput> process(final ServiceTask<UpdateWebSocketStompApplicationInput> serviceTask) {
         final UpdateWebSocketStompApplicationInput input = serviceTask.getInput();
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        final WebSocketStompApplicationDto updatedWebSocketStompApplication = input.getWebSocketStompApplication();
-        webSocketStompApplication.setName(updatedWebSocketStompApplication.getName());
-        save(input.getWebSocketStompProjectId());
+        final WebSocketStompApplicationDto updatedWebSocketStompApplication =
+                repository.updateWebSocketStompApplication(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompApplication());
         return createServiceResult(new UpdateWebSocketStompApplicationOutput(updatedWebSocketStompApplication));
     }
 }

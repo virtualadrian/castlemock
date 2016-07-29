@@ -21,6 +21,7 @@ import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResource;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.UpdateWebSocketStompResourcesForwardedEndpointInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.UpdateWebSocketStompResourcesForwardedEndpointOutput;
 
@@ -42,11 +43,13 @@ public class UpdateWebSocketStompResourcesForwardedEndpointService extends Abstr
     @Override
     public ServiceResult<UpdateWebSocketStompResourcesForwardedEndpointOutput> process(final ServiceTask<UpdateWebSocketStompResourcesForwardedEndpointInput> serviceTask) {
         final UpdateWebSocketStompResourcesForwardedEndpointInput input = serviceTask.getInput();
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        for(WebSocketStompResource webSocketStompResource : webSocketStompApplication.getResources()){
+        for(WebSocketStompResourceDto webSocketStompResourceDto : input.getWebSocketStompResources()){
+            WebSocketStompResourceDto webSocketStompResource = repository.findWebSocketStompResource(
+                    input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), webSocketStompResourceDto.getId());
             // Set forward address
+            repository.updateWebSocketStompResource(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), webSocketStompResource.getId(), webSocketStompResource);
         }
-        save(input.getWebSocketStompProjectId());
+
         return createServiceResult(new UpdateWebSocketStompResourcesForwardedEndpointOutput());
     }
 }

@@ -40,7 +40,7 @@ public class ImportWebSocketStompProjectService extends AbstractWebSocketStompPr
     @Override
     public ServiceResult<ImportWebSocketStompProjectOutput> process(final ServiceTask<ImportWebSocketStompProjectInput> serviceTask) {
         final ImportWebSocketStompProjectInput input = serviceTask.getInput();
-        importType(input.getProjectRaw());
+        repository.importOne(input.getProjectRaw());
         return createServiceResult(new ImportWebSocketStompProjectOutput());
     }
 }

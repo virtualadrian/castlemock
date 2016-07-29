@@ -31,6 +31,14 @@ import com.castlemock.core.mock.websocket.stomp.model.event.service.message.outp
 @org.springframework.stereotype.Service
 public class ReadWebSocketStompEventService extends AbstractWebSocketStompEventService implements Service<ReadWebSocketStompEventInput, ReadWebSocketStompEventOutput> {
 
+    /**
+     * The process message is responsible for processing an incoming serviceTask and generate
+     * a response based on the incoming serviceTask input
+     * @param serviceTask The serviceTask that will be processed by the service
+     * @return A result based on the processed incoming serviceTask
+     * @see ServiceTask
+     * @see ServiceResult
+     */
     @Override
     public ServiceResult<ReadWebSocketStompEventOutput> process(ServiceTask<ReadWebSocketStompEventInput> serviceTask) {
         final ReadWebSocketStompEventInput input = serviceTask.getInput();

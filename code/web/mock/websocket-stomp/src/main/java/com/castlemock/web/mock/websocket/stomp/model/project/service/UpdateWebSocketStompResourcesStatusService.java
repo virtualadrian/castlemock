@@ -20,6 +20,7 @@ import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResource;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.UpdateWebSocketStompResourcesStatusInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.UpdateWebSocketStompResourcesStatusOutput;
 
@@ -41,9 +42,11 @@ public class UpdateWebSocketStompResourcesStatusService extends AbstractWebSocke
     @Override
     public ServiceResult<UpdateWebSocketStompResourcesStatusOutput> process(final ServiceTask<UpdateWebSocketStompResourcesStatusInput> serviceTask) {
         final UpdateWebSocketStompResourcesStatusInput input = serviceTask.getInput();
-        final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
+        final WebSocketStompResourceDto webSocketStompResource = repository.findWebSocketStompResource(
+                input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
         webSocketStompResource.setStatus(input.getWebSocketStompResourceStatus());
-        save(input.getWebSocketStompProjectId());
+        repository.updateWebSocketStompResource(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(),
+                input.getWebSocketStompResourceId(), webSocketStompResource);
         return createServiceResult(new UpdateWebSocketStompResourcesStatusOutput());
     }
 }

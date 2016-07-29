@@ -42,8 +42,8 @@ public class ReadWebSocketStompResourceService extends AbstractWebSocketStompPro
     @Override
     public ServiceResult<ReadWebSocketStompResourceOutput> process(final ServiceTask<ReadWebSocketStompResourceInput> serviceTask) {
         final ReadWebSocketStompResourceInput input = serviceTask.getInput();
-        final WebSocketStompResource webSocketStompResource = findWebSocketStompResourceType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
-        final WebSocketStompResourceDto webSocketStompResourceDto = webSocketStompResource != null ? mapper.map(webSocketStompResource, WebSocketStompResourceDto.class) : null;
+        final WebSocketStompResourceDto webSocketStompResourceDto = repository.findWebSocketStompResource(
+                input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), input.getWebSocketStompResourceId());
         return createServiceResult(new ReadWebSocketStompResourceOutput(webSocketStompResourceDto));
     }
 }

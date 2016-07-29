@@ -16,11 +16,17 @@
 
 package com.castlemock.web.mock.websocket.stomp.model.event.repository;
 
+import com.castlemock.core.basis.model.SearchQuery;
+import com.castlemock.core.basis.model.SearchResult;
+import com.castlemock.core.basis.model.event.domain.Event;
 import com.castlemock.core.mock.websocket.stomp.model.event.domain.WebSocketStompEvent;
+import com.castlemock.core.mock.websocket.stomp.model.event.dto.WebSocketStompEventDto;
 import com.castlemock.web.basis.model.RepositoryImpl;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * The class is an implementation of the file repository and provides the functionality to interact with the file system.
@@ -33,7 +39,7 @@ import org.springframework.stereotype.Repository;
  * @see WebSocketStompEvent
  */
 @Repository
-public class WebSocketStompEventRepositoryImpl extends RepositoryImpl<WebSocketStompEvent, String> implements WebSocketStompEventRepository {
+public class WebSocketStompEventRepositoryImpl extends RepositoryImpl<WebSocketStompEvent, WebSocketStompEventDto, String> implements WebSocketStompEventRepository {
 
     @Value(value = "${websocket.stomp.event.file.directory}")
     private String webSocketStompEventFileDirectory;
@@ -59,6 +65,26 @@ public class WebSocketStompEventRepositoryImpl extends RepositoryImpl<WebSocketS
         return webSocketStompEventFileExtension;
     }
 
+
+    /**
+     * The service finds the oldest event
+     * @return The oldest event
+     */
+    @Override
+    public WebSocketStompEventDto getOldestEvent() {
+        Event oldestEvent = null;
+        for(Event event : collection.values()){
+            if(oldestEvent == null){
+                oldestEvent = event;
+            } else if(event.getStartDate().before(oldestEvent.getStartDate())){
+                oldestEvent = event;
+            }
+        }
+
+        return oldestEvent == null ? null : mapper.map(oldestEvent, WebSocketStompEventDto.class);
+    }
+
+
     /**
      * The method is responsible for controller that the type that is about the be saved to the file system is valid.
      * The method should check if the type contains all the necessary values and that the values are valid. This method
@@ -78,4 +104,13 @@ public class WebSocketStompEventRepositoryImpl extends RepositoryImpl<WebSocketS
         Preconditions.checkNotNull(webSocketStompEvent.getStartDate(), "Event start date cannot be null");
     }
 
+    /**
+     * The method provides the functionality to search in the repository with a {@link SearchQuery}
+     * @param query The search query
+     * @return A <code>list</code> of {@link SearchResult} that matches the provided {@link SearchQuery}
+     */
+    @Override
+    public List<SearchResult> search(SearchQuery query) {
+        throw new UnsupportedOperationException();
+    }
 }

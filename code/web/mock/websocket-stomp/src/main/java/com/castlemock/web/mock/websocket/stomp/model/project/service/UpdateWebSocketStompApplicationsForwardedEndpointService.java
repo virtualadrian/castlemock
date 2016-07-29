@@ -22,6 +22,7 @@ import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResource;
 import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompApplicationDto;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.UpdateWebSocketStompApplicationsForwardedEndpointInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.UpdateWebSocketStompApplicationsForwardedEndpointOutput;
 
@@ -44,12 +45,12 @@ public class UpdateWebSocketStompApplicationsForwardedEndpointService extends Ab
     public ServiceResult<UpdateWebSocketStompApplicationsForwardedEndpointOutput> process(final ServiceTask<UpdateWebSocketStompApplicationsForwardedEndpointInput> serviceTask) {
         final UpdateWebSocketStompApplicationsForwardedEndpointInput input = serviceTask.getInput();
         for(WebSocketStompApplicationDto webSocketStompApplicationDto : input.getWebSocketStompApplications()){
-            WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), webSocketStompApplicationDto.getId());
-            for(WebSocketStompResource webSocketStompResource : webSocketStompApplication.getResources()){
+            WebSocketStompApplicationDto webSocketStompApplication = repository.findWebSocketStompApplication(input.getWebSocketStompProjectId(), webSocketStompApplicationDto.getId());
+            for(WebSocketStompResourceDto webSocketStompResource : webSocketStompApplication.getResources()){
                 // Set forward address
+                repository.updateWebSocketStompResource(input.getWebSocketStompProjectId(), webSocketStompApplication.getId(), webSocketStompResource.getId(), webSocketStompResource);
             }
         }
-        save(input.getWebSocketStompProjectId());
         return createServiceResult(new UpdateWebSocketStompApplicationsForwardedEndpointOutput());
     }
 }

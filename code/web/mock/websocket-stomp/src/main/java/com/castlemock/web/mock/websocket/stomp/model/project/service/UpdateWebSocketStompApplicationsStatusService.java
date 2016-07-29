@@ -21,6 +21,8 @@ import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompApplication;
 import com.castlemock.core.mock.websocket.stomp.model.project.domain.WebSocketStompResource;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompApplicationDto;
+import com.castlemock.core.mock.websocket.stomp.model.project.dto.WebSocketStompResourceDto;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.input.UpdateWebSocketStompApplicationsStatusInput;
 import com.castlemock.core.mock.websocket.stomp.model.project.service.message.output.UpdateWebSocketStompApplicationsStatusOutput;
 
@@ -43,11 +45,12 @@ public class UpdateWebSocketStompApplicationsStatusService extends AbstractWebSo
     @Override
     public ServiceResult<UpdateWebSocketStompApplicationsStatusOutput> process(final ServiceTask<UpdateWebSocketStompApplicationsStatusInput> serviceTask) {
         final UpdateWebSocketStompApplicationsStatusInput input = serviceTask.getInput();
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        for(WebSocketStompResource webSocketStompResource : webSocketStompApplication.getResources()){
+        final WebSocketStompApplicationDto webSocketStompApplication = repository.findWebSocketStompApplication(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
+        for(WebSocketStompResourceDto webSocketStompResource : webSocketStompApplication.getResources()){
             webSocketStompResource.setStatus(input.getWebSocketStompResourceStatus());
+            repository.updateWebSocketStompResource(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(),
+                    webSocketStompResource.getId(), webSocketStompResource);
         }
-        save(input.getWebSocketStompProjectId());
         return createServiceResult(new UpdateWebSocketStompApplicationsStatusOutput());
     }
 }

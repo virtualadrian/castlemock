@@ -44,12 +44,10 @@ public class CreateWebSocketStompResourceService extends AbstractWebSocketStompP
     @Override
     public ServiceResult<CreateWebSocketStompResourceOutput> process(final ServiceTask<CreateWebSocketStompResourceInput> serviceTask) {
         final CreateWebSocketStompResourceInput input = serviceTask.getInput();
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        final WebSocketStompResource webSocketStompResource = mapper.map(input.getWebSocketStompResource(), WebSocketStompResource.class);
+        final WebSocketStompResourceDto webSocketStompResource = input.getWebSocketStompResource();
         // Default status for a new ly created WebSocket Stomp resource
         webSocketStompResource.setStatus(WebSocketStompResourceStatus.MOCKED);
-        webSocketStompApplication.getResources().add(webSocketStompResource);
-        save(input.getWebSocketStompProjectId());
-        return createServiceResult(new CreateWebSocketStompResourceOutput(mapper.map(webSocketStompResource, WebSocketStompResourceDto.class)));
+        WebSocketStompResourceDto result = repository.saveWebSocketStompResource(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId(), webSocketStompResource);
+        return createServiceResult(new CreateWebSocketStompResourceOutput(result));
     }
 }

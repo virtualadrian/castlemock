@@ -49,13 +49,13 @@ public class CreateWebSocketStompEventServiceTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ReflectionTestUtils.setField(service, "websocketStompMaxEventCount", 5);
+        ReflectionTestUtils.setField(service, "webSocketStompMaxEventCount", 5);
     }
 
     @Test
     public void testProcess(){
         final WebSocketStompEventDto webSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto();
-        Mockito.when(repository.save(Mockito.any(WebSocketStompEvent.class))).thenReturn(WebSocketStompEventDtoGenerator.generateWebSocketStompEvent());
+        Mockito.when(repository.save(Mockito.any(WebSocketStompEventDto.class))).thenReturn(WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto());
 
         final CreateWebSocketStompEventInput input = new CreateWebSocketStompEventInput(webSocketStompEvent);
 

@@ -53,18 +53,18 @@ public class ReadWebSocketStompEventServiceTest {
 
     @Test
     public void testProcess(){
-        final WebSocketStompEvent webSocketStompEvent = WebSocketStompEventDtoGenerator.generateWebSocketStompEvent();
-        Mockito.when(repository.findOne(webSocketStompEvent.getId())).thenReturn(webSocketStompEvent);
+        final WebSocketStompEventDto webSocketStompEventDto = WebSocketStompEventDtoGenerator.generateWebSocketStompEventDto();
+        Mockito.when(repository.findOne(webSocketStompEventDto.getId())).thenReturn(webSocketStompEventDto);
 
-        final ReadWebSocketStompEventInput input = new ReadWebSocketStompEventInput(webSocketStompEvent.getId());
+        final ReadWebSocketStompEventInput input = new ReadWebSocketStompEventInput(webSocketStompEventDto.getId());
         final ServiceTask<ReadWebSocketStompEventInput> serviceTask = new ServiceTask<ReadWebSocketStompEventInput>(input);
         final ServiceResult<ReadWebSocketStompEventOutput> serviceResult = service.process(serviceTask);
         final ReadWebSocketStompEventOutput output = serviceResult.getOutput();
         final WebSocketStompEventDto returnedWebSocketStompEvent = output.getWebSocketStompEvent();
 
-        Assert.assertEquals(webSocketStompEvent.getId(), returnedWebSocketStompEvent.getId());
-        Assert.assertEquals(webSocketStompEvent.getApplicationId(), returnedWebSocketStompEvent.getApplicationId());
-        Assert.assertEquals(webSocketStompEvent.getResourceId(), returnedWebSocketStompEvent.getResourceId());
-        Assert.assertEquals(webSocketStompEvent.getProjectId(), returnedWebSocketStompEvent.getProjectId());
+        Assert.assertEquals(webSocketStompEventDto.getId(), returnedWebSocketStompEvent.getId());
+        Assert.assertEquals(webSocketStompEventDto.getApplicationId(), returnedWebSocketStompEvent.getApplicationId());
+        Assert.assertEquals(webSocketStompEventDto.getResourceId(), returnedWebSocketStompEvent.getResourceId());
+        Assert.assertEquals(webSocketStompEventDto.getProjectId(), returnedWebSocketStompEvent.getProjectId());
     }
 }

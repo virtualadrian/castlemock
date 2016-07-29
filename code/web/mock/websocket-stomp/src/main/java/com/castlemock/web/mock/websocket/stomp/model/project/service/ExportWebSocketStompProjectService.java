@@ -40,7 +40,7 @@ public class ExportWebSocketStompProjectService extends AbstractWebSocketStompPr
     @Override
     public ServiceResult<ExportWebSocketStompProjectOutput> process(final ServiceTask<ExportWebSocketStompProjectInput> serviceTask) {
         final ExportWebSocketStompProjectInput input = serviceTask.getInput();
-        final String rawProjet = exportType(input.getWebSocketStompProjectId());
+        final String rawProjet = repository.exportOne(input.getWebSocketStompProjectId());
         return createServiceResult(new ExportWebSocketStompProjectOutput(rawProjet));
     }
 }

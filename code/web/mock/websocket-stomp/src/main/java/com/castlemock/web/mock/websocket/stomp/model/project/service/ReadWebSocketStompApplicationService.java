@@ -42,8 +42,8 @@ public class ReadWebSocketStompApplicationService extends AbstractWebSocketStomp
     @Override
     public ServiceResult<ReadWebSocketStompApplicationOutput> process(final ServiceTask<ReadWebSocketStompApplicationInput> serviceTask) {
         final ReadWebSocketStompApplicationInput input = serviceTask.getInput();
-        final WebSocketStompApplication webSocketStompApplication = findWebSocketStompApplicationType(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
-        final WebSocketStompApplicationDto webSocketStompApplicationDto = webSocketStompApplication != null ? mapper.map(webSocketStompApplication, WebSocketStompApplicationDto.class) : null;
+        final WebSocketStompApplicationDto webSocketStompApplicationDto =
+                repository.findWebSocketStompApplication(input.getWebSocketStompProjectId(), input.getWebSocketStompApplicationId());
         return createServiceResult(new ReadWebSocketStompApplicationOutput(webSocketStompApplicationDto));
     }
 }

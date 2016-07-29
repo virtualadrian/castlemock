@@ -49,7 +49,7 @@ public class CreateWebSocketStompEventService extends AbstractWebSocketStompEven
         final CreateWebSocketStompEventInput input = serviceTask.getInput();
         final WebSocketStompEventDto webSocketStompEventDto = input.getWebSocketStompEvent();
         if(count() >= webSocketStompMaxEventCount){
-            EventDto eventDto = getOldestEvent();
+            EventDto eventDto = repository.getOldestEvent();
             delete(eventDto.getId());
 
         }
