@@ -44,7 +44,7 @@
 	<modules>
 		<module>soap</module>
 		<module>rest</module>
-		<module>websocket-stomp</module>
+		<module>websocket</module>
 	</modules>
 
 	<parent>

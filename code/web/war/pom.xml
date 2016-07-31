@@ -70,7 +70,7 @@
 
 		<dependency>
 			<groupId>com.castlemock</groupId>
-			<artifactId>castlemock-web-mock-websocket-stomp</artifactId>
+			<artifactId>castlemock-web-mock-websocket</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

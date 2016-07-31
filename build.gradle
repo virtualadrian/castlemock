@@ -95,8 +95,8 @@ project(':code:core:mock:soap') {
     }
 }
 
-project(':code:core:mock:websocket-stomp') {
-    description = "Fort mocks core: Mock WebSocket Stomp"
+project(':code:core:mock:websocket') {
+    description = "Fort mocks core: Mock WebSocket"
     group = "com.fortmocks.core"
     dependencies {
         compile(project(":code:core:basis"))
@@ -173,8 +173,8 @@ project(':code:web:mock:soap') {
     }
 }
 
-project(':code:web:mock:websocket-stomp') {
-    description = "Fort Mocks web: WebSocket Stomp"
+project(':code:web:mock:websocket') {
+    description = "Fort Mocks web: WebSocket"
     apply plugin: 'spring-boot'
     group = "com.fortmocks.web"
 
@@ -188,7 +188,7 @@ project(':code:web:mock:websocket-stomp') {
 
     dependencies {
         compile(project(":code:web:basis"))
-        compile(project(":code:core:mock:websocket-stomp"))
+        compile(project(":code:core:mock:websocket"))
         testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test')
     }
 }
@@ -216,7 +216,7 @@ project(':code:web:war') {
         compile(project(":code:web:basis"))
         compile(project(":code:web:mock:rest"))
         compile(project(":code:web:mock:soap"))
-        compile(project(":code:web:mock:websocket-stomp"))
+        compile(project(":code:web:mock:websocket"))
 
         compile(group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', 'version': tomcatEmbedVersion)
         compile(group: 'javax.servlet', name: 'javax.servlet-api', 'version': servletApiVersion)
