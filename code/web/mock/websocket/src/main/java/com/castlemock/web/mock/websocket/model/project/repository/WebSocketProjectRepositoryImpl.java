@@ -131,18 +131,18 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
      *         have an identifier, then the method will generate a new identifier for the type.
      */
     @Override
-    public WebSocketProjectDto save(final WebSocketProjectDto webSocketProject) {
-        for(WebSocketApplicationDto webSocketApplication : webSocketProject.getApplications()){
+    public WebSocketProjectDto save(final WebSocketProject webSocketProject) {
+        for(WebSocketApplication webSocketApplication : webSocketProject.getApplications()){
             if(webSocketApplication.getId() == null){
                 String webSocketApplicationId = generateId();
                 webSocketApplication.setId(webSocketApplicationId);
             }
-            for(WebSocketResourceDto webSocketResource : webSocketApplication.getResources()){
+            for(WebSocketResource webSocketResource : webSocketApplication.getResources()){
                 if(webSocketResource.getId() == null){
                     String webSocketResourceId = generateId();
                     webSocketResource.setId(webSocketResourceId);
                 }
-                for(WebSocketMockResponseDto webSocketMockResponse : webSocketResource.getMockResponses()){
+                for(WebSocketMockResponse webSocketMockResponse : webSocketResource.getMockResponses()){
                     if(webSocketMockResponse.getId() == null){
                         String webSocketMockResponseId = generateId();
                         webSocketMockResponse.setId(webSocketMockResponseId);
