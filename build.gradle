@@ -104,7 +104,7 @@ project(':code:core:mock:soap') {
 
 project(':code:core:mock:websocket') {
     description = "Fort mocks core: Mock WebSocket"
-    group = "com.fortmocks.core"
+    group = "com.castlemock.core"
     dependencies {
         compile(project(":code:core:basis"))
     }
@@ -183,7 +183,7 @@ project(':code:web:mock:soap') {
 project(':code:web:mock:websocket') {
     description = "Fort Mocks web: WebSocket"
     apply plugin: 'spring-boot'
-    group = "com.fortmocks.web"
+    group = "com.castlemock.web"
 
     bootRepackage {
         enabled = false
@@ -196,6 +196,8 @@ project(':code:web:mock:websocket') {
     dependencies {
         compile(project(":code:web:basis"))
         compile(project(":code:core:mock:websocket"))
+        compile(group: 'org.springframework', name: 'spring-messaging', version: springFrameworkVersion)
+        compile(group: 'org.springframework.boot', name: 'spring-boot-starter-websocket')
         testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test')
     }
 }
