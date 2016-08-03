@@ -16,10 +16,19 @@
 
 package com.castlemock.web.mock.websocket.web.websocket.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.support.NativeMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Karl Dahlgren
@@ -29,11 +38,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Controller
 public class WebSocketServiceController {
 
-    @MessageMapping("/mock/wss/hello")
-    @SendTo("/mock/wss/topic/greetings")
-    public Greeting greeting(HelloMessage message) throws Exception {
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    @MessageMapping("/project/{projectId}/topic/{topicId}")
+    public void greeting(@DestinationVariable String projectId, @DestinationVariable String topicId) throws Exception {
         Thread.sleep(3000); // simulated delay
-        return new Greeting("Hello, " + message.getName() + "!");
+
+
+        Map<String, List<String>> nativeHeaders = new HashMap<>();
+        nativeHeaders.put("hello", Collections.singletonList("world"));
+
+        Map<String,Object> headers = new HashMap<>();
+        headers.put(NativeMessageHeaderAccessor.NATIVE_HEADERS, nativeHeaders);
+        this.template.convertAndSend("/topic/greetings", new Greeting("Hello!"));
     }
 
 }

@@ -32,11 +32,16 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/mock/wss/topic");
+        config.enableSimpleBroker("/topic");
+
+        // Topic prefix. Not required
+        //config.setApplicationDestinationPrefixes("/mock/ws");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/mock/wss/hello").withSockJS();
+        // The endpoint is only used for when connection to the Websocket interface
+        // Example: http://localhost:8080/castlemock/mock/ws
+        registry.addEndpoint("/mock/ws").setAllowedOrigins("*").withSockJS();
     }
 }
