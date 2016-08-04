@@ -15,7 +15,7 @@
 --%>
 
 <%@ include file="../../../../includes.jspf"%>
-<c:url var="update_resources_endpoint_url"  value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}/resource/update/confirm" />
+<c:url var="update_resources_endpoint_url"  value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/update/confirm" />
 <div class="content-top">
     <h1><spring:message code="websocket.updatewebSocketresourcesendpoint.header.updateresource"/></h1>
 </div>
@@ -36,11 +36,11 @@
                 </tr>
             </table>
             <button class="button-success pure-button"><i class="fa fa-check-circle"></i> <span><spring:message code="websocket.updatewebSocketresourcesendpoint.button.updateresources"/></span></button>
-            <a href="<c:url value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}"/>" class="button-secondary pure-button"><i class="fa fa-times"></i> <spring:message code="websocket.updatewebSocketresourcesendpoint.button.cancel"/></a>
+            <a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}"/>" class="button-secondary pure-button"><i class="fa fa-times"></i> <spring:message code="websocket.updatewebSocketresourcesendpoint.button.cancel"/></a>
         </form:form>
     </c:when>
     <c:otherwise>
         <p><spring:message code="websocket.updatewebSocketresourcesendpoint.label.noresources"/></p>
-        <a href="<c:url value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}"/>" class="button-secondary pure-button"><i class="fa fa-times"></i> <spring:message code="websocket.updatewebSocketresourcesendpoint.button.cancel"/></a>
+        <a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}"/>" class="button-secondary pure-button"><i class="fa fa-times"></i> <spring:message code="websocket.updatewebSocketresourcesendpoint.button.cancel"/></a>
     </c:otherwise>
 </c:choose>

@@ -75,7 +75,7 @@ public class ReadAllWebSocketEventServiceTest {
             final WebSocketEventDto returnedWebSocketEvent = output.getWebSocketEvents().get(index);
 
             Assert.assertEquals(webSocketEventDto.getId(), returnedWebSocketEvent.getId());
-            Assert.assertEquals(webSocketEventDto.getApplicationId(), returnedWebSocketEvent.getApplicationId());
+            Assert.assertEquals(webSocketEventDto.getTopicId(), returnedWebSocketEvent.getTopicId());
             Assert.assertEquals(webSocketEventDto.getResourceId(), returnedWebSocketEvent.getResourceId());
             Assert.assertEquals(webSocketEventDto.getProjectId(), returnedWebSocketEvent.getProjectId());
         }

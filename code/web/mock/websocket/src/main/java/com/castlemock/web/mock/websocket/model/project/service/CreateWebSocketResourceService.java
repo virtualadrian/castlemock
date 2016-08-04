@@ -45,7 +45,7 @@ public class CreateWebSocketResourceService extends AbstractWebSocketProjectServ
         final WebSocketResourceDto webSocketResource = input.getWebSocketResource();
         // Default status for a new ly created WebSocket resource
         webSocketResource.setStatus(WebSocketResourceStatus.MOCKED);
-        WebSocketResourceDto result = repository.saveWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketApplicationId(), webSocketResource);
+        WebSocketResourceDto result = repository.saveWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketTopicId(), webSocketResource);
         return createServiceResult(new CreateWebSocketResourceOutput(result));
     }
 }

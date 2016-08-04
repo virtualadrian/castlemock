@@ -90,7 +90,7 @@ public class WebSocketEventRepositoryImpl extends RepositoryImpl<WebSocketEvent,
      * The method should check if the type contains all the necessary values and that the values are valid. This method
      * will always be called before a type is about to be saved. The main reason for why this is vital and done before
      * saving is to make sure that the type can be correctly saved to the file system, but also loaded from the
-     * file system upon application startup. The method will throw an exception in case of the type not being acceptable.
+     * file system upon topic startup. The method will throw an exception in case of the type not being acceptable.
      * @param webSocketEvent The instance of the type that will be checked and controlled before it is allowed to be saved on
      *             the file system.
      * @see #save

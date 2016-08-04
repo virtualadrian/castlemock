@@ -31,15 +31,15 @@ public class UpdateWebSocketResourcesForwardedEndpointInput implements Input {
     @NotNull
     private String webSocketProjectId;
     @NotNull
-    private String webSocketApplicationId;
+    private String webSocketTopicId;
     @NotNull
     private List<WebSocketResourceDto> webSocketResources;
     @NotNull
     private String forwardedEndpoint;
 
-    public UpdateWebSocketResourcesForwardedEndpointInput(String webSocketProjectId, String webSocketApplicationId, List<WebSocketResourceDto> webSocketResources, String forwardedEndpoint) {
+    public UpdateWebSocketResourcesForwardedEndpointInput(String webSocketProjectId, String webSocketTopicId, List<WebSocketResourceDto> webSocketResources, String forwardedEndpoint) {
         this.webSocketProjectId = webSocketProjectId;
-        this.webSocketApplicationId = webSocketApplicationId;
+        this.webSocketTopicId = webSocketTopicId;
         this.webSocketResources = webSocketResources;
         this.forwardedEndpoint = forwardedEndpoint;
     }
@@ -52,12 +52,12 @@ public class UpdateWebSocketResourcesForwardedEndpointInput implements Input {
         this.webSocketProjectId = webSocketProjectId;
     }
 
-    public String getWebSocketApplicationId() {
-        return webSocketApplicationId;
+    public String getWebSocketTopicId() {
+        return webSocketTopicId;
     }
 
-    public void setWebSocketApplicationId(String webSocketApplicationId) {
-        this.webSocketApplicationId = webSocketApplicationId;
+    public void setWebSocketTopicId(String webSocketTopicId) {
+        this.webSocketTopicId = webSocketTopicId;
     }
 
     public List<WebSocketResourceDto> getWebSocketResources() {

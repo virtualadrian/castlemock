@@ -19,11 +19,11 @@ package com.castlemock.web.mock.websocket.model.project.repository;
 import com.castlemock.core.basis.model.SearchQuery;
 import com.castlemock.core.basis.model.SearchResult;
 import com.castlemock.core.basis.model.SearchValidator;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketApplication;
+import com.castlemock.core.mock.websocket.model.project.domain.WebSocketTopic;
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketMockResponse;
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketProject;
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResource;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketApplicationDto;
+import com.castlemock.core.mock.websocket.model.project.dto.WebSocketTopicDto;
 import com.castlemock.core.mock.websocket.model.project.dto.WebSocketMockResponseDto;
 import com.castlemock.core.mock.websocket.model.project.dto.WebSocketProjectDto;
 import com.castlemock.core.mock.websocket.model.project.dto.WebSocketResourceDto;
@@ -62,7 +62,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
 
     private static final String WEBSOCKET = "WebSocket";
     private static final String PROJECT = "project";
-    private static final String APPLICATION = "application";
+    private static final String TOPIC = "topic";
     private static final String RESOURCE = "resource";
     private static final String RESPONSE = "response";
     private static final String COMMA = ", ";
@@ -111,7 +111,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
      * The method should check if the type contains all the necessary values and that the values are valid. This method
      * will always be called before a type is about to be saved. The main reason for why this is vital and done before
      * saving is to make sure that the type can be correctly saved to the file system, but also loaded from the
-     * file system upon application startup. The method will throw an exception in case of the type not being acceptable.
+     * file system upon topic startup. The method will throw an exception in case of the type not being acceptable.
      * @param webSocketProject The instance of the type that will be checked and controlled before it is allowed to be saved on
      *             the file system.
      * @see #save
@@ -132,12 +132,12 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
      */
     @Override
     public WebSocketProjectDto save(final WebSocketProject webSocketProject) {
-        for(WebSocketApplication webSocketApplication : webSocketProject.getApplications()){
-            if(webSocketApplication.getId() == null){
-                String webSocketApplicationId = generateId();
-                webSocketApplication.setId(webSocketApplicationId);
+        for(WebSocketTopic webSocketTopic : webSocketProject.getTopics()){
+            if(webSocketTopic.getId() == null){
+                String webSocketTopicId = generateId();
+                webSocketTopic.setId(webSocketTopicId);
             }
-            for(WebSocketResource webSocketResource : webSocketApplication.getResources()){
+            for(WebSocketResource webSocketResource : webSocketTopic.getResources()){
                 if(webSocketResource.getId() == null){
                     String webSocketResourceId = generateId();
                     webSocketResource.setId(webSocketResourceId);
@@ -183,27 +183,27 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         return null;
     }
 
-    public WebSocketApplication findWebSocketApplicationType(final String webSocketProjectId, final String webSocketApplicationId) {
+    public WebSocketTopic findWebSocketTopicType(final String webSocketProjectId, final String webSocketTopicId) {
         Preconditions.checkNotNull(webSocketProjectId, "Project id cannot be null");
-        Preconditions.checkNotNull(webSocketApplicationId, "Application id cannot be null");
+        Preconditions.checkNotNull(webSocketTopicId, "Topic id cannot be null");
         final WebSocketProject webSocketProject = collection.get(webSocketProjectId);
 
         if(webSocketProject == null){
             throw new IllegalArgumentException("Unable to find a WebSocket project with id " + webSocketProjectId);
         }
 
-        for(WebSocketApplication webSocketApplication : webSocketProject.getApplications()){
-            if(webSocketApplication.getId().equals(webSocketApplicationId)){
-                return webSocketApplication;
+        for(WebSocketTopic webSocketTopic : webSocketProject.getTopics()){
+            if(webSocketTopic.getId().equals(webSocketTopicId)){
+                return webSocketTopic;
             }
         }
-        throw new IllegalArgumentException("Unable to find a WebSocket application with id " + webSocketApplicationId);
+        throw new IllegalArgumentException("Unable to find a WebSocket topic with id " + webSocketTopicId);
     }
 
-    public WebSocketResource findWebSocketResourceType(final String webSocketProjectId, final String webSocketApplicationId, final String webSocketResourceId){
+    public WebSocketResource findWebSocketResourceType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketResourceId){
         Preconditions.checkNotNull(webSocketResourceId, "Resource id cannot be null");
-        final WebSocketApplication webSocketApplication = findWebSocketApplicationType(webSocketProjectId, webSocketApplicationId);
-        for(WebSocketResource webSocketResource : webSocketApplication.getResources()){
+        final WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        for(WebSocketResource webSocketResource : webSocketTopic.getResources()){
             if(webSocketResource.getId().equals(webSocketResourceId)){
                 return webSocketResource;
             }
@@ -211,9 +211,9 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         throw new IllegalArgumentException("Unable to find a WebSocket resource with id " + webSocketResourceId);
     }
 
-    public WebSocketMockResponse findWebSocketMockResponseType(final String webSocketProjectId, final String webSocketApplicationId, final String webSocketResourceId, final String webSocketMockResponseId){
+    public WebSocketMockResponse findWebSocketMockResponseType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketResourceId, final String webSocketMockResponseId){
         Preconditions.checkNotNull(webSocketResourceId, "Resource id cannot be null");
-        final WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketApplicationId, webSocketResourceId);
+        final WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
         for(WebSocketMockResponse webSocketMockResponse : webSocketResource.getMockResponses()){
             if(webSocketMockResponse.getId().equals(webSocketMockResponseId)){
                 return webSocketMockResponse;
@@ -226,16 +226,16 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
 
 
     /**
-     * Find a WebSocket resource with a project id, application id and a set of resource parts
+     * Find a WebSocket resource with a project id, topic id and a set of resource parts
      * @param webSocketProjectId The id of the project that the resource belongs to
-     * @param webSocketApplicationId The id of the application that the resource belongs to
+     * @param webSocketTopicId The id of the topic that the resource belongs to
      * @param otherWebSocketResourceUriParts The set of resources that will be used to identify the WebSocket resource
      * @return A WebSocket resource that matches the search criteria. Null otherwise
      */
-    public WebSocketResource findWebSocketResourceType(final String webSocketProjectId, final String webSocketApplicationId, final String[] otherWebSocketResourceUriParts) {
-        final WebSocketApplication webSocketApplication = findWebSocketApplicationType(webSocketProjectId, webSocketApplicationId);
+    public WebSocketResource findWebSocketResourceType(final String webSocketProjectId, final String webSocketTopicId, final String[] otherWebSocketResourceUriParts) {
+        final WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
 
-        for(WebSocketResource webSocketResource : webSocketApplication.getResources()){
+        for(WebSocketResource webSocketResource : webSocketTopic.getResources()){
             final String[] webSocketResourceUriParts = webSocketResource.getUri().split(SLASH);
 
             if(compareWebSocketResourceUri(webSocketResourceUriParts, otherWebSocketResourceUriParts)){
@@ -274,47 +274,47 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketApplicationDto findWebSocketApplication(String webSocketProjectId, String webSocketApplicationId) {
-        Preconditions.checkNotNull(webSocketApplicationId, "Application id cannot be null");
-        final WebSocketApplication webSocketApplication = findWebSocketApplicationType(webSocketProjectId, webSocketApplicationId);
-        return mapper.map(webSocketApplication, WebSocketApplicationDto.class);
+    public WebSocketTopicDto findWebSocketTopic(String webSocketProjectId, String webSocketTopicId) {
+        Preconditions.checkNotNull(webSocketTopicId, "Topic id cannot be null");
+        final WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        return mapper.map(webSocketTopic, WebSocketTopicDto.class);
     }
 
     @Override
-    public WebSocketResourceDto findWebSocketResource(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId) {
+    public WebSocketResourceDto findWebSocketResource(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId) {
         Preconditions.checkNotNull(webSocketResourceId, "Resource id cannot be null");
-        final WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketApplicationId, webSocketResourceId);
+        final WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
         return mapper.map(webSocketResource, WebSocketResourceDto.class);
     }
 
     @Override
-    public WebSocketMockResponseDto findWebSocketMockResponse(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId, String webSocketMockResponseId) {
+    public WebSocketMockResponseDto findWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId) {
         Preconditions.checkNotNull(webSocketResourceId, "Mock response id cannot be null");
-        final WebSocketMockResponse webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketApplicationId, webSocketResourceId, webSocketMockResponseId);
+        final WebSocketMockResponse webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketMockResponseId);
         return mapper.map(webSocketMockResponse, WebSocketMockResponseDto.class);
     }
 
     @Override
-    public WebSocketApplicationDto saveWebSocketApplication(String webSocketProjectId, WebSocketApplicationDto webSocketApplicationDto) {
+    public WebSocketTopicDto saveWebSocketTopic(String webSocketProjectId, WebSocketTopicDto webSocketTopicDto) {
         WebSocketProject webSocketProject = collection.get(webSocketProjectId);
-        WebSocketApplication webSocketApplication = mapper.map(webSocketApplicationDto, WebSocketApplication.class);
-        webSocketProject.getApplications().add(webSocketApplication);
+        WebSocketTopic webSocketTopic = mapper.map(webSocketTopicDto, WebSocketTopic.class);
+        webSocketProject.getTopics().add(webSocketTopic);
         save(webSocketProjectId);
-        return mapper.map(webSocketApplication, WebSocketApplicationDto.class);
+        return mapper.map(webSocketTopic, WebSocketTopicDto.class);
     }
 
     @Override
-    public WebSocketResourceDto saveWebSocketResource(String webSocketProjectId, String webSocketApplicationId, WebSocketResourceDto webSocketResourceDto) {
-        WebSocketApplication webSocketApplication = findWebSocketApplicationType(webSocketProjectId, webSocketApplicationId);
+    public WebSocketResourceDto saveWebSocketResource(String webSocketProjectId, String webSocketTopicId, WebSocketResourceDto webSocketResourceDto) {
+        WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
         WebSocketResource webSocketResource = mapper.map(webSocketResourceDto, WebSocketResource.class);
-        webSocketApplication.getResources().add(webSocketResource);
+        webSocketTopic.getResources().add(webSocketResource);
         save(webSocketProjectId);
         return mapper.map(webSocketResource, WebSocketResourceDto.class);
     }
 
     @Override
-    public WebSocketMockResponseDto saveWebSocketMockResponse(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId, WebSocketMockResponseDto webSocketMockResponseDto) {
-        WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketApplicationId, webSocketResourceId);
+    public WebSocketMockResponseDto saveWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketMockResponseDto webSocketMockResponseDto) {
+        WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
         WebSocketMockResponse webSocketMockResponse = mapper.map(webSocketMockResponseDto, WebSocketMockResponse.class);
         webSocketResource.getMockResponses().add(webSocketMockResponse);
         save(webSocketProjectId);
@@ -322,15 +322,15 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketApplicationDto updateWebSocketApplication(String webSocketProjectId, String webSocketApplicationId, WebSocketApplicationDto updatedWebSocketApplicationDto) {
-        WebSocketApplication webSocketApplication = findWebSocketApplicationType(webSocketProjectId, webSocketApplicationId);
-        webSocketApplication.setName(updatedWebSocketApplicationDto.getName());
-        return updatedWebSocketApplicationDto;
+    public WebSocketTopicDto updateWebSocketTopic(String webSocketProjectId, String webSocketTopicId, WebSocketTopicDto updatedWebSocketTopicDto) {
+        WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        webSocketTopic.setName(updatedWebSocketTopicDto.getName());
+        return updatedWebSocketTopicDto;
     }
 
     @Override
-    public WebSocketResourceDto updateWebSocketResource(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId, WebSocketResourceDto webSocketResourceDto) {
-        WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketApplicationId, webSocketResourceId);
+    public WebSocketResourceDto updateWebSocketResource(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketResourceDto webSocketResourceDto) {
+        WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
         webSocketResource.setName(webSocketResourceDto.getName());
         webSocketResource.setUri(webSocketResourceDto.getUri());
         webSocketResource.setStatus(webSocketResourceDto.getStatus());
@@ -338,8 +338,8 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketMockResponseDto updateWebSocketMockResponse(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId, String webSocketMockResponseId, WebSocketMockResponseDto webSocketMockResponseDto) {
-        WebSocketMockResponse webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketApplicationId, webSocketResourceId, webSocketMockResponseId);
+    public WebSocketMockResponseDto updateWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId, WebSocketMockResponseDto webSocketMockResponseDto) {
+        WebSocketMockResponse webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketMockResponseId);
         webSocketMockResponse.setName(webSocketMockResponseDto.getName());
         webSocketMockResponse.setBody(webSocketMockResponseDto.getBody());
         webSocketMockResponse.setHttpStatusCode(webSocketMockResponseDto.getHttpStatusCode());
@@ -348,32 +348,32 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketApplicationDto deleteWebSocketApplication(String webSocketProjectId, String webSocketApplicationId) {
+    public WebSocketTopicDto deleteWebSocketTopic(String webSocketProjectId, String webSocketTopicId) {
         WebSocketProject webSocketProject = collection.get(webSocketProjectId);
-        Iterator<WebSocketApplication> webSocketApplicationIterator = webSocketProject.getApplications().iterator();
-        WebSocketApplication deletedWebSocketApplication = null;
-        while(webSocketApplicationIterator.hasNext()){
-            deletedWebSocketApplication = webSocketApplicationIterator.next();
-            if(webSocketApplicationId.equals(deletedWebSocketApplication.getId())){
-                webSocketApplicationIterator.remove();
+        Iterator<WebSocketTopic> webSocketTopicIterator = webSocketProject.getTopics().iterator();
+        WebSocketTopic deletedWebSocketTopic = null;
+        while(webSocketTopicIterator.hasNext()){
+            deletedWebSocketTopic = webSocketTopicIterator.next();
+            if(webSocketTopicId.equals(deletedWebSocketTopic.getId())){
+                webSocketTopicIterator.remove();
                 break;
             }
         }
 
-        if(deletedWebSocketApplication != null){
+        if(deletedWebSocketTopic != null){
             save(webSocketProjectId);
         }
-        return deletedWebSocketApplication != null ? mapper.map(deletedWebSocketApplication, WebSocketApplicationDto.class) : null;
+        return deletedWebSocketTopic != null ? mapper.map(deletedWebSocketTopic, WebSocketTopicDto.class) : null;
     }
 
     @Override
-    public WebSocketResourceDto deleteWebSocketResource(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId) {
-        WebSocketApplication webSocketApplication = findWebSocketApplicationType(webSocketProjectId, webSocketApplicationId);
-        Iterator<WebSocketResource> webSocketResourceIterator = webSocketApplication.getResources().iterator();
+    public WebSocketResourceDto deleteWebSocketResource(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId) {
+        WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        Iterator<WebSocketResource> webSocketResourceIterator = webSocketTopic.getResources().iterator();
         WebSocketResource deletedWebSocketResource = null;
         while(webSocketResourceIterator.hasNext()){
             deletedWebSocketResource = webSocketResourceIterator.next();
-            if(webSocketApplicationId.equals(deletedWebSocketResource.getId())){
+            if(webSocketTopicId.equals(deletedWebSocketResource.getId())){
                 webSocketResourceIterator.remove();
                 break;
             }
@@ -386,13 +386,13 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketMockResponseDto deleteWebSocketMockResponse(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId, String webSocketMockResponseId) {
-        WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketApplicationId, webSocketResourceId);
+    public WebSocketMockResponseDto deleteWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId) {
+        WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
         Iterator<WebSocketMockResponse> webSocketMockResponseIterator = webSocketResource.getMockResponses().iterator();
         WebSocketMockResponse deletedWebSocketMockResponse = null;
         while(webSocketMockResponseIterator.hasNext()){
             deletedWebSocketMockResponse = webSocketMockResponseIterator.next();
-            if(webSocketApplicationId.equals(deletedWebSocketMockResponse.getId())){
+            if(webSocketTopicId.equals(deletedWebSocketMockResponse.getId())){
                 webSocketMockResponseIterator.remove();
                 break;
             }
@@ -423,33 +423,33 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         }
 
 
-        for(WebSocketApplication webSocketApplication : webSocketProject.getApplications()){
-            List<SearchResult> webSocketOperationSearchResult = searchWebSocketApplication(webSocketProject, webSocketApplication, query);
+        for(WebSocketTopic webSocketTopic : webSocketProject.getTopics()){
+            List<SearchResult> webSocketOperationSearchResult = searchWebSocketTopic(webSocketProject, webSocketTopic, query);
             searchResults.addAll(webSocketOperationSearchResult);
         }
         return searchResults;
     }
 
     /**
-     * Search through a WebSocket application and all its resources
+     * Search through a WebSocket topic and all its resources
      * @param webSocketProject The WebSocket project which will be searched
-     * @param webSocketApplication The WebSocket application which will be searched
+     * @param webSocketTopic The WebSocket topic which will be searched
      * @param query The provided search query
      * @return A list of search results that matches the provided query
      */
-    private List<SearchResult> searchWebSocketApplication(final WebSocketProject webSocketProject, final WebSocketApplication webSocketApplication, final String query){
+    private List<SearchResult> searchWebSocketTopic(final WebSocketProject webSocketProject, final WebSocketTopic webSocketTopic, final String query){
         final List<SearchResult> searchResults = new LinkedList<SearchResult>();
-        if(SearchValidator.validate(webSocketApplication.getName(), query)){
+        if(SearchValidator.validate(webSocketTopic.getName(), query)){
             final String portType = messageSource.getMessage("webSocket.type.port", null , LocaleContextHolder.getLocale());
             final SearchResult searchResult = new SearchResult();
-            searchResult.setTitle(webSocketApplication.getName());
-            searchResult.setLink(WEBSOCKET + SLASH + PROJECT + SLASH + webSocketProject.getId() + SLASH + APPLICATION + SLASH + webSocketApplication.getId());
+            searchResult.setTitle(webSocketTopic.getName());
+            searchResult.setLink(WEBSOCKET + SLASH + PROJECT + SLASH + webSocketProject.getId() + SLASH + TOPIC + SLASH + webSocketTopic.getId());
             searchResult.setDescription(WEBSOCKET_TYPE + COMMA + portType);
             searchResults.add(searchResult);
         }
 
-        for(WebSocketResource webSocketResource : webSocketApplication.getResources()){
-            List<SearchResult> webSocketOperationSearchResult = searchWebSocketResource(webSocketProject, webSocketApplication, webSocketResource, query);
+        for(WebSocketResource webSocketResource : webSocketTopic.getResources()){
+            List<SearchResult> webSocketOperationSearchResult = searchWebSocketResource(webSocketProject, webSocketTopic, webSocketResource, query);
             searchResults.addAll(webSocketOperationSearchResult);
         }
         return searchResults;
@@ -458,24 +458,24 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     /**
      * Search through a WebSocket resource and all its resources
      * @param webSocketProject The WebSocket project which will be searched
-     * @param webSocketApplication The WebSocket application which will be searched
+     * @param webSocketTopic The WebSocket topic which will be searched
      * @param webSocketResource The WebSocket resource which will be searched
      * @param query The provided search query
      * @return A list of search results that matches the provided query
      */
-    private List<SearchResult> searchWebSocketResource(final WebSocketProject webSocketProject, final WebSocketApplication webSocketApplication, final WebSocketResource webSocketResource, final String query){
+    private List<SearchResult> searchWebSocketResource(final WebSocketProject webSocketProject, final WebSocketTopic webSocketTopic, final WebSocketResource webSocketResource, final String query){
         final List<SearchResult> searchResults = new LinkedList<SearchResult>();
         if(SearchValidator.validate(webSocketResource.getName(), query)){
             final String operationType = messageSource.getMessage("webSocket.type.operation", null , LocaleContextHolder.getLocale());
             final SearchResult searchResult = new SearchResult();
             searchResult.setTitle(webSocketResource.getName());
-            searchResult.setLink(WEBSOCKET + SLASH + PROJECT + SLASH + webSocketProject.getId() + SLASH + APPLICATION + SLASH + webSocketApplication.getId() + SLASH + RESOURCE + SLASH + webSocketResource.getId());
+            searchResult.setLink(WEBSOCKET + SLASH + PROJECT + SLASH + webSocketProject.getId() + SLASH + TOPIC + SLASH + webSocketTopic.getId() + SLASH + RESOURCE + SLASH + webSocketResource.getId());
             searchResult.setDescription(WEBSOCKET_TYPE + COMMA + operationType);
             searchResults.add(searchResult);
         }
 
         for(WebSocketMockResponse webSocketMockResponse : webSocketResource.getMockResponses()){
-            SearchResult webSocketMockResponseSearchResult = searchWebSocketMockResponse(webSocketProject, webSocketApplication, webSocketResource, webSocketMockResponse, query);
+            SearchResult webSocketMockResponseSearchResult = searchWebSocketMockResponse(webSocketProject, webSocketTopic, webSocketResource, webSocketMockResponse, query);
             if(webSocketMockResponseSearchResult != null){
                 searchResults.add(webSocketMockResponseSearchResult);
             }
@@ -486,20 +486,20 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     /**
      * Search through a WebSocket response
      * @param webSocketProject The WebSocket project which will be searched
-     * @param webSocketApplication The WebSocket application which will be searched
+     * @param webSocketTopic The WebSocket topic which will be searched
      * @param webSocketResource The WebSocket resource which will be searched
      * @param webSocketMockResponse The WebSocket response that will be searched
      * @param query The provided search query
      * @return A list of search results that matches the provided query
      */
-    private SearchResult searchWebSocketMockResponse(final WebSocketProject webSocketProject, final WebSocketApplication webSocketApplication, final WebSocketResource webSocketResource, final WebSocketMockResponse webSocketMockResponse, final String query){
+    private SearchResult searchWebSocketMockResponse(final WebSocketProject webSocketProject, final WebSocketTopic webSocketTopic, final WebSocketResource webSocketResource, final WebSocketMockResponse webSocketMockResponse, final String query){
         SearchResult searchResult = null;
 
         if(SearchValidator.validate(webSocketMockResponse.getName(), query)){
             final String mockResponseType = messageSource.getMessage("webSocket.type.mockresponse", null , LocaleContextHolder.getLocale());
             searchResult = new SearchResult();
             searchResult.setTitle(webSocketMockResponse.getName());
-            searchResult.setLink(WEBSOCKET + SLASH + PROJECT + SLASH + webSocketProject.getId() + SLASH + APPLICATION + SLASH + webSocketApplication.getId() + SLASH + RESOURCE + SLASH + webSocketResource.getId() + SLASH + RESPONSE + SLASH + webSocketMockResponse.getId());
+            searchResult.setLink(WEBSOCKET + SLASH + PROJECT + SLASH + webSocketProject.getId() + SLASH + TOPIC + SLASH + webSocketTopic.getId() + SLASH + RESOURCE + SLASH + webSocketResource.getId() + SLASH + RESPONSE + SLASH + webSocketMockResponse.getId());
             searchResult.setDescription(WEBSOCKET_TYPE + COMMA + mockResponseType);
         }
 

@@ -31,17 +31,17 @@ import java.util.List;
  */
 public class AbstractWebSocketViewController extends AbstractViewController {
 
-    protected static final String APPLICATION = "application";
+    protected static final String TOPIC = "topic";
     protected static final String WEBSOCKET = "wss";
     protected static final String WEBSOCKET_PROJECT = "webSocketProject";
     protected static final String WEBSOCKET_PROJECT_ID = "webSocketProjectId";
     protected static final String WEBSOCKET_RESOURCE_STATUSES = "webSocketResourceStatuses";
     protected static final String WEBSOCKET_RESOURCES = "webSocketResources";
-    protected static final String WEBSOCKET_APPLICATION = "webSocketApplication";
+    protected static final String WEBSOCKET_TOPIC = "webSocketTopic";
     protected static final String WEBSOCKET_RESOURCE_ID = "webSocketResourceId";
-    protected static final String WEBSOCKET_APPLICATION_ID = "webSocketApplicationId";
+    protected static final String WEBSOCKET_TOPIC_ID = "webSocketTopicId";
     protected static final String WEBSOCKET_RESOURCE = "webSocketResource";
-    protected static final String WEBSOCKET_APPLICATIONS = "webSocketApplications";
+    protected static final String WEBSOCKET_TOPICS = "webSocketTopics";
 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractWebSocketViewController.class);
@@ -54,10 +54,10 @@ public class AbstractWebSocketViewController extends AbstractViewController {
      * @param urlPath The URL path (The end of the URL, which is used to identify the WebSocket service)
      * @return A URL based on all the incoming parameters
      */
-    protected String getWebSocketInvokeAddress(final String protocol, int serverPort, final String projectId, final String applicationId, final String urlPath){
+    protected String getWebSocketInvokeAddress(final String protocol, int serverPort, final String projectId, final String topicId, final String urlPath){
         try {
             final String hostAddress = getHostAddress();
-            return protocol + hostAddress + ":" + serverPort + getContext() + SLASH + MOCK + SLASH + WEBSOCKET + SLASH + PROJECT + SLASH + projectId + SLASH + APPLICATION + SLASH + applicationId + urlPath;
+            return protocol + hostAddress + ":" + serverPort + getContext() + SLASH + MOCK + SLASH + WEBSOCKET + SLASH + PROJECT + SLASH + projectId + SLASH + TOPIC + SLASH + topicId + urlPath;
         } catch (Exception exception) {
             LOGGER.error("Unable to generate invoke URL", exception);
             throw new IllegalStateException("Unable to generate invoke URL for " + projectId);

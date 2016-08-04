@@ -20,7 +20,7 @@ import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResourceStatus;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketApplicationDto;
+import com.castlemock.core.mock.websocket.model.project.dto.WebSocketTopicDto;
 import com.castlemock.core.mock.websocket.model.project.dto.WebSocketProjectDto;
 import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketProjectInput;
 import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketProjectOutput;
@@ -46,9 +46,9 @@ public class ReadWebSocketProjectService extends AbstractWebSocketProjectService
     public ServiceResult<ReadWebSocketProjectOutput> process(final ServiceTask<ReadWebSocketProjectInput> serviceTask) {
         final ReadWebSocketProjectInput input = serviceTask.getInput();
         final WebSocketProjectDto webSocketProject = find(input.getWebSocketProjectId());
-        for(final WebSocketApplicationDto webSocketApplicationDto : webSocketProject.getApplications()){
-            final Map<WebSocketResourceStatus, Integer> webSocketOperationStatusCount = getWebSocketResourceStatusCount(webSocketApplicationDto.getResources());
-            webSocketApplicationDto.setStatusCount(webSocketOperationStatusCount);
+        for(final WebSocketTopicDto webSocketTopicDto : webSocketProject.getTopics()){
+            final Map<WebSocketResourceStatus, Integer> webSocketOperationStatusCount = getWebSocketResourceStatusCount(webSocketTopicDto.getResources());
+            webSocketTopicDto.setStatusCount(webSocketOperationStatusCount);
         }
         return createServiceResult(new ReadWebSocketProjectOutput(webSocketProject));
     }

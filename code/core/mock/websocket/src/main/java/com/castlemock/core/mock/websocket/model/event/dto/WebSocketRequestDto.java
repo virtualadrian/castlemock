@@ -29,39 +29,11 @@ import java.util.List;
  */
 public class WebSocketRequestDto {
 
-    @Mapping("body")
-    private String body;
-
-    @Mapping("contentType")
-    private String contentType;
-
     @Mapping("uri")
     private String uri;
 
-    @Mapping("httpMethod")
-    private HttpMethod httpMethod;
-
-    @Mapping("httpParameters")
-    private List<HttpParameterDto> httpParameters;
-
     @Mapping("httpHeaders")
     private List<HttpHeaderDto> httpHeaders;
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
 
     public String getUri() {
         return uri;
@@ -69,22 +41,6 @@ public class WebSocketRequestDto {
 
     public void setUri(String uri) {
         this.uri = uri;
-    }
-
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
-    public void setHttpMethod(HttpMethod httpMethod) {
-        this.httpMethod = httpMethod;
-    }
-
-    public List<HttpParameterDto> getHttpParameters() {
-        return httpParameters;
-    }
-
-    public void setHttpParameters(List<HttpParameterDto> httpParameters) {
-        this.httpParameters = httpParameters;
     }
 
     public List<HttpHeaderDto> getHttpHeaders() {

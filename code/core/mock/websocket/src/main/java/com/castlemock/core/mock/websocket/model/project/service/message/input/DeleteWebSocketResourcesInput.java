@@ -31,13 +31,13 @@ public class DeleteWebSocketResourcesInput implements Input{
     @NotNull
     private String webSocketProjectId;
     @NotNull
-    private String webSocketApplicationId;
+    private String webSocketTopicId;
     @NotNull
     private List<WebSocketResourceDto> webSocketResources;
 
-    public DeleteWebSocketResourcesInput(String webSocketProjectId, String webSocketApplicationId, List<WebSocketResourceDto> webSocketResources) {
+    public DeleteWebSocketResourcesInput(String webSocketProjectId, String webSocketTopicId, List<WebSocketResourceDto> webSocketResources) {
         this.webSocketProjectId = webSocketProjectId;
-        this.webSocketApplicationId = webSocketApplicationId;
+        this.webSocketTopicId = webSocketTopicId;
         this.webSocketResources = webSocketResources;
     }
 
@@ -49,12 +49,12 @@ public class DeleteWebSocketResourcesInput implements Input{
         this.webSocketProjectId = webSocketProjectId;
     }
 
-    public String getWebSocketApplicationId() {
-        return webSocketApplicationId;
+    public String getWebSocketTopicId() {
+        return webSocketTopicId;
     }
 
-    public void setWebSocketApplicationId(String webSocketApplicationId) {
-        this.webSocketApplicationId = webSocketApplicationId;
+    public void setWebSocketTopicId(String webSocketTopicId) {
+        this.webSocketTopicId = webSocketTopicId;
     }
 
     public List<WebSocketResourceDto> getWebSocketResources() {

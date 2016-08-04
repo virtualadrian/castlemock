@@ -15,7 +15,7 @@
   ~ limitations under the License.
   --%>
 
-<c:url var="create_webSocket_resource_url"  value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}/create/resource" />
+<c:url var="create_webSocket_resource_url"  value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/create/resource" />
 <div class="content-top">
     <h1><spring:message code="websocket.createresource.header.resource"/></h1>
 </div>
@@ -33,7 +33,7 @@
     </table>
  
     <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-plus"></i> <span><spring:message code="websocket.createresource.button.createresource"/></span></button>
-    <a href="<c:url value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}"/>" class="button-error pure-button"><i class="fa fa-times"></i> <span><spring:message code="websocket.createresource.button.cancel"/></span></a>
+    <a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}"/>" class="button-error pure-button"><i class="fa fa-times"></i> <span><spring:message code="websocket.createresource.button.cancel"/></span></a>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form:form>
 <script>

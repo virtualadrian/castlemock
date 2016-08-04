@@ -60,10 +60,10 @@ public class CreateWebSocketEventServiceTest {
 
         final ServiceTask<CreateWebSocketEventInput> serviceTask = new ServiceTask<CreateWebSocketEventInput>(input);
         final ServiceResult<CreateWebSocketEventOutput> serviceResult = service.process(serviceTask);
-        final CreateWebSocketEventOutput createWebSocketApplicationOutput = serviceResult.getOutput();
-        final WebSocketEventDto returnedWebSocketEventDto = createWebSocketApplicationOutput.getCreatedWebSocketEvent();
+        final CreateWebSocketEventOutput createWebSocketTopicOutput = serviceResult.getOutput();
+        final WebSocketEventDto returnedWebSocketEventDto = createWebSocketTopicOutput.getCreatedWebSocketEvent();
 
-        Assert.assertEquals(webSocketEvent.getApplicationId(), returnedWebSocketEventDto.getApplicationId());
+        Assert.assertEquals(webSocketEvent.getTopicId(), returnedWebSocketEventDto.getTopicId());
         Assert.assertEquals(webSocketEvent.getResourceId(), returnedWebSocketEventDto.getResourceId());
         Assert.assertEquals(webSocketEvent.getProjectId(), returnedWebSocketEventDto.getProjectId());
     }

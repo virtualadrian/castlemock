@@ -42,7 +42,7 @@ public class ReadWebSocketResourceService extends AbstractWebSocketProjectServic
     public ServiceResult<ReadWebSocketResourceOutput> process(final ServiceTask<ReadWebSocketResourceInput> serviceTask) {
         final ReadWebSocketResourceInput input = serviceTask.getInput();
         final WebSocketResourceDto webSocketResourceDto = repository.findWebSocketResource(
-                input.getWebSocketProjectId(), input.getWebSocketApplicationId(), input.getWebSocketResourceId());
+                input.getWebSocketProjectId(), input.getWebSocketTopicId(), input.getWebSocketResourceId());
         return createServiceResult(new ReadWebSocketResourceOutput(webSocketResourceDto));
     }
 }

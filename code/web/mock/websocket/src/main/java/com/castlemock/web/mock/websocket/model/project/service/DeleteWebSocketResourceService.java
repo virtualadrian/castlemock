@@ -40,7 +40,7 @@ public class DeleteWebSocketResourceService extends AbstractWebSocketProjectServ
     @Override
     public ServiceResult<DeleteWebSocketResourceOutput> process(final ServiceTask<DeleteWebSocketResourceInput> serviceTask) {
         final DeleteWebSocketResourceInput input = serviceTask.getInput();
-        repository.deleteWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketApplicationId(), input.getWebSocketResourceId());
+        repository.deleteWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketTopicId(), input.getWebSocketResourceId());
         return createServiceResult(new DeleteWebSocketResourceOutput());
     }
 }

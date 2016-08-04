@@ -28,8 +28,8 @@ import java.util.List;
  */
 public class WebSocketProjectDto extends ProjectDto {
 
-    @Mapping("applications")
-    private List<WebSocketApplicationDto> applications = new LinkedList<WebSocketApplicationDto>();
+    @Mapping("topics")
+    private List<WebSocketTopicDto> topics = new LinkedList<WebSocketTopicDto>();
 
     /**
      * The default WebSocket project constructor
@@ -47,11 +47,11 @@ public class WebSocketProjectDto extends ProjectDto {
     }
 
 
-    public List<WebSocketApplicationDto> getApplications() {
-        return applications;
+    public List<WebSocketTopicDto> getTopics() {
+        return topics;
     }
 
-    public void setApplications(List<WebSocketApplicationDto> applications) {
-        this.applications = applications;
+    public void setTopics(List<WebSocketTopicDto> topics) {
+        this.topics = topics;
     }
 }

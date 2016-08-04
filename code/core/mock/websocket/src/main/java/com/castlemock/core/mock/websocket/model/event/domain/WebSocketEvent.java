@@ -31,7 +31,7 @@ public class WebSocketEvent extends Event {
     private WebSocketRequest request;
     private WebSocketResponse response;
     private String projectId;
-    private String applicationId;
+    private String topicId;
     private String resourceId;
 
     @XmlElement
@@ -62,12 +62,12 @@ public class WebSocketEvent extends Event {
     }
 
     @XmlElement
-    public String getApplicationId() {
-        return applicationId;
+    public String getTopicId() {
+        return topicId;
     }
 
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
     }
 
     @XmlElement

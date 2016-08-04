@@ -50,25 +50,25 @@ public class WebSocketResourceController extends AbstractWebSocketViewController
     private static final String UPDATE_WEBSOCKET_METHODS_ENDPOINT_COMMAND = "updateWebSocketMethodsEndpointCommand";
 
     /**
-     * Retrieves a specific WebSocket resource with a project id, application and resource id
+     * Retrieves a specific WebSocket resource with a project id, topic and resource id
      * @param webSocketProjectId The id of the project that the WebSocket resource belongs to
-     * @param webSocketApplicationId The id of the application that the WebSocket resource belongs to
+     * @param webSocketTopicId The id of the topic that the WebSocket resource belongs to
      * @param webSocketResourceId The id of the WebSocket resource that should be retrieve
      * @param request The incoming servlet request. Used to extract the address used to invoke the WebSocket methods
      * @return WebSocket resource that matches the provided resource id
      */
     @PreAuthorize("hasAuthority('READER') or hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/{webSocketResourceId}", method = RequestMethod.GET)
-    public ModelAndView defaultPage(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @PathVariable final String webSocketResourceId, final ServletRequest request) {
-        final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketApplicationId, webSocketResourceId));
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/{webSocketResourceId}", method = RequestMethod.GET)
+    public ModelAndView defaultPage(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @PathVariable final String webSocketResourceId, final ServletRequest request) {
+        final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketTopicId, webSocketResourceId));
         final WebSocketResourceDto webSocketResource = output.getWebSocketResource();
 
         final String protocol = getProtocol(request);
-        final String invokeAddress = getWebSocketInvokeAddress(protocol, request.getServerPort(), webSocketProjectId, webSocketApplicationId, webSocketResource.getUri());
+        final String invokeAddress = getWebSocketInvokeAddress(protocol, request.getServerPort(), webSocketProjectId, webSocketTopicId, webSocketResource.getUri());
         webSocketResource.setInvokeAddress(invokeAddress);
         final ModelAndView model = createPartialModelAndView(PAGE);
         model.addObject(WEBSOCKET_PROJECT_ID, webSocketProjectId);
-        model.addObject(WEBSOCKET_APPLICATION_ID, webSocketApplicationId);
+        model.addObject(WEBSOCKET_TOPIC_ID, webSocketTopicId);
         model.addObject(WEBSOCKET_RESOURCE, webSocketResource);
         model.addObject(WEBSOCKET_RESOURCE_STATUSES, getWebSocketResourceStatuses());
         return model;

@@ -17,16 +17,16 @@
 package com.castlemock.web.mock.websocket.web.mvc.controller.project;
 
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResourceStatus;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketApplicationDto;
+import com.castlemock.core.mock.websocket.model.project.dto.WebSocketTopicDto;
 import com.castlemock.core.mock.websocket.model.project.dto.WebSocketProjectDto;
-import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketApplicationInput;
+import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketTopicInput;
 import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketProjectInput;
-import com.castlemock.core.mock.websocket.model.project.service.message.input.UpdateWebSocketApplicationsStatusInput;
-import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketApplicationOutput;
+import com.castlemock.core.mock.websocket.model.project.service.message.input.UpdateWebSocketTopicsStatusInput;
+import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketTopicOutput;
 import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketProjectOutput;
-import com.castlemock.web.mock.websocket.web.mvc.command.application.DeleteWebSocketApplicationsCommand;
-import com.castlemock.web.mock.websocket.web.mvc.command.application.UpdateWebSocketApplicationsEndpointCommand;
-import com.castlemock.web.mock.websocket.web.mvc.command.application.WebSocketApplicationModifierCommand;
+import com.castlemock.web.mock.websocket.web.mvc.command.topic.DeleteWebSocketTopicsCommand;
+import com.castlemock.web.mock.websocket.web.mvc.command.topic.UpdateWebSocketTopicsEndpointCommand;
+import com.castlemock.web.mock.websocket.web.mvc.command.topic.WebSocketTopicModifierCommand;
 import com.castlemock.web.mock.websocket.web.mvc.controller.AbstractWebSocketViewController;
 import org.apache.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,14 +47,14 @@ import java.util.List;
 public class WebSocketProjectController extends AbstractWebSocketViewController {
 
     private static final String PAGE = "mock/websocket/project/webSocketProject";
-    private static final String DELETE_WEBSOCKET_APPLICATIONS_PAGE = "mock/websocket/application/deleteWebSocketApplications";
-    private static final String UPDATE_WEBSOCKET_APPLICATIONS_ENDPOINT_PAGE = "mock/websocket/application/updateWebSocketApplicationsEndpoint";
+    private static final String DELETE_WEBSOCKET_TOPICS_PAGE = "mock/websocket/topic/deleteWebSocketTopics";
+    private static final String UPDATE_WEBSOCKET_TOPICS_ENDPOINT_PAGE = "mock/websocket/topic/updateWebSocketTopicsEndpoint";
     private static final String UPDATE_STATUS = "update";
-    private static final String DELETE_WEBSOCKET_STOPM_APPLICATION = "delete";
+    private static final String DELETE_WEBSOCKET_STOPM_TOPIC = "delete";
     private static final String UPDATE_ENDPOINTS = "update-endpoint";
-    private static final String DELETE_WEBSOCKET_APPLICATIONS_COMMAND = "deleteWebSocketApplicationsCommand";
-    private static final String WEBSOCKET_APPLICATION_MODIFIER_COMMAND = "webSocketApplicationModifierCommand";
-    private static final String UPDATE_WEBSOCKET_APPLICATIONS_ENDPOINT_COMMAND = "updateWebSocketApplicationsEndpointCommand";
+    private static final String DELETE_WEBSOCKET_TOPICS_COMMAND = "deleteWebSocketTopicsCommand";
+    private static final String WEBSOCKET_TOPIC_MODIFIER_COMMAND = "webSocketTopicModifierCommand";
+    private static final String UPDATE_WEBSOCKET_TOPICS_ENDPOINT_COMMAND = "updateWebSocketTopicsEndpointCommand";
     private static final Logger LOGGER = Logger.getLogger(WebSocketProjectController.class);
 
     /**
@@ -70,50 +70,50 @@ public class WebSocketProjectController extends AbstractWebSocketViewController 
         final ModelAndView model = createPartialModelAndView(PAGE);
         model.addObject(WEBSOCKET_PROJECT, project);
         model.addObject(WEBSOCKET_RESOURCE_STATUSES, getWebSocketResourceStatuses());
-        model.addObject(WEBSOCKET_APPLICATION_MODIFIER_COMMAND, new WebSocketApplicationModifierCommand());
+        model.addObject(WEBSOCKET_TOPIC_MODIFIER_COMMAND, new WebSocketTopicModifierCommand());
         model.addObject(DEMO_MODE, demoMode);
         return model;
     }
 
     /**
-     * The method projectFunctionality provides multiple functionalities: Update applications status
-     * and delete applications. Both of the functionalities involves a set of applications that belongs
+     * The method projectFunctionality provides multiple functionalities: Update topics status
+     * and delete topics. Both of the functionalities involves a set of topics that belongs
      * to a specific project
-     * @param projectId The id of the project that the applications belong to
+     * @param projectId The id of the project that the topics belong to
      * @param action The name of the action that should be executed (delete or update).
-     * @param webSocketApplicationModifierCommand The command object that contains the list of applications that get affected by the executed action.
+     * @param webSocketTopicModifierCommand The command object that contains the list of topics that get affected by the executed action.
      * @return Redirects the user back to the main page for the project with the provided id.
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/{projectId}", method = RequestMethod.POST)
-    public ModelAndView projectFunctionality(@PathVariable final String projectId, @RequestParam final String action, @ModelAttribute final WebSocketApplicationModifierCommand webSocketApplicationModifierCommand) {
+    public ModelAndView projectFunctionality(@PathVariable final String projectId, @RequestParam final String action, @ModelAttribute final WebSocketTopicModifierCommand webSocketTopicModifierCommand) {
         LOGGER.debug("Requested WebSocket project action requested: " + action);
         if(UPDATE_STATUS.equalsIgnoreCase(action)){
-            final WebSocketResourceStatus webSocketResourceStatus = WebSocketResourceStatus.valueOf(webSocketApplicationModifierCommand.getWebSocketResourceStatus());
-            for(String webSocketApplicationId : webSocketApplicationModifierCommand.getWebSocketApplicationIds()){
-                serviceProcessor.process(new UpdateWebSocketApplicationsStatusInput(projectId, webSocketApplicationId, webSocketResourceStatus));
+            final WebSocketResourceStatus webSocketResourceStatus = WebSocketResourceStatus.valueOf(webSocketTopicModifierCommand.getWebSocketResourceStatus());
+            for(String webSocketTopicId : webSocketTopicModifierCommand.getWebSocketTopicIds()){
+                serviceProcessor.process(new UpdateWebSocketTopicsStatusInput(projectId, webSocketTopicId, webSocketResourceStatus));
             }
-        } else if(DELETE_WEBSOCKET_STOPM_APPLICATION.equalsIgnoreCase(action)) {
-            final List<WebSocketApplicationDto> webSocketApplicationDtos = new ArrayList<WebSocketApplicationDto>();
-            for(String webSocketApplicationId : webSocketApplicationModifierCommand.getWebSocketApplicationIds()){
-                final ReadWebSocketApplicationOutput output = serviceProcessor.process(new ReadWebSocketApplicationInput(projectId, webSocketApplicationId));
-                webSocketApplicationDtos.add(output.getWebSocketApplication());
+        } else if(DELETE_WEBSOCKET_STOPM_TOPIC.equalsIgnoreCase(action)) {
+            final List<WebSocketTopicDto> webSocketTopicDtos = new ArrayList<WebSocketTopicDto>();
+            for(String webSocketTopicId : webSocketTopicModifierCommand.getWebSocketTopicIds()){
+                final ReadWebSocketTopicOutput output = serviceProcessor.process(new ReadWebSocketTopicInput(projectId, webSocketTopicId));
+                webSocketTopicDtos.add(output.getWebSocketTopic());
             }
-            final ModelAndView model = createPartialModelAndView(DELETE_WEBSOCKET_APPLICATIONS_PAGE);
+            final ModelAndView model = createPartialModelAndView(DELETE_WEBSOCKET_TOPICS_PAGE);
             model.addObject(WEBSOCKET_PROJECT_ID, projectId);
-            model.addObject(WEBSOCKET_APPLICATIONS, webSocketApplicationDtos);
-            model.addObject(DELETE_WEBSOCKET_APPLICATIONS_COMMAND, new DeleteWebSocketApplicationsCommand());
+            model.addObject(WEBSOCKET_TOPICS, webSocketTopicDtos);
+            model.addObject(DELETE_WEBSOCKET_TOPICS_COMMAND, new DeleteWebSocketTopicsCommand());
             return model;
         } else if(UPDATE_ENDPOINTS.equalsIgnoreCase(action)){
-            final List<WebSocketApplicationDto> webSocketApplicationDtos = new ArrayList<WebSocketApplicationDto>();
-            for(String webSocketApplicationId : webSocketApplicationModifierCommand.getWebSocketApplicationIds()){
-                final ReadWebSocketApplicationOutput output = serviceProcessor.process(new ReadWebSocketApplicationInput(projectId, webSocketApplicationId));
-                webSocketApplicationDtos.add(output.getWebSocketApplication());
+            final List<WebSocketTopicDto> webSocketTopicDtos = new ArrayList<WebSocketTopicDto>();
+            for(String webSocketTopicId : webSocketTopicModifierCommand.getWebSocketTopicIds()){
+                final ReadWebSocketTopicOutput output = serviceProcessor.process(new ReadWebSocketTopicInput(projectId, webSocketTopicId));
+                webSocketTopicDtos.add(output.getWebSocketTopic());
             }
-            final ModelAndView model = createPartialModelAndView(UPDATE_WEBSOCKET_APPLICATIONS_ENDPOINT_PAGE);
+            final ModelAndView model = createPartialModelAndView(UPDATE_WEBSOCKET_TOPICS_ENDPOINT_PAGE);
             model.addObject(WEBSOCKET_PROJECT_ID, projectId);
-            model.addObject(WEBSOCKET_APPLICATIONS, webSocketApplicationDtos);
-            model.addObject(UPDATE_WEBSOCKET_APPLICATIONS_ENDPOINT_COMMAND, new UpdateWebSocketApplicationsEndpointCommand());
+            model.addObject(WEBSOCKET_TOPICS, webSocketTopicDtos);
+            model.addObject(UPDATE_WEBSOCKET_TOPICS_ENDPOINT_COMMAND, new UpdateWebSocketTopicsEndpointCommand());
             return model;
         }
         return redirect("/wss/project/" + projectId);

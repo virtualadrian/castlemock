@@ -40,23 +40,23 @@ public class CreateWebSocketResourceController extends AbstractWebSocketViewCont
     private static final String PAGE = "mock/websocket/resource/createWebSocketResource";
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{projectId}/application/{applicationId}/create/resource", method = RequestMethod.GET)
-    public ModelAndView defaultPage(@PathVariable final String projectId, @PathVariable final String applicationId) {
+    @RequestMapping(value = "/{projectId}/topic/{topicId}/create/resource", method = RequestMethod.GET)
+    public ModelAndView defaultPage(@PathVariable final String projectId, @PathVariable final String topicId) {
         final WebSocketResourceDto webSocketResourceDto = new WebSocketResourceDto();
         webSocketResourceDto.setUri(SLASH);
         final ModelAndView model = createPartialModelAndView(PAGE);
         model.addObject(WEBSOCKET_PROJECT_ID, projectId);
-        model.addObject(WEBSOCKET_APPLICATION_ID, applicationId);
+        model.addObject(WEBSOCKET_TOPIC_ID, topicId);
         model.addObject(WEBSOCKET_RESOURCE, webSocketResourceDto);
         return model;
     }
 
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{projectId}/application/{applicationId}/create/resource", method = RequestMethod.POST)
-    public ModelAndView createResource(@PathVariable final String projectId, @PathVariable final String applicationId, @ModelAttribute final WebSocketResourceDto webSocketResourceDto) {
-        final CreateWebSocketResourceOutput output = serviceProcessor.process(new CreateWebSocketResourceInput(projectId, applicationId, webSocketResourceDto));
-        return redirect("/wss/project/" + projectId + "/application/" + applicationId + "/resource/" +  output.getCreatedWebSocketResource().getId());
+    @RequestMapping(value = "/{projectId}/topic/{topicId}/create/resource", method = RequestMethod.POST)
+    public ModelAndView createResource(@PathVariable final String projectId, @PathVariable final String topicId, @ModelAttribute final WebSocketResourceDto webSocketResourceDto) {
+        final CreateWebSocketResourceOutput output = serviceProcessor.process(new CreateWebSocketResourceInput(projectId, topicId, webSocketResourceDto));
+        return redirect("/wss/project/" + projectId + "/topic/" + topicId + "/resource/" +  output.getCreatedWebSocketResource().getId());
     }
 
 

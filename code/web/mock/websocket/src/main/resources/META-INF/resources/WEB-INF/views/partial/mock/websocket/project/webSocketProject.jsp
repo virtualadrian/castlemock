@@ -16,7 +16,7 @@
 
 <%@ include file="../../../../includes.jspf"%>
 
-<c:url var="websocket_application_update_url"  value="/web/wss/project/${webSocketProject.id}" />
+<c:url var="websocket_topic_update_url"  value="/web/wss/project/${webSocketProject.id}" />
 <div class="content-top">
     <div class="title">
         <h1><spring:message code="websocket.websocketproject.header.project" arguments="${webSocketProject.name}"/></h1>
@@ -24,7 +24,7 @@
     <div class="menu" align="right">
         <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
         <a class="button-success pure-button" href="<c:url value="/web/wss/project/${webSocketProject.id}/update"/>"><i class="fa fa-file"></i> <span><spring:message code="websocket.websocketproject.button.updateproject"/></span></a>
-        <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProject.id}/create/application"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.websocketproject.button.createapplication"/></span></a>
+        <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProject.id}/create/topic"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.websocketproject.button.createtopic"/></span></a>
         <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProject.id}/export"/>"><i class="fa fa-cloud-download"></i> <span><spring:message code="websocket.websocketproject.button.export"/></span></a>
         <a class="button-error pure-button" href="<c:url value="/web/wss/project/${webSocketProject.id}/delete"/>"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websocketproject.button.delete"/></span></a>
         </sec:authorize>
@@ -46,25 +46,25 @@
         </tr>
     </table>
 </div>
-<h2 class="decorated"><span><spring:message code="websocket.websocketproject.header.applications"/></span></h2>
+<h2 class="decorated"><span><spring:message code="websocket.websocketproject.header.topics"/></span></h2>
 <c:choose>
-    <c:when test="${webSocketProject.applications.size() > 0}">
-        <form:form action="${websocket_application_update_url}/" method="POST"  commandName="webSocketApplicationModifierCommand">
+    <c:when test="${webSocketProject.topics.size() > 0}">
+        <form:form action="${websocket_topic_update_url}/" method="POST"  commandName="webSocketTopicModifierCommand">
             <div class="table-frame">
                 <table class="entityTable">
                     <tr>
                         <th><spring:message code="websocket.websocketproject.column.selected"/></th>
-                        <th><spring:message code="websocket.websocketproject.column.application"/></th>
+                        <th><spring:message code="websocket.websocketproject.column.topic"/></th>
                         <c:forEach items="${webSocketResourceStatuses}" var="webSocketResourceStatus">
                             <th><spring:message code="websocket.type.websocketresourcestatus.${webSocketResourceStatus}"/></th>
                         </c:forEach>
                     </tr>
-                    <c:forEach items="${webSocketProject.applications}" var="webSocketApplication" varStatus="loopStatus">
+                    <c:forEach items="${webSocketProject.topics}" var="webSocketTopic" varStatus="loopStatus">
                         <tr class="${loopStatus.index % 2 == 0 ? 'even' : 'odd'}">
-                            <td><form:checkbox path="webSocketApplicationIds" name="${webSocketApplication.id}" value="${webSocketApplication.id}"/></td>
-                            <td><a href="<c:url value="/web/wss/project/${webSocketProject.id}/application/${webSocketApplication.id}"/>">${webSocketApplication.name}</a></td>
+                            <td><form:checkbox path="webSocketTopicIds" name="${webSocketTopic.id}" value="${webSocketTopic.id}"/></td>
+                            <td><a href="<c:url value="/web/wss/project/${webSocketProject.id}/topic/${webSocketTopic.id}"/>">${webSocketTopic.name}</a></td>
                             <c:forEach items="${webSocketResourceStatuses}" var="webSocketResourceStatus">
-                                <td>${webSocketApplication.statusCount[webSocketResourceStatus]}</td>
+                                <td>${webSocketTopic.statusCount[webSocketResourceStatus]}</td>
                             </c:forEach>
                         </tr>
                     </c:forEach>
@@ -78,13 +78,13 @@
                 </form:select>
                 <button class="button-success pure-button" type="submit" name="action" value="update"><i class="fa fa-check-circle"></i> <span><spring:message code="websocket.websocketproject.button.update"/></span></button>
                 <button class="button-secondary pure-button" type="submit" name="action" value="update-endpoint"><i class="fa fa-code-fork"></i> <span><spring:message code="websocket.websocketproject.button.updateendpoint"/></span></button>
-                <button class="button-error pure-button" type="submit" name="action" value="delete"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websocketproject.button.deleteapplication"/></span></button>
+                <button class="button-error pure-button" type="submit" name="action" value="delete"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websocketproject.button.deletetopic"/></span></button>
             </sec:authorize>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form:form>
 
     </c:when>
     <c:otherwise>
-        <spring:message code="websocket.websocketproject.label.noapplications" arguments="wsdl"/>
+        <spring:message code="websocket.websocketproject.label.notopics" arguments="wsdl"/>
     </c:otherwise>
 </c:choose>

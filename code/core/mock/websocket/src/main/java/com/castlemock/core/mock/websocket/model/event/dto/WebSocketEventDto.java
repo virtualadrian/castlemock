@@ -34,8 +34,8 @@ public class WebSocketEventDto extends EventDto {
     @Mapping("projectId")
     private String projectId;
 
-    @Mapping("applicationId")
-    private String applicationId;
+    @Mapping("topicId")
+    private String topicId;
 
     @Mapping("resourceId")
     private String resourceId;
@@ -77,12 +77,12 @@ public class WebSocketEventDto extends EventDto {
         this.projectId = projectId;
     }
 
-    public String getApplicationId() {
-        return applicationId;
+    public String getTopicId() {
+        return topicId;
     }
 
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
     }
 
     public String getResourceId() {

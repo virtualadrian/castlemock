@@ -91,7 +91,7 @@ public class WebSocketEventServiceAdapterTest {
             final WebSocketEventDto returnedWebSocketEvent = returnedWebSocketEventDtos.get(index);
 
             Assert.assertEquals(webSocketEvent.getId(), returnedWebSocketEvent.getId());
-            Assert.assertEquals(webSocketEvent.getApplicationId(), returnedWebSocketEvent.getApplicationId());
+            Assert.assertEquals(webSocketEvent.getTopicId(), returnedWebSocketEvent.getTopicId());
             Assert.assertEquals(webSocketEvent.getResourceId(), returnedWebSocketEvent.getResourceId());
             Assert.assertEquals(webSocketEvent.getProjectId(), returnedWebSocketEvent.getProjectId());
         }
@@ -106,7 +106,7 @@ public class WebSocketEventServiceAdapterTest {
         final WebSocketEventDto returnedWebSocketEvent = serviceAdapter.read(webSocketEvent.getId());
 
         Assert.assertEquals(webSocketEvent.getId(), returnedWebSocketEvent.getId());
-        Assert.assertEquals(webSocketEvent.getApplicationId(), returnedWebSocketEvent.getApplicationId());
+        Assert.assertEquals(webSocketEvent.getTopicId(), returnedWebSocketEvent.getTopicId());
         Assert.assertEquals(webSocketEvent.getResourceId(), returnedWebSocketEvent.getResourceId());
         Assert.assertEquals(webSocketEvent.getProjectId(), returnedWebSocketEvent.getProjectId());
     }
@@ -135,6 +135,6 @@ public class WebSocketEventServiceAdapterTest {
     public void testGenerateResourceLink(){
         final WebSocketEventDto webSocketEventDto = WebSocketEventDtoGenerator.generateWebSocketEventDto();
         final String generatedResourceLink = serviceAdapter.generateResourceLink(webSocketEventDto);
-        Assert.assertEquals("/web/websocket/project/" + webSocketEventDto.getProjectId() + "/application/" + webSocketEventDto.getApplicationId() + "/resource/" + webSocketEventDto.getResourceId(), generatedResourceLink);
+        Assert.assertEquals("/web/websocket/project/" + webSocketEventDto.getProjectId() + "/topic/" + webSocketEventDto.getTopicId() + "/resource/" + webSocketEventDto.getResourceId(), generatedResourceLink);
     }
 }

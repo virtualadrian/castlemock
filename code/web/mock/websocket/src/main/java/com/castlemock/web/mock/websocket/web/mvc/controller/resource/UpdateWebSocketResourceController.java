@@ -44,39 +44,39 @@ public class UpdateWebSocketResourceController extends AbstractWebSocketViewCont
     private static final String PAGE = "mock/websocket/resource/updateWebSocketResource";
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/{webSocketResourceId}/update", method = RequestMethod.GET)
-    public ModelAndView defaultPage(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @PathVariable final String webSocketResourceId) {
-        final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketApplicationId, webSocketResourceId));
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/{webSocketResourceId}/update", method = RequestMethod.GET)
+    public ModelAndView defaultPage(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @PathVariable final String webSocketResourceId) {
+        final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketTopicId, webSocketResourceId));
         final ModelAndView model = createPartialModelAndView(PAGE);
         model.addObject(WEBSOCKET_RESOURCE, output.getWebSocketResource());
         model.addObject(WEBSOCKET_PROJECT_ID, webSocketProjectId);
-        model.addObject(WEBSOCKET_APPLICATION_ID, webSocketApplicationId);
+        model.addObject(WEBSOCKET_TOPIC_ID, webSocketTopicId);
         model.addObject(WEBSOCKET_RESOURCE_ID, webSocketResourceId);
         return model;
     }
 
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/{webSocketResourceId}/update", method = RequestMethod.POST)
-    public ModelAndView update(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @PathVariable final String webSocketResourceId,  @ModelAttribute final WebSocketResourceDto webSocketResourceDto) {
-        serviceProcessor.process(new UpdateWebSocketResourceInput(webSocketProjectId, webSocketApplicationId, webSocketResourceId, webSocketResourceDto));
-        return redirect("/wss/project/" + webSocketProjectId + "/application/" + webSocketApplicationId + "/resource/" + webSocketResourceId);
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/{webSocketResourceId}/update", method = RequestMethod.POST)
+    public ModelAndView update(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @PathVariable final String webSocketResourceId,  @ModelAttribute final WebSocketResourceDto webSocketResourceDto) {
+        serviceProcessor.process(new UpdateWebSocketResourceInput(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketResourceDto));
+        return redirect("/wss/project/" + webSocketProjectId + "/topic/" + webSocketTopicId + "/resource/" + webSocketResourceId);
     }
 
     /**
      * The method provides the functionality to update the endpoint address for multiple
      * resources at once
      * @param webSocketProjectId The id of the project that the resources belongs to
-     * @param webSocketApplicationId The id of the application that the resources belongs to
+     * @param webSocketTopicId The id of the topic that the resources belongs to
      * @param updateWebSocketResourcesEndpointCommand The command object contains both the resources that
      *                                          will be updated and the new forwarded address
-     * @return Redirects the user to the application page
+     * @return Redirects the user to the topic page
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/update/confirm", method = RequestMethod.POST)
-    public ModelAndView updateEndpoint(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @ModelAttribute final UpdateWebSocketResourcesEndpointCommand updateWebSocketResourcesEndpointCommand) {
-        Preconditions.checkNotNull(updateWebSocketResourcesEndpointCommand, "The update application endpoint command cannot be null");
-        serviceProcessor.process(new UpdateWebSocketResourcesForwardedEndpointInput(webSocketProjectId, webSocketApplicationId, updateWebSocketResourcesEndpointCommand.getWebSocketResources(), updateWebSocketResourcesEndpointCommand.getForwardedEndpoint()));
-        return redirect("/wss/project/" + webSocketProjectId + "/application/" + webSocketApplicationId);
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/update/confirm", method = RequestMethod.POST)
+    public ModelAndView updateEndpoint(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @ModelAttribute final UpdateWebSocketResourcesEndpointCommand updateWebSocketResourcesEndpointCommand) {
+        Preconditions.checkNotNull(updateWebSocketResourcesEndpointCommand, "The update topic endpoint command cannot be null");
+        serviceProcessor.process(new UpdateWebSocketResourcesForwardedEndpointInput(webSocketProjectId, webSocketTopicId, updateWebSocketResourcesEndpointCommand.getWebSocketResources(), updateWebSocketResourcesEndpointCommand.getForwardedEndpoint()));
+        return redirect("/wss/project/" + webSocketProjectId + "/topic/" + webSocketTopicId);
     }
 
 }

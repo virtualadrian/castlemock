@@ -15,7 +15,7 @@
   ~ limitations under the License.
   --%>
 
-<c:url var="update_webSocket_resource_url"  value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}/resource/${webSocketResource.id}/update" />
+<c:url var="update_webSocket_resource_url"  value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}/update" />
 <div class="content-top">
     <h1><spring:message code="websocket.updateresource.header.updateresource" arguments="${webSocketResource.name}"/></h1>
 </div>
@@ -32,7 +32,7 @@
     </table>
     
     <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-check-circle"></i><spring:message code="websocket.updateresource.button.updateresource"/></button>
-    <a href="<c:url value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}/resource/${webSocketResource.id}"/>" class="button-error pure-button"><i class="fa fa-times"></i><spring:message code="websocket.updateresource.button.cancel"/></a>
+    <a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}"/>" class="button-error pure-button"><i class="fa fa-times"></i><spring:message code="websocket.updateresource.button.cancel"/></a>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form:form>
 <script>

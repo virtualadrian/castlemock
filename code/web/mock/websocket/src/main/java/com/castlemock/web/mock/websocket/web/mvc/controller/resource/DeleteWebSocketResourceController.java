@@ -41,20 +41,20 @@ public class DeleteWebSocketResourceController extends AbstractWebSocketViewCont
 
     private static final String PAGE = "mock/websocket/resource/deleteWebSocketResource";
     /**
-     * Retrieves a specific WebSocket resource with a project id, application id and a resource id
+     * Retrieves a specific WebSocket resource with a project id, topic id and a resource id
      * @param webSocketProjectId The id of the project that the WebSocket resource belongs to
-     * @param webSocketApplicationId The id of the application that the WebSocket resource belongs to
+     * @param webSocketTopicId The id of the topic that the WebSocket resource belongs to
      * @param webSocketResourceId The id of the WebSocket resource that should be retrieve
      * @return WebSocket resource that matches the provided resource id
      */
     @PreAuthorize("hasAuthority('READER') or hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/{webSocketResourceId}/delete", method = RequestMethod.GET)
-    public ModelAndView defaultPage(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @PathVariable final String webSocketResourceId) {
-        final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketApplicationId, webSocketResourceId));
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/{webSocketResourceId}/delete", method = RequestMethod.GET)
+    public ModelAndView defaultPage(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @PathVariable final String webSocketResourceId) {
+        final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketTopicId, webSocketResourceId));
 
         final ModelAndView model = createPartialModelAndView(PAGE);
         model.addObject(WEBSOCKET_PROJECT_ID, webSocketProjectId);
-        model.addObject(WEBSOCKET_APPLICATION_ID, webSocketApplicationId);
+        model.addObject(WEBSOCKET_TOPIC_ID, webSocketTopicId);
         model.addObject(WEBSOCKET_RESOURCE, output.getWebSocketResource());
         return model;
     }
@@ -62,29 +62,29 @@ public class DeleteWebSocketResourceController extends AbstractWebSocketViewCont
     /**
      * The method provides the functionality to delete a WebSocket resource
      * @param webSocketProjectId The id of the project that the WebSocket resource belongs to
-     * @param webSocketApplicationId The id of the application that the WebSocket resource belongs to
+     * @param webSocketTopicId The id of the topic that the WebSocket resource belongs to
      * @param webSocketResourceId The id of the WebSocket resource that should be deleted
-     * @return Redirects the user to the WebSocket application page
+     * @return Redirects the user to the WebSocket topic page
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/{webSocketResourceId}/delete/confirm", method = RequestMethod.GET)
-    public ModelAndView confirm(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @PathVariable final String webSocketResourceId) {
-        serviceProcessor.process(new DeleteWebSocketResourceInput(webSocketProjectId, webSocketApplicationId, webSocketResourceId));
-        return redirect("/wss/project/" + webSocketProjectId + "/application/" + webSocketApplicationId);
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/{webSocketResourceId}/delete/confirm", method = RequestMethod.GET)
+    public ModelAndView confirm(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @PathVariable final String webSocketResourceId) {
+        serviceProcessor.process(new DeleteWebSocketResourceInput(webSocketProjectId, webSocketTopicId, webSocketResourceId));
+        return redirect("/wss/project/" + webSocketProjectId + "/topic/" + webSocketTopicId);
     }
 
     /**
      * The method provides the functionality to delete a list WebSocket resources
      * @param webSocketProjectId The id of the project that the WebSocket resources belongs to
-     * @param webSocketApplicationId The id of the application that the WebSocket resources belongs to
+     * @param webSocketTopicId The id of the topic that the WebSocket resources belongs to
      * @param deleteWebSocketResourcesCommand The command object contains the WebSocket resources that should be deleted
-     * @return Redirects the user to the WebSocket application page
+     * @return Redirects the user to the WebSocket topic page
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{webSocketProjectId}/application/{webSocketApplicationId}/resource/delete/confirm", method = RequestMethod.POST)
-    public ModelAndView confirmDeletationOfMultpleProjects(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketApplicationId, @ModelAttribute final DeleteWebSocketResourcesCommand deleteWebSocketResourcesCommand) {
-        serviceProcessor.process(new DeleteWebSocketResourcesInput(webSocketProjectId, webSocketApplicationId, deleteWebSocketResourcesCommand.getWebSocketResources()));
-        return redirect("/wss/project/" + webSocketProjectId + "/application/" + webSocketApplicationId);
+    @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}/resource/delete/confirm", method = RequestMethod.POST)
+    public ModelAndView confirmDeletationOfMultpleProjects(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @ModelAttribute final DeleteWebSocketResourcesCommand deleteWebSocketResourcesCommand) {
+        serviceProcessor.process(new DeleteWebSocketResourcesInput(webSocketProjectId, webSocketTopicId, deleteWebSocketResourcesCommand.getWebSocketResources()));
+        return redirect("/wss/project/" + webSocketProjectId + "/topic/" + webSocketTopicId);
     }
 
 

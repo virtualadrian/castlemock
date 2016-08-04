@@ -43,9 +43,9 @@ public class UpdateWebSocketResourcesForwardedEndpointService extends AbstractWe
         final UpdateWebSocketResourcesForwardedEndpointInput input = serviceTask.getInput();
         for(WebSocketResourceDto webSocketResourceDto : input.getWebSocketResources()){
             WebSocketResourceDto webSocketResource = repository.findWebSocketResource(
-                    input.getWebSocketProjectId(), input.getWebSocketApplicationId(), webSocketResourceDto.getId());
+                    input.getWebSocketProjectId(), input.getWebSocketTopicId(), webSocketResourceDto.getId());
             // Set forward address
-            repository.updateWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketApplicationId(), webSocketResource.getId(), webSocketResource);
+            repository.updateWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketTopicId(), webSocketResource.getId(), webSocketResource);
         }
 
         return createServiceResult(new UpdateWebSocketResourcesForwardedEndpointOutput());

@@ -32,30 +32,8 @@ import java.util.List;
 @XmlRootElement
 public class WebSocketRequest {
 
-    private String body;
-    private String contentType;
     private String uri;
-    private HttpMethod httpMethod;
-    private List<HttpParameter> httpParameters;
     private List<HttpHeader> httpHeaders;
-
-    @XmlElement
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    @XmlElement
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
 
     @XmlElement
     public String getUri() {
@@ -64,25 +42,6 @@ public class WebSocketRequest {
 
     public void setUri(String uri) {
         this.uri = uri;
-    }
-
-    @XmlElement
-    public HttpMethod getHttpMethod() {
-        return httpMethod;
-    }
-
-    public void setHttpMethod(HttpMethod httpMethod) {
-        this.httpMethod = httpMethod;
-    }
-
-    @XmlElementWrapper(name = "httpParameters")
-    @XmlElement(name = "httpParameter")
-    public List<HttpParameter> getHttpParameters() {
-        return httpParameters;
-    }
-
-    public void setHttpParameters(List<HttpParameter> httpParameters) {
-        this.httpParameters = httpParameters;
     }
 
     @XmlElementWrapper(name = "httpHeaders")

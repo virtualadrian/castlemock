@@ -30,15 +30,15 @@ import java.util.List;
 @XmlRootElement
 public class WebSocketProject extends Project {
 
-    private List<WebSocketApplication> applications;
+    private List<WebSocketTopic> topics;
 
-    @XmlElementWrapper(name = "applications")
-    @XmlElement(name = "application")
-    public List<WebSocketApplication> getApplications() {
-        return applications;
+    @XmlElementWrapper(name = "topics")
+    @XmlElement(name = "topic")
+    public List<WebSocketTopic> getTopics() {
+        return topics;
     }
 
-    public void setApplications(List<WebSocketApplication> applications) {
-        this.applications = applications;
+    public void setTopics(List<WebSocketTopic> topics) {
+        this.topics = topics;
     }
 }

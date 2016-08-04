@@ -38,14 +38,11 @@ public class WebSocketEventDtoGenerator {
         webSocketEventDto.setId("WEBSOCKET EVENT");
         webSocketEventDto.setStartDate(new Date());
         webSocketEventDto.setEndDate(new Date());
-        webSocketEventDto.setApplicationId("Application id");
+        webSocketEventDto.setTopicId("Topic id");
         webSocketEventDto.setResourceId("Resource id");
         webSocketEventDto.setProjectId("Project id");
 
         WebSocketRequestDto webSocketRequestDto = new WebSocketRequestDto();
-        webSocketRequestDto.setBody("WebSocket request body");
-        webSocketRequestDto.setContentType("application/json");
-        webSocketRequestDto.setHttpMethod(HttpMethod.POST);
 
         WebSocketResponseDto webSocketResponseDto = new WebSocketResponseDto();
         webSocketResponseDto.setHttpStatusCode(200);
@@ -62,14 +59,11 @@ public class WebSocketEventDtoGenerator {
         webSocketEvent.setId("WEBSOCKET EVENT");
         webSocketEvent.setStartDate(new Date());
         webSocketEvent.setEndDate(new Date());
-        webSocketEvent.setApplicationId("Application id");
+        webSocketEvent.setTopicId("Topic id");
         webSocketEvent.setResourceId("Resource id");
         webSocketEvent.setProjectId("Project id");
 
         WebSocketRequest webSocketRequest = new WebSocketRequest();
-        webSocketRequest.setBody("WebSocket request body");
-        webSocketRequest.setContentType("application/json");
-        webSocketRequest.setHttpMethod(HttpMethod.POST);
 
         WebSocketResponse webSocketResponse = new WebSocketResponse();
         webSocketResponse.setHttpStatusCode(200);

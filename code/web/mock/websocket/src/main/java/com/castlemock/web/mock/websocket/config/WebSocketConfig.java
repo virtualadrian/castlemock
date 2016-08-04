@@ -35,7 +35,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/topic");
 
         // Topic prefix. Not required
-        //config.setApplicationDestinationPrefixes("/mock/ws");
+        //config.setTopicDestinationPrefixes("/mock/ws");
     }
 
     @Override

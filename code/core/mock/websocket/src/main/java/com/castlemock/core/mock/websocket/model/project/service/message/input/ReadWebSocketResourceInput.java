@@ -28,13 +28,13 @@ public class ReadWebSocketResourceInput implements Input {
     @NotNull
     private String webSocketProjectId;
     @NotNull
-    private String webSocketApplicationId;
+    private String webSocketTopicId;
     @NotNull
     private String webSocketResourceId;
 
-    public ReadWebSocketResourceInput(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId) {
+    public ReadWebSocketResourceInput(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId) {
         this.webSocketProjectId = webSocketProjectId;
-        this.webSocketApplicationId = webSocketApplicationId;
+        this.webSocketTopicId = webSocketTopicId;
         this.webSocketResourceId = webSocketResourceId;
     }
 
@@ -46,12 +46,12 @@ public class ReadWebSocketResourceInput implements Input {
         this.webSocketProjectId = webSocketProjectId;
     }
 
-    public String getWebSocketApplicationId() {
-        return webSocketApplicationId;
+    public String getWebSocketTopicId() {
+        return webSocketTopicId;
     }
 
-    public void setWebSocketApplicationId(String webSocketApplicationId) {
-        this.webSocketApplicationId = webSocketApplicationId;
+    public void setWebSocketTopicId(String webSocketTopicId) {
+        this.webSocketTopicId = webSocketTopicId;
     }
 
     public String getWebSocketResourceId() {

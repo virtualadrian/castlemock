@@ -44,7 +44,7 @@ public class DeleteWebSocketResourcesService extends AbstractWebSocketProjectSer
         final DeleteWebSocketResourcesInput input = serviceTask.getInput();
         for(final WebSocketResourceDto webSocketResourceDto : input.getWebSocketResources()){
             repository.deleteWebSocketResource(input.getWebSocketProjectId(),
-                    input.getWebSocketApplicationId(), webSocketResourceDto.getId());
+                    input.getWebSocketTopicId(), webSocketResourceDto.getId());
         }
 
         return createServiceResult(new DeleteWebSocketResourcesOutput());

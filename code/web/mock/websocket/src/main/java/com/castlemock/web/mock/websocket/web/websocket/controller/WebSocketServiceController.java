@@ -16,19 +16,13 @@
 
 package com.castlemock.web.mock.websocket.web.websocket.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.support.NativeMessageHeaderAccessor;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Karl Dahlgren
@@ -36,22 +30,17 @@ import java.util.Map;
  */
 @CrossOrigin
 @Controller
-public class WebSocketServiceController {
+public class WebSocketServiceController extends AbstractWebSocketServiceController {
 
-    @Autowired
-    private SimpMessagingTemplate template;
+    @MessageMapping("/project/{projectId}/topic/{topicId}/**")
+    public void process(@DestinationVariable String projectId, @DestinationVariable String topicId, Message message) {
+        super.process(projectId, topicId, message);
+    }
 
-    @MessageMapping("/project/{projectId}/topic/{topicId}")
-    public void greeting(@DestinationVariable String projectId, @DestinationVariable String topicId) throws Exception {
-        Thread.sleep(3000); // simulated delay
+    @MessageExceptionHandler
+    @SendToUser(destinations="/queue/errors", broadcast=false)
+    public void handleException(Exception exception) {
 
-
-        Map<String, List<String>> nativeHeaders = new HashMap<>();
-        nativeHeaders.put("hello", Collections.singletonList("world"));
-
-        Map<String,Object> headers = new HashMap<>();
-        headers.put(NativeMessageHeaderAccessor.NATIVE_HEADERS, nativeHeaders);
-        this.template.convertAndSend("/topic/greetings", new Greeting("Hello!"));
     }
 
 }

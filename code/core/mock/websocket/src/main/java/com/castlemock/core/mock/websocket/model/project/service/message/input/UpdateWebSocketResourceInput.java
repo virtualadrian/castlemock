@@ -29,15 +29,15 @@ public class UpdateWebSocketResourceInput implements Input {
     @NotNull
     private String webSocketProjectId;
     @NotNull
-    private String webSocketApplicationId;
+    private String webSocketTopicId;
     @NotNull
     private String webSocketResourceId;
     @NotNull
     private WebSocketResourceDto webSocketResource;
 
-    public UpdateWebSocketResourceInput(String webSocketProjectId, String webSocketApplicationId, String webSocketResourceId, WebSocketResourceDto webSocketResource) {
+    public UpdateWebSocketResourceInput(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketResourceDto webSocketResource) {
         this.webSocketProjectId = webSocketProjectId;
-        this.webSocketApplicationId = webSocketApplicationId;
+        this.webSocketTopicId = webSocketTopicId;
         this.webSocketResourceId = webSocketResourceId;
         this.webSocketResource = webSocketResource;
     }
@@ -50,12 +50,12 @@ public class UpdateWebSocketResourceInput implements Input {
         this.webSocketProjectId = webSocketProjectId;
     }
 
-    public String getWebSocketApplicationId() {
-        return webSocketApplicationId;
+    public String getWebSocketTopicId() {
+        return webSocketTopicId;
     }
 
-    public void setWebSocketApplicationId(String webSocketApplicationId) {
-        this.webSocketApplicationId = webSocketApplicationId;
+    public void setWebSocketTopicId(String webSocketTopicId) {
+        this.webSocketTopicId = webSocketTopicId;
     }
 
     public String getWebSocketResourceId() {

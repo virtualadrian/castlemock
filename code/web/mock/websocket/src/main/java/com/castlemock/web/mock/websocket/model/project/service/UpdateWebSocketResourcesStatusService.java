@@ -42,9 +42,9 @@ public class UpdateWebSocketResourcesStatusService extends AbstractWebSocketProj
     public ServiceResult<UpdateWebSocketResourcesStatusOutput> process(final ServiceTask<UpdateWebSocketResourcesStatusInput> serviceTask) {
         final UpdateWebSocketResourcesStatusInput input = serviceTask.getInput();
         final WebSocketResourceDto webSocketResource = repository.findWebSocketResource(
-                input.getWebSocketProjectId(), input.getWebSocketApplicationId(), input.getWebSocketResourceId());
+                input.getWebSocketProjectId(), input.getWebSocketTopicId(), input.getWebSocketResourceId());
         webSocketResource.setStatus(input.getWebSocketResourceStatus());
-        repository.updateWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketApplicationId(),
+        repository.updateWebSocketResource(input.getWebSocketProjectId(), input.getWebSocketTopicId(),
                 input.getWebSocketResourceId(), webSocketResource);
         return createServiceResult(new UpdateWebSocketResourcesStatusOutput());
     }

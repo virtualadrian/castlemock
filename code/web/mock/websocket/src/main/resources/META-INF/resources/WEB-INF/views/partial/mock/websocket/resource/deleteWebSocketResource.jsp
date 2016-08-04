@@ -21,6 +21,6 @@
 <spring:message code="websocket.deleteresource.label.confirmation" arguments="${webSocketResource.name}"/>
 
 <p>
-<a href="<c:url value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}/resource/${webSocketResource.id}/delete/confirm"/>" class="button-error pure-button"><i class="fa fa-trash"></i> <spring:message code="websocket.deleteresource.button.deleteresource"/></a>
-<a href="<c:url value="/web/wss/project/${webSocketProjectId}/application/${webSocketApplicationId}/resource/${webSocketResource.id}"/>" class="button-secondary pure-button"><i class="fa fa-times"></i> <spring:message code="websocket.deleteresource.button.cancel"/></a>
+<a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}/delete/confirm"/>" class="button-error pure-button"><i class="fa fa-trash"></i> <spring:message code="websocket.deleteresource.button.deleteresource"/></a>
+<a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}"/>" class="button-secondary pure-button"><i class="fa fa-times"></i> <spring:message code="websocket.deleteresource.button.cancel"/></a>
 </p>

@@ -46,7 +46,7 @@ public class WebSocketEventServiceAdapter implements EventServiceAdapter<WebSock
     private static final String WEB = "web";
     private static final String PROJECT = "project";
     private static final String WEBSOCKET = "websocket";
-    private static final String APPLICATION = "application";
+    private static final String TOPIC = "topic";
     private static final String RESOURCE = "resource";
 
 
@@ -147,7 +147,7 @@ public class WebSocketEventServiceAdapter implements EventServiceAdapter<WebSock
      * WEBSOCKET event. The resource link will be based on the following:
      * <ul>
      *   <li>Project id</li>
-     *   <li>Application id</li>
+     *   <li>Topic id</li>
      *   <li>Resource id</li>
      * </ul>
      * @param webSocketEventDto The incoming WebSocket event which will be used to generate the resource link
@@ -155,6 +155,6 @@ public class WebSocketEventServiceAdapter implements EventServiceAdapter<WebSock
      */
     @Override
     public String generateResourceLink(WebSocketEventDto webSocketEventDto) {
-        return SLASH + WEB + SLASH + WEBSOCKET + SLASH + PROJECT + SLASH + webSocketEventDto.getProjectId() + SLASH + APPLICATION + SLASH + webSocketEventDto.getApplicationId() + SLASH + RESOURCE + SLASH + webSocketEventDto.getResourceId();
+        return SLASH + WEB + SLASH + WEBSOCKET + SLASH + PROJECT + SLASH + webSocketEventDto.getProjectId() + SLASH + TOPIC + SLASH + webSocketEventDto.getTopicId() + SLASH + RESOURCE + SLASH + webSocketEventDto.getResourceId();
     }
 }
