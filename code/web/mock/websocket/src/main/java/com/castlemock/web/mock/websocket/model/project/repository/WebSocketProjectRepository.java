@@ -17,14 +17,8 @@
 package com.castlemock.web.mock.websocket.model.project.repository;
 
 import com.castlemock.core.basis.model.Repository;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketTopic;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketMockResponse;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResource;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketProject;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketTopicDto;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketMockResponseDto;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketProjectDto;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketResourceDto;
+import com.castlemock.core.mock.websocket.model.project.domain.*;
+import com.castlemock.core.mock.websocket.model.project.dto.*;
 
 /**
  * The WebSocket project file repository provides the functionality to interact with the file system.
@@ -72,6 +66,22 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
      */
     WebSocketResourceDto findWebSocketResource(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId);
 
+    /**
+     * The method finds a broadcaster that matching the search criteria and returns the result
+     * @param webSocketProjectId The id of the project which the operation belongs to
+     * @param webSocketTopicId The id of the port which the operation belongs to
+     * @param webSocketBroadcasterId The id of the broadcaster that will be retrieved
+     * @return Returns an operation that matches the search criteria. Returns null if no operation matches.
+     * @throws IllegalArgumentException IllegalArgumentException will be thrown jf no matching SOAP operation was found
+     * @see WebSocketProject
+     * @see WebSocketProjectDto
+     * @see WebSocketTopic
+     * @see WebSocketTopicDto
+     * @see WebSocketBroadcaster
+     * @see WebSocketBroadcasterDto
+     */
+    WebSocketBroadcasterDto findWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, String webSocketBroadcasterId);
+
 
 
     /**
@@ -88,10 +98,10 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
      * @see WebSocketTopicDto
      * @see WebSocketResource
      * @see WebSocketResourceDto
-     * @see WebSocketMockResponse
-     * @see WebSocketMockResponseDto
+     * @see WebSocketMockBroadcastMessage
+     * @see WebSocketMockBroadcastMessageDto
      */
-    WebSocketMockResponseDto findWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId);
+    WebSocketMockBroadcastMessageDto findWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId);
 
     WebSocketProjectDto findWebSocketProject(String name);
 
@@ -113,6 +123,22 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
     WebSocketTopicDto saveWebSocketTopic(String webSocketProjectId, WebSocketTopicDto webSocketTopicDto);
 
     /**
+     * The method adds a new {@link WebSocketBroadcaster} to a {@link WebSocketTopic} and then saves
+     * the {@link WebSocketProject} to the file system.
+     * @param webSocketProjectId The id of the {@link WebSocketProject}
+     * @param webSocketTopicId The id of the {@link WebSocketTopic}
+     * @param webSocketBroadcasterDto The dto instance of {@link WebSocketBroadcaster} that will be added to the {@link WebSocketTopic}
+     * @return The saved {@link WebSocketBroadcasterDto}
+     * @see WebSocketProject
+     * @see WebSocketProjectDto
+     * @see WebSocketTopic
+     * @see WebSocketTopicDto
+     * @see WebSocketBroadcaster
+     * @see WebSocketBroadcasterDto
+     */
+    WebSocketBroadcasterDto saveWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, WebSocketBroadcasterDto webSocketBroadcasterDto);
+
+    /**
      * The method adds a new {@link WebSocketResource} to a {@link WebSocketTopic} and then saves
      * the {@link WebSocketProject} to the file system.
      * @param webSocketProjectId The id of the {@link WebSocketProject}
@@ -130,23 +156,23 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
 
 
     /**
-     * The method adds a new {@link WebSocketMockResponse} to a {@link WebSocketResource} and then saves
+     * The method adds a new {@link WebSocketMockBroadcastMessage} to a {@link WebSocketResource} and then saves
      * the {@link WebSocketProject} to the file system.
      * @param webSocketProjectId The id of the {@link WebSocketProject}
      * @param webSocketTopicId The id of the {@link WebSocketTopic}
      * @param webSocketResourceId The id of the {@link WebSocketResource}
-     * @param webSocketMockResponseDto The dto instance of {@link WebSocketMockResponse} that will be added to the {@link WebSocketResource}
-     * @return The saved {@link WebSocketMockResponseDto}
+     * @param webSocketMockResponseDto The dto instance of {@link WebSocketMockBroadcastMessage} that will be added to the {@link WebSocketResource}
+     * @return The saved {@link WebSocketMockBroadcastMessageDto}
      * @see WebSocketProject
      * @see WebSocketProjectDto
      * @see WebSocketTopic
      * @see WebSocketTopicDto
      * @see WebSocketResource
      * @see WebSocketResourceDto
-     * @see WebSocketMockResponse
-     * @see WebSocketMockResponseDto
+     * @see WebSocketMockBroadcastMessage
+     * @see WebSocketMockBroadcastMessageDto
      */
-    WebSocketMockResponseDto saveWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketMockResponseDto webSocketMockResponseDto);
+    WebSocketMockBroadcastMessageDto saveWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketMockBroadcastMessageDto webSocketMockResponseDto);
 
     /*
      * UPDATE OPERATIONS
@@ -164,6 +190,22 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
      * @see WebSocketTopicDto
      */
     WebSocketTopicDto updateWebSocketTopic(String webSocketProjectId, String webSocketTopicId, WebSocketTopicDto webSocketTopicDto);
+
+    /**
+     * The method updates an already existing {@link WebSocketBroadcaster}
+     * @param webSocketProjectId The id of the {@link WebSocketProject}
+     * @param webSocketTopicId The id of the {@link WebSocketTopic}
+     * @param webSocketBroadcasterId The id of the {@link WebSocketBroadcaster} that will be updated
+     * @param webSocketBroadcasterDto The updated {@link WebSocketBroadcasterDto}
+     * @return The updated version of the {@link WebSocketResourceDto}
+     * @see WebSocketProject
+     * @see WebSocketProjectDto
+     * @see WebSocketTopic
+     * @see WebSocketTopicDto
+     * @see WebSocketBroadcaster
+     * @see WebSocketBroadcasterDto
+     */
+    WebSocketBroadcasterDto updateWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, String webSocketBroadcasterId, WebSocketBroadcasterDto webSocketBroadcasterDto);
 
     /**
      * The method updates an already existing {@link WebSocketResource}
@@ -187,9 +229,9 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
      * @param webSocketProjectId The id of the {@link WebSocketProject}
      * @param webSocketTopicId The id of the {@link WebSocketTopic}
      * @param webSocketResourceId The id of the {@link WebSocketResource}
-     * @param webSocketMockResponseId The id of the {@link WebSocketMockResponse} that will be updated
-     * @param webSocketMockResponseDto The updated {@link WebSocketMockResponseDto)
-     * @return The updated version of the {@link WebSocketMockResponseDto}
+     * @param webSocketMockResponseId The id of the {@link WebSocketMockBroadcastMessage} that will be updated
+     * @param webSocketMockResponseDto The updated {@link WebSocketMockBroadcastMessageDto )
+     * @return The updated version of the {@link WebSocketMockBroadcastMessageDto }
      * @see WebSocketProject
      * @see WebSocketProjectDto
      * @see WebSocketTopic
@@ -199,7 +241,7 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
      * @see WebSocketMockResponse
      * @see WebSocketMockResponseDto
      */
-    WebSocketMockResponseDto updateWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId, WebSocketMockResponseDto webSocketMockResponseDto);
+    WebSocketMockBroadcastMessageDto updateWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId, WebSocketMockBroadcastMessageDto webSocketMockResponseDto);
 
     /*
      * DELETE OPERATIONS
@@ -218,6 +260,21 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
     WebSocketTopicDto deleteWebSocketTopic(String webSocketProjectId, String webSocketTopicId);
 
     /**
+     * The method deletes a {@link WebSocketBroadcaster}
+     * @param webSocketProjectId The id of the {@link WebSocketProject}
+     * @param webSocketTopicId The id of the {@link WebSocketTopic}
+     * @param webSocketBroadcasterId The id of the {@link WebSocketBroadcaster}
+     * @return The deleted {@link WebSocketBroadcasterDto}
+     * @see WebSocketProject
+     * @see WebSocketProjectDto
+     * @see WebSocketTopic
+     * @see WebSocketTopicDto
+     * @see WebSocketBroadcaster
+     * @see WebSocketBroadcasterDto
+     */
+    WebSocketBroadcasterDto deleteWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, String webSocketBroadcasterId);
+
+    /**
      * The method deletes a {@link WebSocketResource}
      * @param webSocketProjectId The id of the {@link WebSocketProject}
      * @param webSocketTopicId The id of the {@link WebSocketTopic}
@@ -234,21 +291,21 @@ public interface WebSocketProjectRepository extends Repository<WebSocketProject,
 
 
     /**
-     * The method deletes a {@link WebSocketMockResponse}
+     * The method deletes a {@link WebSocketMockBroadcastMessage}
      * @param webSocketProjectId The id of the {@link WebSocketProject}
      * @param webSocketTopicId The id of the {@link WebSocketTopic}
      * @param webSocketResourceId The id of the {@link WebSocketResource}
-     * @param webSocketMockResponseId The id of the {@link WebSocketMockResponse}
-     * @return The deleted {@link WebSocketMockResponseDto}
+     * @param webSocketMockResponseId The id of the {@link WebSocketMockBroadcastMessage}
+     * @return The deleted {@link WebSocketMockBroadcastMessageDto}
      * @see WebSocketProject
      * @see WebSocketProjectDto
      * @see WebSocketTopic
      * @see WebSocketTopicDto
      * @see WebSocketResource
      * @see WebSocketResourceDto
-     * @see WebSocketMockResponse
-     * @see WebSocketMockResponseDto
+     * @see WebSocketMockBroadcastMessage
+     * @see WebSocketMockBroadcastMessageDto
      */
-    WebSocketMockResponseDto deleteWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId);
+    WebSocketMockBroadcastMessageDto deleteWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId);
 
 }

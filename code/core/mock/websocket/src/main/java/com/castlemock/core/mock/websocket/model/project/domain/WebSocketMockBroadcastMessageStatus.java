@@ -20,7 +20,7 @@ package com.castlemock.core.mock.websocket.model.project.domain;
  * @author Karl Dahlgren
  * @since 1.5
  */
-public enum WebSocketMockResponseStatus {
+public enum WebSocketMockBroadcastMessageStatus {
 
     ENABLED, DISABLED
 

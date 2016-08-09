@@ -33,6 +33,7 @@ public class WebSocketTopic implements Saveable<String> {
     private String id;
     private String name;
     private List<WebSocketResource> resources;
+    private List<WebSocketBroadcaster> broadcasters;
 
     @Override
     @XmlElement
@@ -61,5 +62,15 @@ public class WebSocketTopic implements Saveable<String> {
 
     public void setResources(List<WebSocketResource> resources) {
         this.resources = resources;
+    }
+
+    @XmlElementWrapper(name = "broadcasters")
+    @XmlElement(name = "broadcaster")
+    public List<WebSocketBroadcaster> getBroadcasters() {
+        return broadcasters;
+    }
+
+    public void setBroadcasters(List<WebSocketBroadcaster> broadcasters) {
+        this.broadcasters = broadcasters;
     }
 }

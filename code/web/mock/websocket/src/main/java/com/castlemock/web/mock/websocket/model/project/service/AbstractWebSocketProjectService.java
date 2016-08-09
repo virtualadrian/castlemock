@@ -70,7 +70,25 @@ public abstract class AbstractWebSocketProjectService extends AbstractService<We
         return super.save(project);
     }
 
-
+    /**
+     * Updates a project with new information
+     * @param restProjectId The id of the project that will be updated
+     * @param updatedProject The updated version of the project
+     * @return The updated version project
+     */
+    @Override
+    public WebSocketProjectDto update(final String restProjectId, final WebSocketProjectDto updatedProject){
+        Preconditions.checkNotNull(restProjectId, "Project id be null");
+        Preconditions.checkNotNull(updatedProject, "Project cannot be null");
+        Preconditions.checkArgument(!updatedProject.getName().isEmpty(), "Invalid project name. Project name cannot be empty");
+        final WebSocketProjectDto projectWithNameDto = repository.findWebSocketProject(updatedProject.getName());
+        Preconditions.checkArgument(projectWithNameDto == null || projectWithNameDto.getId().equals(restProjectId), "Project name is already taken");
+        final WebSocketProjectDto project = find(restProjectId);
+        project.setName(updatedProject.getName());
+        project.setDescription(updatedProject.getDescription());
+        project.setUpdated(new Date());
+        return super.save(project);
+    }
 
 
 }

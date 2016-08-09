@@ -24,7 +24,7 @@
     <div class="menu" align="right">
         <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
             <a class="button-success pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}/update"/>"><i class="fa fa-file"></i> <span><spring:message code="websocket.websocketresource.button.updateresource"/></span></a>
-            <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}/create/method"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.websocketresource.button.createmethod"/></span></a>
+            <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}/create/method"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.websocketresource.button.createmessage"/></span></a>
             <a class="button-error pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopicId}/resource/${webSocketResource.id}/delete"/>"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websocketresource.button.delete"/></span></a>
         </sec:authorize>
     </div>

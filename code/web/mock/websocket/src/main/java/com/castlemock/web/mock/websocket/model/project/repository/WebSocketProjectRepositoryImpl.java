@@ -19,14 +19,8 @@ package com.castlemock.web.mock.websocket.model.project.repository;
 import com.castlemock.core.basis.model.SearchQuery;
 import com.castlemock.core.basis.model.SearchResult;
 import com.castlemock.core.basis.model.SearchValidator;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketTopic;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketMockResponse;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketProject;
-import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResource;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketTopicDto;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketMockResponseDto;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketProjectDto;
-import com.castlemock.core.mock.websocket.model.project.dto.WebSocketResourceDto;
+import com.castlemock.core.mock.websocket.model.project.domain.*;
+import com.castlemock.core.mock.websocket.model.project.dto.*;
 import com.castlemock.web.basis.model.RepositoryImpl;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +29,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -142,7 +137,19 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
                     String webSocketResourceId = generateId();
                     webSocketResource.setId(webSocketResourceId);
                 }
-                for(WebSocketMockResponse webSocketMockResponse : webSocketResource.getMockResponses()){
+                for(WebSocketMockBroadcastMessage webSocketMockResponse : webSocketResource.getMockBroadcastMessages()){
+                    if(webSocketMockResponse.getId() == null){
+                        String webSocketMockResponseId = generateId();
+                        webSocketMockResponse.setId(webSocketMockResponseId);
+                    }
+                }
+            }
+            for(WebSocketBroadcaster webSocketBroadcaster : webSocketTopic.getBroadcasters()){
+                if(webSocketBroadcaster.getId() == null){
+                    String webSocketBroadcasterId = generateId();
+                    webSocketBroadcaster.setId(webSocketBroadcasterId);
+                }
+                for(WebSocketMockBroadcastMessage webSocketMockResponse : webSocketBroadcaster.getMockBroadcastMessages()){
                     if(webSocketMockResponse.getId() == null){
                         String webSocketMockResponseId = generateId();
                         webSocketMockResponse.setId(webSocketMockResponseId);
@@ -183,7 +190,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         return null;
     }
 
-    public WebSocketTopic findWebSocketTopicType(final String webSocketProjectId, final String webSocketTopicId) {
+    private WebSocketTopic findWebSocketTopicType(final String webSocketProjectId, final String webSocketTopicId) {
         Preconditions.checkNotNull(webSocketProjectId, "Project id cannot be null");
         Preconditions.checkNotNull(webSocketTopicId, "Topic id cannot be null");
         final WebSocketProject webSocketProject = collection.get(webSocketProjectId);
@@ -200,7 +207,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         throw new IllegalArgumentException("Unable to find a WebSocket topic with id " + webSocketTopicId);
     }
 
-    public WebSocketResource findWebSocketResourceType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketResourceId){
+    private WebSocketResource findWebSocketResourceType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketResourceId){
         Preconditions.checkNotNull(webSocketResourceId, "Resource id cannot be null");
         final WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
         for(WebSocketResource webSocketResource : webSocketTopic.getResources()){
@@ -211,18 +218,27 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         throw new IllegalArgumentException("Unable to find a WebSocket resource with id " + webSocketResourceId);
     }
 
-    public WebSocketMockResponse findWebSocketMockResponseType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketResourceId, final String webSocketMockResponseId){
+    private WebSocketBroadcaster findWebSocketBroadcasterType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketBroadcasterId){
+        Preconditions.checkNotNull(webSocketBroadcasterId, "Broadcaster id cannot be null");
+        final WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        for(WebSocketBroadcaster webSocketBroadcaster : webSocketTopic.getBroadcasters()){
+            if(webSocketBroadcaster.getId().equals(webSocketBroadcasterId)){
+                return webSocketBroadcaster;
+            }
+        }
+        throw new IllegalArgumentException("Unable to find a WebSocket broadcaster with id " + webSocketBroadcasterId);
+    }
+
+    private WebSocketMockBroadcastMessage findWebSocketMockResponseType(final String webSocketProjectId, final String webSocketTopicId, final String webSocketResourceId, final String webSocketMockResponseId){
         Preconditions.checkNotNull(webSocketResourceId, "Resource id cannot be null");
         final WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
-        for(WebSocketMockResponse webSocketMockResponse : webSocketResource.getMockResponses()){
+        for(WebSocketMockBroadcastMessage webSocketMockResponse : webSocketResource.getMockBroadcastMessages()){
             if(webSocketMockResponse.getId().equals(webSocketMockResponseId)){
                 return webSocketMockResponse;
             }
         }
         throw new IllegalArgumentException("Unable to find a WebSocket mock response with id " + webSocketMockResponseId);
     }
-
-
 
 
     /**
@@ -288,10 +304,17 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketMockResponseDto findWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId) {
+    public WebSocketBroadcasterDto findWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, String webSocketBroadcasterId) {
+        Preconditions.checkNotNull(webSocketBroadcasterId, "Broadcaster id cannot be null");
+        final WebSocketBroadcaster webSocketBroadcaster = findWebSocketBroadcasterType(webSocketProjectId, webSocketTopicId, webSocketBroadcasterId);
+        return mapper.map(webSocketBroadcaster, WebSocketBroadcasterDto.class);
+    }
+
+    @Override
+    public WebSocketMockBroadcastMessageDto findWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId) {
         Preconditions.checkNotNull(webSocketResourceId, "Mock response id cannot be null");
-        final WebSocketMockResponse webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketMockResponseId);
-        return mapper.map(webSocketMockResponse, WebSocketMockResponseDto.class);
+        final WebSocketMockBroadcastMessage webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketMockResponseId);
+        return mapper.map(webSocketMockResponse, WebSocketMockBroadcastMessageDto.class);
     }
 
     @Override
@@ -304,6 +327,15 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
+    public WebSocketBroadcasterDto saveWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, WebSocketBroadcasterDto webSocketBroadcasterDto) {
+        WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        WebSocketBroadcaster webSocketBroadcaster = mapper.map(webSocketBroadcasterDto, WebSocketBroadcaster.class);
+        webSocketTopic.getBroadcasters().add(webSocketBroadcaster);
+        save(webSocketProjectId);
+        return mapper.map(webSocketBroadcaster, WebSocketBroadcasterDto.class);
+    }
+
+    @Override
     public WebSocketResourceDto saveWebSocketResource(String webSocketProjectId, String webSocketTopicId, WebSocketResourceDto webSocketResourceDto) {
         WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
         WebSocketResource webSocketResource = mapper.map(webSocketResourceDto, WebSocketResource.class);
@@ -313,12 +345,12 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketMockResponseDto saveWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketMockResponseDto webSocketMockResponseDto) {
+    public WebSocketMockBroadcastMessageDto saveWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, WebSocketMockBroadcastMessageDto webSocketMockResponseDto) {
         WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
-        WebSocketMockResponse webSocketMockResponse = mapper.map(webSocketMockResponseDto, WebSocketMockResponse.class);
-        webSocketResource.getMockResponses().add(webSocketMockResponse);
+        WebSocketMockBroadcastMessage webSocketMockResponse = mapper.map(webSocketMockResponseDto, WebSocketMockBroadcastMessage.class);
+        webSocketResource.getMockBroadcastMessages().add(webSocketMockResponse);
         save(webSocketProjectId);
-        return mapper.map(webSocketMockResponse, WebSocketMockResponseDto.class);
+        return mapper.map(webSocketMockResponse, WebSocketMockBroadcastMessageDto.class);
     }
 
     @Override
@@ -326,6 +358,13 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
         webSocketTopic.setName(updatedWebSocketTopicDto.getName());
         return updatedWebSocketTopicDto;
+    }
+
+    @Override
+    public WebSocketBroadcasterDto updateWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, String webSocketBroadcasterId, WebSocketBroadcasterDto webSocketBroadcasterDto) {
+        WebSocketBroadcaster webSocketBroadcaster = findWebSocketBroadcasterType(webSocketProjectId, webSocketTopicId, webSocketBroadcasterId);
+        webSocketBroadcaster.setName(webSocketBroadcasterDto.getName());
+        return webSocketBroadcasterDto;
     }
 
     @Override
@@ -338,8 +377,8 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketMockResponseDto updateWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId, WebSocketMockResponseDto webSocketMockResponseDto) {
-        WebSocketMockResponse webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketMockResponseId);
+    public WebSocketMockBroadcastMessageDto updateWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId, WebSocketMockBroadcastMessageDto webSocketMockResponseDto) {
+        WebSocketMockBroadcastMessage webSocketMockResponse = findWebSocketMockResponseType(webSocketProjectId, webSocketTopicId, webSocketResourceId, webSocketMockResponseId);
         webSocketMockResponse.setName(webSocketMockResponseDto.getName());
         webSocketMockResponse.setBody(webSocketMockResponseDto.getBody());
         webSocketMockResponse.setHttpStatusCode(webSocketMockResponseDto.getHttpStatusCode());
@@ -367,13 +406,32 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
+    public WebSocketBroadcasterDto deleteWebSocketBroadcaster(String webSocketProjectId, String webSocketTopicId, String webSocketBroadcasterId) {
+        WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
+        Iterator<WebSocketBroadcaster> webSocketBroadcasterIterator = webSocketTopic.getBroadcasters().iterator();
+        WebSocketBroadcaster deletedWebSocketBroadcaster = null;
+        while(webSocketBroadcasterIterator.hasNext()){
+            deletedWebSocketBroadcaster = webSocketBroadcasterIterator.next();
+            if(webSocketBroadcasterId.equals(deletedWebSocketBroadcaster.getId())){
+                webSocketBroadcasterIterator.remove();
+                break;
+            }
+        }
+
+        if(deletedWebSocketBroadcaster != null){
+            save(webSocketProjectId);
+        }
+        return deletedWebSocketBroadcaster != null ? mapper.map(deletedWebSocketBroadcaster, WebSocketBroadcasterDto.class) : null;
+    }
+
+    @Override
     public WebSocketResourceDto deleteWebSocketResource(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId) {
         WebSocketTopic webSocketTopic = findWebSocketTopicType(webSocketProjectId, webSocketTopicId);
         Iterator<WebSocketResource> webSocketResourceIterator = webSocketTopic.getResources().iterator();
         WebSocketResource deletedWebSocketResource = null;
         while(webSocketResourceIterator.hasNext()){
             deletedWebSocketResource = webSocketResourceIterator.next();
-            if(webSocketTopicId.equals(deletedWebSocketResource.getId())){
+            if(webSocketResourceId.equals(deletedWebSocketResource.getId())){
                 webSocketResourceIterator.remove();
                 break;
             }
@@ -386,10 +444,10 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
     }
 
     @Override
-    public WebSocketMockResponseDto deleteWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId) {
+    public WebSocketMockBroadcastMessageDto deleteWebSocketMockResponse(String webSocketProjectId, String webSocketTopicId, String webSocketResourceId, String webSocketMockResponseId) {
         WebSocketResource webSocketResource = findWebSocketResourceType(webSocketProjectId, webSocketTopicId, webSocketResourceId);
-        Iterator<WebSocketMockResponse> webSocketMockResponseIterator = webSocketResource.getMockResponses().iterator();
-        WebSocketMockResponse deletedWebSocketMockResponse = null;
+        Iterator<WebSocketMockBroadcastMessage> webSocketMockResponseIterator = webSocketResource.getMockBroadcastMessages().iterator();
+        WebSocketMockBroadcastMessage deletedWebSocketMockResponse = null;
         while(webSocketMockResponseIterator.hasNext()){
             deletedWebSocketMockResponse = webSocketMockResponseIterator.next();
             if(webSocketTopicId.equals(deletedWebSocketMockResponse.getId())){
@@ -401,7 +459,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
         if(deletedWebSocketMockResponse != null){
             save(webSocketProjectId);
         }
-        return deletedWebSocketMockResponse != null ? mapper.map(deletedWebSocketMockResponse, WebSocketMockResponseDto.class) : null;
+        return deletedWebSocketMockResponse != null ? mapper.map(deletedWebSocketMockResponse, WebSocketMockBroadcastMessageDto.class) : null;
     }
 
 
@@ -474,7 +532,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
             searchResults.add(searchResult);
         }
 
-        for(WebSocketMockResponse webSocketMockResponse : webSocketResource.getMockResponses()){
+        for(WebSocketMockBroadcastMessage webSocketMockResponse : webSocketResource.getMockBroadcastMessages()){
             SearchResult webSocketMockResponseSearchResult = searchWebSocketMockResponse(webSocketProject, webSocketTopic, webSocketResource, webSocketMockResponse, query);
             if(webSocketMockResponseSearchResult != null){
                 searchResults.add(webSocketMockResponseSearchResult);
@@ -492,7 +550,7 @@ public class WebSocketProjectRepositoryImpl extends RepositoryImpl<WebSocketProj
      * @param query The provided search query
      * @return A list of search results that matches the provided query
      */
-    private SearchResult searchWebSocketMockResponse(final WebSocketProject webSocketProject, final WebSocketTopic webSocketTopic, final WebSocketResource webSocketResource, final WebSocketMockResponse webSocketMockResponse, final String query){
+    private SearchResult searchWebSocketMockResponse(final WebSocketProject webSocketProject, final WebSocketTopic webSocketTopic, final WebSocketResource webSocketResource, final WebSocketMockBroadcastMessage webSocketMockResponse, final String query){
         SearchResult searchResult = null;
 
         if(SearchValidator.validate(webSocketMockResponse.getName(), query)){

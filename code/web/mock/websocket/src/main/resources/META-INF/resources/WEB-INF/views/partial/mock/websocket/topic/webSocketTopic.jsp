@@ -24,6 +24,7 @@
     <div class="menu" align="right">
         <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
             <a class="button-success pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopic.id}/update"/>"><i class="fa fa-file"></i> <span><spring:message code="websocket.websockettopic.button.updatetopic"/></span></a>
+            <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopic.id}/create/broadcaster"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.websockettopic.button.createbroadcaster"/></span></a>
             <a class="button-secondary pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopic.id}/create/resource"/>"><i class="fa fa-plus"></i> <span><spring:message code="websocket.websockettopic.button.createresource"/></span></a>
           <a class="button-error pure-button" href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopic.id}/delete"/>"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websockettopic.button.delete"/></span></a>
         </sec:authorize>
@@ -37,6 +38,39 @@
         </tr>
     </table>
 </div>
+
+<h2 class="decorated"><span><spring:message code="websocket.websockettopic.header.broadcasters"/></span></h2>
+<c:choose>
+    <c:when test="${webSocketTopic.broadcasters.size() > 0}">
+        <form:form action="${webSocket_resource_update_url}/" method="POST"  commandName="webSocketBroadcasterModifierCommand">
+            <div class="table-frame">
+                <table class="entityTable">
+                    <col width="10%">
+                    <col width="90%">
+                    <tr>
+                        <th><spring:message code="websocket.websockettopic.column.selected"/></th>
+                        <th><spring:message code="websocket.websockettopic.column.broadcaster"/></th>
+                    </tr>
+                    <c:forEach items="${webSocketTopic.broadcasters}" var="broadcaster" varStatus="loopStatus">
+                        <tr class="${loopStatus.index % 2 == 0 ? 'even' : 'odd'}">
+                            <td><form:checkbox path="webSocketBroadcasterIds" name="${broadcaster.id}" value="${broadcaster.id}"/></td>
+                            <td><a href="<c:url value="/web/wss/project/${webSocketProjectId}/topic/${webSocketTopic.id}/broadcaster/${broadcaster.id}"/>">${broadcaster.name}</a></td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
+                <button class="button-error pure-button" type="submit" name="action" value="delete-broadcasters"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websockettopic.button.deletebroadcasters"/></span></button>
+            </sec:authorize>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form:form>
+
+    </c:when>
+    <c:otherwise>
+        <spring:message code="websocket.websockettopic.label.nobroadcasters"/>
+    </c:otherwise>
+</c:choose>
+
 
 <h2 class="decorated"><span><spring:message code="websocket.websockettopic.header.resources"/></span></h2>
 <c:choose>
@@ -71,7 +105,7 @@
                 </form:select>
                 <button class="button-success pure-button" type="submit" name="action" value="update"><i class="fa fa-check-circle"></i> <span><spring:message code="websocket.websockettopic.button.update"/></span></button>
                 <button class="button-secondary pure-button" type="submit" name="action" value="update-endpoint"><i class="fa fa-code-fork"></i> <span><spring:message code="websocket.websockettopic.button.updateendpoint"/></span></button>
-                <button class="button-error pure-button" type="submit" name="action" value="delete"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websockettopic.button.deleteresources"/></span></button>
+                <button class="button-error pure-button" type="submit" name="action" value="delete-resources"><i class="fa fa-trash"></i> <span><spring:message code="websocket.websockettopic.button.deleteresources"/></span></button>
             </sec:authorize>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form:form>

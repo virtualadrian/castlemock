@@ -14,38 +14,40 @@
  * limitations under the License.
  */
 
-package com.castlemock.core.mock.websocket.model.project.domain;
+package com.castlemock.core.mock.websocket.model.project.dto;
 
-import com.castlemock.core.basis.model.Saveable;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.castlemock.core.mock.websocket.model.project.domain.WebSocketMockBroadcastMessageStatus;
+import org.dozer.Mapping;
 
 /**
  * @author Karl Dahlgren
  * @since 1.5
  */
-@XmlRootElement
-public class WebSocketMockResponse implements Saveable<String> {
+public class WebSocketMockBroadcastMessageDto {
 
+    @Mapping("id")
     private String id;
+
+    @Mapping("name")
     private String name;
+
+    @Mapping("body")
     private String body;
-    private WebSocketMockResponseStatus status;
+
+    @Mapping("status")
+    private WebSocketMockBroadcastMessageStatus status;
+
+    @Mapping("httpStatusCode")
     private Integer httpStatusCode;
 
-    @Override
-    @XmlElement
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    @XmlElement
     public String getName() {
         return name;
     }
@@ -54,7 +56,6 @@ public class WebSocketMockResponse implements Saveable<String> {
         this.name = name;
     }
 
-    @XmlElement
     public String getBody() {
         return body;
     }
@@ -63,16 +64,14 @@ public class WebSocketMockResponse implements Saveable<String> {
         this.body = body;
     }
 
-    @XmlElement
-    public WebSocketMockResponseStatus getStatus() {
+    public WebSocketMockBroadcastMessageStatus getStatus() {
         return status;
     }
 
-    public void setStatus(WebSocketMockResponseStatus status) {
+    public void setStatus(WebSocketMockBroadcastMessageStatus status) {
         this.status = status;
     }
 
-    @XmlElement
     public Integer getHttpStatusCode() {
         return httpStatusCode;
     }

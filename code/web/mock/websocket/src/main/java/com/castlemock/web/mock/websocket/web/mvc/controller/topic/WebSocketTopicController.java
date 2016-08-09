@@ -18,15 +18,20 @@ package com.castlemock.web.mock.websocket.web.mvc.controller.topic;
 
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResource;
 import com.castlemock.core.mock.websocket.model.project.domain.WebSocketResourceStatus;
+import com.castlemock.core.mock.websocket.model.project.dto.WebSocketBroadcasterDto;
 import com.castlemock.core.mock.websocket.model.project.dto.WebSocketResourceDto;
+import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketBroadcasterInput;
 import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketTopicInput;
 import com.castlemock.core.mock.websocket.model.project.service.message.input.ReadWebSocketResourceInput;
 import com.castlemock.core.mock.websocket.model.project.service.message.input.UpdateWebSocketResourcesStatusInput;
+import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketBroadcasterOutput;
 import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketTopicOutput;
 import com.castlemock.core.mock.websocket.model.project.service.message.output.ReadWebSocketResourceOutput;
+import com.castlemock.web.mock.websocket.web.mvc.command.broadcaster.DeleteWebSocketBroadcastersCommand;
 import com.castlemock.web.mock.websocket.web.mvc.command.resource.DeleteWebSocketResourcesCommand;
 import com.castlemock.web.mock.websocket.web.mvc.command.resource.UpdateWebSocketResourcesEndpointCommand;
 import com.castlemock.web.mock.websocket.web.mvc.command.resource.WebSocketResourceModifierCommand;
+import com.castlemock.web.mock.websocket.web.mvc.command.broadcaster.WebSocketBroadcasterModifierCommand;
 import com.castlemock.web.mock.websocket.web.mvc.controller.AbstractWebSocketViewController;
 import org.apache.log4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,14 +55,20 @@ public class WebSocketTopicController extends AbstractWebSocketViewController {
 
     private static final String PAGE = "mock/websocket/topic/webSocketTopic";
     private static final String WEBSOCKET_RESOURCE_MODIFIER_COMMAND = "webSocketResourceModifierCommand";
+    private static final String WEBSOCKET_BROADCASTER_MODIFIER_COMMAND = "webSocketBroadcasterModifierCommand";
     private static final Logger LOGGER = Logger.getLogger(WebSocketTopicController.class);
-    private static final String DELETE_WEBSOCKET_RESOURCES = "delete";
+    private static final String DELETE_WEBSOCKET_RESOURCES = "delete-resources";
+    private static final String DELETE_WEBSOCKET_BROADCASTERS = "delete-broadcasters";
     private static final String DELETE_WEBSOCKET_RESOURCES_COMMAND = "deleteWebSocketResourcesCommand";
+    private static final String DELETE_WEBSOCKET_BROADCASTERS_COMMAND = "deleteWebSocketBroadcastersCommand";
     private static final String DELETE_WEBSOCKET_RESOURCES_PAGE = "mock/websocket/resource/deleteWebSocketResources";
+    private static final String DELETE_WEBSOCKET_BROADCASTERS_PAGE = "mock/websocket/broadcaster/deleteWebSocketBroadcasters";
     private static final String UPDATE_STATUS = "update";
     private static final String UPDATE_ENDPOINTS = "update-endpoint";
     private static final String UPDATE_WEBSOCKET_RESOURCES_ENDPOINT_PAGE = "mock/websocket/resource/updateWebSocketResourcesEndpoint";
     private static final String UPDATE_WEBSOCKET_RESOURCES_ENDPOINT_COMMAND = "updateWebSocketResourcesEndpointCommand";
+
+
 
     /**
      * Retrieves a specific project with a project id
@@ -75,6 +86,7 @@ public class WebSocketTopicController extends AbstractWebSocketViewController {
         model.addObject(WEBSOCKET_TOPIC, output.getWebSocketTopic());
         model.addObject(WEBSOCKET_RESOURCE_STATUSES, getWebSocketResourceStatuses());
         model.addObject(WEBSOCKET_RESOURCE_MODIFIER_COMMAND, new WebSocketResourceModifierCommand());
+        model.addObject(WEBSOCKET_BROADCASTER_MODIFIER_COMMAND, new WebSocketBroadcasterModifierCommand());
         return model;
     }
 
@@ -94,7 +106,7 @@ public class WebSocketTopicController extends AbstractWebSocketViewController {
      */
     @PreAuthorize("hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/{webSocketProjectId}/topic/{webSocketTopicId}", method = RequestMethod.POST)
-    public ModelAndView topicFunctionality(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @RequestParam final String action, @ModelAttribute final WebSocketResourceModifierCommand webSocketResourceModifierCommand) {
+    public ModelAndView topicFunctionality(@PathVariable final String webSocketProjectId, @PathVariable final String webSocketTopicId, @RequestParam final String action, @ModelAttribute final WebSocketResourceModifierCommand webSocketResourceModifierCommand, @ModelAttribute final WebSocketBroadcasterModifierCommand webSocketBroadcasterModifierCommand) {
         LOGGER.debug("Requested WebSocket project action requested: " + action);
         if(UPDATE_STATUS.equalsIgnoreCase(action)){
             final WebSocketResourceStatus webSocketResourceStatus = WebSocketResourceStatus.valueOf(webSocketResourceModifierCommand.getWebSocketResourceStatus());
@@ -113,7 +125,19 @@ public class WebSocketTopicController extends AbstractWebSocketViewController {
             model.addObject(WEBSOCKET_RESOURCES, webSocketResources);
             model.addObject(DELETE_WEBSOCKET_RESOURCES_COMMAND, new DeleteWebSocketResourcesCommand());
             return model;
-        } else if(UPDATE_ENDPOINTS.equalsIgnoreCase(action)){
+        } else if(DELETE_WEBSOCKET_BROADCASTERS.equalsIgnoreCase(action)) {
+            final List<WebSocketBroadcasterDto> webSocketBroadcasters = new ArrayList<WebSocketBroadcasterDto>();
+            for(String webSocketBroadcastersId : webSocketBroadcasterModifierCommand.getWebSocketBroadcasterIds()){
+                ReadWebSocketBroadcasterOutput output = serviceProcessor.process(new ReadWebSocketBroadcasterInput(webSocketProjectId, webSocketTopicId, webSocketBroadcastersId));
+                webSocketBroadcasters.add(output.getWebSocketBroadcaster());
+            }
+            final ModelAndView model = createPartialModelAndView(DELETE_WEBSOCKET_BROADCASTERS_PAGE);
+            model.addObject(WEBSOCKET_PROJECT_ID, webSocketProjectId);
+            model.addObject(WEBSOCKET_TOPIC_ID, webSocketTopicId);
+            model.addObject(WEBSOCKET_BROADCASTERS, webSocketBroadcasters);
+            model.addObject(DELETE_WEBSOCKET_BROADCASTERS_COMMAND, new DeleteWebSocketBroadcastersCommand());
+            return model;
+        }else if(UPDATE_ENDPOINTS.equalsIgnoreCase(action)){
             final List<WebSocketResourceDto> webSocketResourceDtos = new ArrayList<WebSocketResourceDto>();
             for(String webSocketResourceId : webSocketResourceModifierCommand.getWebSocketResourceIds()){
                 final ReadWebSocketResourceOutput output = serviceProcessor.process(new ReadWebSocketResourceInput(webSocketProjectId, webSocketTopicId, webSocketResourceId));

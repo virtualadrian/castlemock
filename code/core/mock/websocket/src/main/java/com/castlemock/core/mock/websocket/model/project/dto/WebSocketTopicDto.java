@@ -39,6 +39,9 @@ public class WebSocketTopicDto {
     @Mapping("resources")
     private List<WebSocketResourceDto> resources = new LinkedList<WebSocketResourceDto>();
 
+    @Mapping("broadcasters")
+    private List<WebSocketBroadcasterDto> broadcasters = new LinkedList<WebSocketBroadcasterDto>();
+
     private Map<WebSocketResourceStatus, Integer> statusCount = new HashMap<WebSocketResourceStatus, Integer>();
 
     public String getId() {
@@ -71,5 +74,13 @@ public class WebSocketTopicDto {
 
     public void setStatusCount(Map<WebSocketResourceStatus, Integer> statusCount) {
         this.statusCount = statusCount;
+    }
+
+    public List<WebSocketBroadcasterDto> getBroadcasters() {
+        return broadcasters;
+    }
+
+    public void setBroadcasters(List<WebSocketBroadcasterDto> broadcasters) {
+        this.broadcasters = broadcasters;
     }
 }

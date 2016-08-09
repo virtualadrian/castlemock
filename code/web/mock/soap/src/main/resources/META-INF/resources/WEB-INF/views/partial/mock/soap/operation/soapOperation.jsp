@@ -74,7 +74,7 @@
     <h2 class="decorated"><span><spring:message code="soap.soapoperation.header.mockresponses"/></span></h2>
     <c:choose>
 
-        <c:when test="${soapOperation.mockResponses.size() > 0}">
+        <c:when test="${soapOperation.mockBroadcastMessages.size() > 0}">
             <form:form action="${soap_mock_response_update_url}" method="POST"  commandName="soapMockResponseModifierCommand">
                 <div class="table-frame">
                     <table class="entityTable">
@@ -88,7 +88,7 @@
                             <th><spring:message code="soap.soapoperation.column.status"/></th>
                             <th><spring:message code="soap.soapoperation.column.httpstatuscode"/></th>
                         </tr>
-                        <c:forEach items="${soapOperation.mockResponses}" var="soapMockResponse" varStatus="loopStatus">
+                        <c:forEach items="${soapOperation.mockBroadcastMessages}" var="soapMockResponse" varStatus="loopStatus">
                             <tr class="${loopStatus.index % 2 == 0 ? 'even' : 'odd'}">
                                 <td><form:checkbox path="soapMockResponseIds" name="${soapMockResponse.id}" value="${soapMockResponse.id}"/></td>
                                 <td><a href="<c:url value="/web/soap/project/${soapProjectId}/port/${soapPortId}/operation/${soapOperation.id}/response/${soapMockResponse.id}"/>">${soapMockResponse.name}</a></td>

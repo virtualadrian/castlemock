@@ -42,6 +42,9 @@ public class AbstractWebSocketViewController extends AbstractViewController {
     protected static final String WEBSOCKET_TOPIC_ID = "webSocketTopicId";
     protected static final String WEBSOCKET_RESOURCE = "webSocketResource";
     protected static final String WEBSOCKET_TOPICS = "webSocketTopics";
+    protected static final String WEBSOCKET_BROADCASTER = "webSocketBroadcaster";
+    protected static final String WEBSOCKET_BROADCASTER_ID = "webSocketBroadcasterId";
+    protected static final String WEBSOCKET_BROADCASTERS = "webSocketBroadcasters";
 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractWebSocketViewController.class);
