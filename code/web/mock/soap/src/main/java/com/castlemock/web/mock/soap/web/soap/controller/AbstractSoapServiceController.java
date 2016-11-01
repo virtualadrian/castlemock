@@ -18,6 +18,7 @@ package com.castlemock.web.mock.soap.web.soap.controller;
 
 import com.castlemock.core.basis.model.http.domain.HttpMethod;
 import com.castlemock.core.basis.model.http.dto.HttpHeaderDto;
+import com.castlemock.core.basis.utility.parser.TextParser;
 import com.castlemock.core.mock.soap.model.event.dto.SoapEventDto;
 import com.castlemock.core.mock.soap.model.event.dto.SoapRequestDto;
 import com.castlemock.core.mock.soap.model.event.dto.SoapResponseDto;
@@ -200,8 +201,14 @@ public abstract class AbstractSoapServiceController extends AbstractController{
             throw new SoapException("No mocked response created for operation " + soapOperationDto.getName());
         }
 
+        String body = mockResponse.getBody();
+        if(mockResponse.isUsingExpressions()){
+            // Parse the text and apply expression functionality if
+            // the mock response is configured to use expressions
+            body = TextParser.parse(body);
+        }
         final SoapResponseDto response = new SoapResponseDto();
-        response.setBody(mockResponse.getBody());
+        response.setBody(body);
         response.setMockResponseName(mockResponse.getName());
         response.setHttpHeaders(mockResponse.getHttpHeaders());
         response.setHttpStatusCode(mockResponse.getHttpStatusCode());
