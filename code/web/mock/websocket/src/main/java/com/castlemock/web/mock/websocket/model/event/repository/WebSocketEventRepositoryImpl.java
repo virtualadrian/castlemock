@@ -26,6 +26,7 @@ import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -82,6 +83,20 @@ public class WebSocketEventRepositoryImpl extends RepositoryImpl<WebSocketEvent,
         }
 
         return oldestEvent == null ? null : mapper.map(oldestEvent, WebSocketEventDto.class);
+    }
+
+    /**
+     * The method clears and deletes all logs.
+     *
+     * @since 1.7
+     */
+    @Override
+    public void clearAll() {
+        Iterator<WebSocketEvent> iterator = collection.values().iterator();
+        while(iterator.hasNext()){
+            WebSocketEvent webSocketEvent = iterator.next();
+            delete(webSocketEvent.getId());
+        }
     }
 
 

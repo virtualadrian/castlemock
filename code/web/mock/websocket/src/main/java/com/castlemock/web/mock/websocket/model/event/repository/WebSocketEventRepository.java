@@ -38,4 +38,10 @@ public interface WebSocketEventRepository extends Repository<WebSocketEvent, Web
      */
     WebSocketEventDto getOldestEvent();
 
+    /**
+     * The method clears and deletes all logs.
+     * @since 1.7
+     */
+    void clearAll();
+
 }

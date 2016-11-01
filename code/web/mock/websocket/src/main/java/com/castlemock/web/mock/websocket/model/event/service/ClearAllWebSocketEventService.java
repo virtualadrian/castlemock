@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.castlemock.web.mock.rest.model.event.service;
+package com.castlemock.web.mock.websocket.model.event.service;
 
 import com.castlemock.core.basis.model.Service;
 import com.castlemock.core.basis.model.ServiceResult;
 import com.castlemock.core.basis.model.ServiceTask;
-import com.castlemock.core.mock.rest.model.event.service.message.input.ClearAllRestEventInput;
-import com.castlemock.core.mock.rest.model.event.service.message.output.ClearAllRestEventOutput;
+import com.castlemock.core.mock.websocket.model.event.service.message.input.ClearAllWebSocketEventInput;
+import com.castlemock.core.mock.websocket.model.event.service.message.output.ClearAllWebSocketEventOutput;
 
 /**
  * @author Karl Dahlgren
  * @since 1.7
  */
 @org.springframework.stereotype.Service
-public class ClearAllRestEventService extends AbstractRestEventService implements Service<ClearAllRestEventInput, ClearAllRestEventOutput> {
+public class ClearAllWebSocketEventService extends AbstractWebSocketEventService implements Service<ClearAllWebSocketEventInput, ClearAllWebSocketEventOutput> {
 
     /**
      * The process message is responsible for processing an incoming serviceTask and generate
@@ -38,10 +38,9 @@ public class ClearAllRestEventService extends AbstractRestEventService implement
      * @see ServiceResult
      */
     @Override
-    public ServiceResult<ClearAllRestEventOutput> process(ServiceTask<ClearAllRestEventInput> serviceTask) {
+    public ServiceResult<ClearAllWebSocketEventOutput> process(ServiceTask<ClearAllWebSocketEventInput> serviceTask) {
         repository.clearAll();
-        return createServiceResult(new ClearAllRestEventOutput());
+        return createServiceResult(new ClearAllWebSocketEventOutput());
     }
-
 
 }

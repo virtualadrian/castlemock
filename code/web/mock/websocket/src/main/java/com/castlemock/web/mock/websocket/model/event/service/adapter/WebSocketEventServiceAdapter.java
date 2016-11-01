@@ -157,4 +157,9 @@ public class WebSocketEventServiceAdapter implements EventServiceAdapter<WebSock
     public String generateResourceLink(WebSocketEventDto webSocketEventDto) {
         return SLASH + WEB + SLASH + WEBSOCKET + SLASH + PROJECT + SLASH + webSocketEventDto.getProjectId() + SLASH + TOPIC + SLASH + webSocketEventDto.getTopicId() + SLASH + RESOURCE + SLASH + webSocketEventDto.getResourceId();
     }
+
+    @Override
+    public void clearAll() {
+
+    }
 }
