@@ -81,6 +81,7 @@ public class CreateRestMockResponseControllerTest extends AbstractRestController
                 .andExpect(MockMvcResultMatchers.model().attribute(REST_APPLICATION_ID, restApplicationDto.getId()))
                 .andExpect(MockMvcResultMatchers.model().attribute(REST_RESOURCE_ID, restResourceDto.getId()))
                 .andExpect(MockMvcResultMatchers.model().attribute(REST_METHOD_ID, restMethodDto.getId()))
+                .andExpect(MockMvcResultMatchers.model().attribute(DEMO_MODE, false))
                 .andExpect(MockMvcResultMatchers.model().attributeExists(REST_MOCK_RESPONSE));
     }
 

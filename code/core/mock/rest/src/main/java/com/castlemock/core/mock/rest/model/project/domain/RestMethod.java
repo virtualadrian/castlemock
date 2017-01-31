@@ -41,6 +41,8 @@ public class RestMethod implements Saveable<String> {
     private RestResponseStrategy responseStrategy;
     private List<RestMockResponse> mockResponses = new CopyOnWriteArrayList<RestMockResponse>();
     private Integer currentResponseSequenceIndex;
+    private boolean simulateNetworkDelay;
+    private long networkDelay;
 
     @Override
     @XmlElement
@@ -124,5 +126,23 @@ public class RestMethod implements Saveable<String> {
 
     public void setCurrentResponseSequenceIndex(Integer currentResponseSequenceIndex) {
         this.currentResponseSequenceIndex = currentResponseSequenceIndex;
+    }
+
+    @XmlElement
+    public boolean getSimulateNetworkDelay() {
+        return simulateNetworkDelay;
+    }
+
+    public void setSimulateNetworkDelay(boolean simulateNetworkDelay) {
+        this.simulateNetworkDelay = simulateNetworkDelay;
+    }
+
+    @XmlElement
+    public long getNetworkDelay() {
+        return networkDelay;
+    }
+
+    public void setNetworkDelay(long networkDelay) {
+        this.networkDelay = networkDelay;
     }
 }

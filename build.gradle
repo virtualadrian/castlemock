@@ -17,7 +17,7 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: "jacoco"
     group = "com.castlemock"
-    version = '1.7-SNAPSHOT'
+    version = '1.10-SNAPSHOT'
 
     repositories {
         mavenCentral()
@@ -218,6 +218,11 @@ project(':code:web:war') {
         if (it.name == 'application.properties') {
           ant.replace(file: it.file, token: "\${project.version}", value: version)
         }
+      }
+      from('../../../') {
+          include 'LICENSE-3RD-PARTY'
+          include 'LICENSE'
+          include 'AUTHORS'
       }
     }
 

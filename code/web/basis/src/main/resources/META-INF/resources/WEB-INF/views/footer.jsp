@@ -17,10 +17,17 @@
 <%@ include file="includes.jspf"%>
 <footer>
     <div class="languages">
-        <a href="?language=en"><img class="flag flag-gb" alt="English"/></a>
+        <!--<a href="?language=en"><img class="flag flag-gb" alt="English"/></a>-->
     </div>
 
     <div class="info">
-        <a href="http://www.castlemock.com" target="_blank">Castle Mock version. ${appVersion}</a>
+        <c:choose>
+            <c:when test="${demoMode}">
+                <a href="https://www.castlemock.com" target="_blank">Castle Mock version. ${appVersion} (Demo)</a>
+            </c:when>
+            <c:otherwise>
+                <a href="https://www.castlemock.com" target="_blank">Castle Mock version. ${appVersion}</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </footer>

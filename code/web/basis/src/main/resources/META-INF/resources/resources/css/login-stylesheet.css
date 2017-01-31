@@ -1,12 +1,18 @@
 @font-face {
   font-family: robotoThinFont;
-  src: url("../font/Roboto-Thin.ttf"); }
+  src: local("Roboto Thin"), local("Roboto-Thin"), url("../font/Roboto-Thin.ttf"); }
+@font-face {
+  font-family: robotoMediumFont;
+  src: local("Roboto Medium"), local("Roboto-Medium"), url("../font/Roboto-Medium.ttf"); }
+@font-face {
+  font-family: robotoRegularFont;
+  src: local("Roboto Regular"), local("Roboto-Regular"), url("../font/Roboto-Regular.ttf"); }
 @font-face {
   font-family: robotoBoldFont;
-  src: url("../font/Roboto-Bold.ttf"); }
+  src: local("Roboto Bold"), local("Roboto-Bold"), url("../font/Roboto-Bold.ttf"); }
 @font-face {
   font-family: robotoItalicFont;
-  src: url("../font/Roboto-ThinItalic.ttf"); }
+  src: local("Roboto ThinItalic"), local("Roboto-ThinItalic"), url("../font/Roboto-ThinItalic.ttf"); }
 footer {
   position: fixed;
   bottom: 0px;
@@ -27,11 +33,11 @@ footer {
   footer .info {
     text-align: right;
     padding-right: 20px;
-    padding-top: 7px; }
+    padding-top: 10px; }
     footer .info a {
       text-decoration: underline;
       font-size: 11px;
-      color: #000000; }
+      color: #666666; }
 
 a {
   text-decoration: none; }
@@ -128,16 +134,23 @@ a {
     display: none; } }
 @font-face {
   font-family: robotoThinFont;
-  src: url("../font/Roboto-Thin.ttf"); }
+  src: local("Roboto Thin"), local("Roboto-Thin"), url("../font/Roboto-Thin.ttf"); }
+@font-face {
+  font-family: robotoMediumFont;
+  src: local("Roboto Medium"), local("Roboto-Medium"), url("../font/Roboto-Medium.ttf"); }
+@font-face {
+  font-family: robotoRegularFont;
+  src: local("Roboto Regular"), local("Roboto-Regular"), url("../font/Roboto-Regular.ttf"); }
 @font-face {
   font-family: robotoBoldFont;
-  src: url("../font/Roboto-Bold.ttf"); }
+  src: local("Roboto Bold"), local("Roboto-Bold"), url("../font/Roboto-Bold.ttf"); }
 @font-face {
   font-family: robotoItalicFont;
-  src: url("../font/Roboto-ThinItalic.ttf"); }
+  src: local("Roboto ThinItalic"), local("Roboto-ThinItalic"), url("../font/Roboto-ThinItalic.ttf"); }
 body {
   background-color: #fbfbfb;
-  font-family: robotoThinFont; }
+  font-family: robotoRegularFont;
+  color: #666666; }
 
 #login-box {
   width: 250px;
@@ -168,7 +181,7 @@ body {
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
-    color: #000;
+    color: #666666;
     background-color: #f2dede;
     border-color: #fff;
     text-align: center;
@@ -179,7 +192,6 @@ body {
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
-    color: #000;
     background-color: #e3f5cf;
     border-color: #fff;
     text-align: center; }

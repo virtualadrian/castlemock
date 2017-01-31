@@ -1,12 +1,18 @@
 @font-face {
   font-family: robotoThinFont;
-  src: url("../font/Roboto-Thin.ttf"); }
+  src: local("Roboto Thin"), local("Roboto-Thin"), url("../font/Roboto-Thin.ttf"); }
+@font-face {
+  font-family: robotoMediumFont;
+  src: local("Roboto Medium"), local("Roboto-Medium"), url("../font/Roboto-Medium.ttf"); }
+@font-face {
+  font-family: robotoRegularFont;
+  src: local("Roboto Regular"), local("Roboto-Regular"), url("../font/Roboto-Regular.ttf"); }
 @font-face {
   font-family: robotoBoldFont;
-  src: url("../font/Roboto-Bold.ttf"); }
+  src: local("Roboto Bold"), local("Roboto-Bold"), url("../font/Roboto-Bold.ttf"); }
 @font-face {
   font-family: robotoItalicFont;
-  src: url("../font/Roboto-ThinItalic.ttf"); }
+  src: local("Roboto ThinItalic"), local("Roboto-ThinItalic"), url("../font/Roboto-ThinItalic.ttf"); }
 footer {
   position: fixed;
   bottom: 0px;
@@ -27,11 +33,11 @@ footer {
   footer .info {
     text-align: right;
     padding-right: 20px;
-    padding-top: 7px; }
+    padding-top: 10px; }
     footer .info a {
       text-decoration: underline;
       font-size: 11px;
-      color: #000000; }
+      color: #666666; }
 
 a {
   text-decoration: none; }
@@ -128,16 +134,25 @@ a {
     display: none; } }
 @font-face {
   font-family: robotoThinFont;
-  src: url("../font/Roboto-Thin.ttf"); }
+  src: local("Roboto Thin"), local("Roboto-Thin"), url("../font/Roboto-Thin.ttf"); }
+@font-face {
+  font-family: robotoMediumFont;
+  src: local("Roboto Medium"), local("Roboto-Medium"), url("../font/Roboto-Medium.ttf"); }
+@font-face {
+  font-family: robotoRegularFont;
+  src: local("Roboto Regular"), local("Roboto-Regular"), url("../font/Roboto-Regular.ttf"); }
 @font-face {
   font-family: robotoBoldFont;
-  src: url("../font/Roboto-Bold.ttf"); }
+  src: local("Roboto Bold"), local("Roboto-Bold"), url("../font/Roboto-Bold.ttf"); }
 @font-face {
   font-family: robotoItalicFont;
-  src: url("../font/Roboto-ThinItalic.ttf"); }
+  src: local("Roboto ThinItalic"), local("Roboto-ThinItalic"), url("../font/Roboto-ThinItalic.ttf"); }
 body {
   margin: 0px;
-  font-family: robotoThinFont; }
+  font-family: robotoRegularFont;
+  color: #666666; }
+  body h1 {
+    color: #4b4b4b; }
 
 .main-header {
   width: 100%;
@@ -155,8 +170,7 @@ body {
     float: left;
     margin-top: 5px;
     margin-left: 5%;
-    font-size: 25px;
-    font-weight: bold; }
+    font-size: 30px; }
     .main-header .logo a:hover {
       text-decoration: none; }
   .main-header #header-logo {
@@ -267,10 +281,10 @@ aside {
     margin-left: 15px;
     margin-top: 5px; }
     aside .content .content-item a {
-      color: #000; }
+      color: #666666; }
 
 section {
-  width: 80%;
+  width: 100%;
   position: relative;
   font-size: 12px;
   min-height: 100%;
@@ -338,7 +352,8 @@ section {
   section .button {
     margin: 10px 3px; }
   section a {
-    color: #000; }
+    color: #666666;
+    text-decoration: underline; }
   section table {
     border-collapse: collapse;
     position: relative; }
@@ -357,13 +372,18 @@ section {
     padding-bottom: 4px;
     background-color: #f0f0f0;
     border-collapse: collapse;
-    color: #000000; }
+    color: #666666;
+    cursor: pointer; }
   section .even {
-    color: #000000;
+    color: #666666;
     background-color: #fff; }
+    section .even:hover {
+      background-color: #E8E8E8; }
   section .odd {
-    color: #000000;
+    color: #666666;
     background-color: #fbfbfb; }
+    section .odd:hover {
+      background-color: #E8E8E8; }
 
 .decorated span {
   font-size: 18px;

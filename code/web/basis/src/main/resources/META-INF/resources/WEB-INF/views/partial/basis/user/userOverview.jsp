@@ -46,12 +46,19 @@
                 </td>
             </tr>
         </table>
-            <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-plus"></i> <span><spring:message code="general.useroverview.button.createuser"/></span></button>
+        <c:choose>
+            <c:when test="${demoMode}">
+                <a class="button-success pure-button pure-button-disabled" title="<spring:message code="general.mode.demo.disabled"/>" href="<c:url value="#"/>"><i class="fa fa-plus"></i> <span><spring:message code="general.useroverview.button.createuser"/></span></a>
+            </c:when>
+            <c:otherwise>
+                <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-plus"></i> <span><spring:message code="general.useroverview.button.createuser"/></span></button>
+            </c:otherwise>
+        </c:choose>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form:form>
 </fieldset>
 <h2 class="decorated"><span><spring:message code="general.useroverview.header.usertable"/></span></h2>
-<table class="entityTable">
+<table class="entityTable sortable">
     <tr>
         <th><spring:message code="general.useroverview.column.name"/></th>
         <th><spring:message code="general.useroverview.column.email"/></th>

@@ -78,7 +78,7 @@
         </fieldset>
 
         <div class="table-frame">
-            <table class="entityTable" id="headerTable">
+            <table class="entityTable sortable" id="headerTable">
                 <col width="4%">
                 <col width="48%">
                 <col width="48%">
@@ -91,7 +91,9 @@
         </div>
     </div>
 
-    <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-plus"></i>  <span><spring:message code="soap.createsoapmockresponse.button.createmockresponse"/></span></button>
+    <sec:authorize access="hasAuthority('ADMIN') or hasAuthority('MODIFIER')">
+        <button class="button-success pure-button" type="submit" name="submit"><i class="fa fa-plus"></i>  <span><spring:message code="soap.createsoapmockresponse.button.createmockresponse"/></span></button>
+    </sec:authorize>
     <a href="<c:url value="/web/soap/project/${soapProjectId}/port/${soapPortId}/operation/${soapOperation.id}"/>" class="button-error pure-button"><i class="fa fa-times"></i> <span><spring:message code="soap.createsoapmockresponse.button.cancel"/></span></a>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form:form>

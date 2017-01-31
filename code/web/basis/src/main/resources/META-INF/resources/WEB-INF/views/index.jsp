@@ -26,13 +26,13 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <script type="text/javascript" charset="UTF-8" src="<c:url value="/resources/js/jquery/jquery-2.1.4.min.js"/>"></script>
       <script type="text/javascript" charset="UTF-8" src="<c:url value="/resources/js/main-script.js"/>"></script>
+      <script type="text/javascript" charset="UTF-8" src="<c:url value="/resources/js/table.js"/>"></script>
   </head>
     <body>
         <jsp:include page="header.jsp" />
         <jsp:include page="navigation.jsp" />
 
         <div class="container">
-            <jsp:include page="aside.jsp" />
             <section>
                     <jsp:include page="${partial}" />
             </section>

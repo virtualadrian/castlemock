@@ -22,6 +22,7 @@ import com.castlemock.core.mock.rest.model.project.service.message.input.CreateR
 import com.castlemock.core.mock.rest.model.project.service.message.input.ReadRestMethodInput;
 import com.castlemock.core.mock.rest.model.project.service.message.output.ReadRestMethodOutput;
 import com.castlemock.web.mock.rest.web.mvc.controller.AbstractRestViewController;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/web/rest/project")
+@ConditionalOnExpression("${server.mode.demo} == false")
 public class CreateRestMockResponseController extends AbstractRestViewController {
 
     private static final String PAGE = "mock/rest/mockresponse/createRestMockResponse";
@@ -45,7 +47,7 @@ public class CreateRestMockResponseController extends AbstractRestViewController
 
     @PreAuthorize("hasAuthority('READER') or hasAuthority('MODIFIER') or hasAuthority('ADMIN')")
     @RequestMapping(value = "/{restProjectId}/application/{restApplicationId}/resource/{restResourceId}/method/{restMethodId}/create/response", method = RequestMethod.GET)
-    public ModelAndView dispayCreatePage(@PathVariable final String restProjectId, @PathVariable final String restApplicationId, @PathVariable final String restResourceId, @PathVariable final String restMethodId) {
+    public ModelAndView displayCreatePage(@PathVariable final String restProjectId, @PathVariable final String restApplicationId, @PathVariable final String restResourceId, @PathVariable final String restMethodId) {
         final ReadRestMethodOutput output = serviceProcessor.process(new ReadRestMethodInput(restProjectId, restApplicationId, restResourceId, restMethodId));
 
         final RestMockResponseDto mockResponse = new RestMockResponseDto();

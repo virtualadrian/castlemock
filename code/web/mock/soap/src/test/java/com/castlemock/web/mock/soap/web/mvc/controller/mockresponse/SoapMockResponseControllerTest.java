@@ -84,6 +84,7 @@ public class SoapMockResponseControllerTest extends AbstractSoapControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attribute(SOAP_PROJECT_ID, projectDto.getId()))
                 .andExpect(MockMvcResultMatchers.model().attribute(SOAP_PORT_ID, applicationDto.getId()))
                 .andExpect(MockMvcResultMatchers.model().attribute(SOAP_OPERATION_ID, soapOperationDto.getId()))
+                .andExpect(MockMvcResultMatchers.model().attribute(DEMO_MODE, false))
                 .andExpect(MockMvcResultMatchers.model().attribute(SOAP_MOCK_RESPONSE, soapMockResponseDto));
     }
 

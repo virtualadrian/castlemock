@@ -91,6 +91,7 @@ public abstract class AbstractViewController extends AbstractController {
         modelAndView.addObject(PARTIAL, createPartial(page));
         modelAndView.addObject(CONTENT_ITEM_GROUPS, createContentItemGroups(pageContentItems));
         modelAndView.addObject(SEARCH_COMMAND, new SearchCommand());
+        modelAndView.addObject(DEMO_MODE, demoMode);
         return modelAndView;
     }
 
@@ -132,7 +133,7 @@ public abstract class AbstractViewController extends AbstractController {
         final ContentItem configurationContentItem = new ContentItem(configurationTitle, getContext() + "/web/configuration", Role.ADMIN, "fa fa-cogs fa-1x");
         final ContentItem usersContentItem = new ContentItem(usersTitle, getContext() + "/web/user", Role.ADMIN, "fa fa-users fa-1x");
         final ContentItem logoutContentItem = new ContentItem(logoutTitle, getContext() + "/web/logout", Role.READER, "fa fa-sign-out fa-1x");
-        final ContentItem systemContentItem = new ContentItem(systemTitle, getContext() + "/web/system", Role.READER, "fa fa-desktop fa-1x");
+        final ContentItem systemContentItem = new ContentItem(systemTitle, getContext() + "/web/system", Role.ADMIN, "fa fa-desktop fa-1x");
 
         mainContentItems.add(homeContentItem);
         mainContentItems.add(userContentItem);
