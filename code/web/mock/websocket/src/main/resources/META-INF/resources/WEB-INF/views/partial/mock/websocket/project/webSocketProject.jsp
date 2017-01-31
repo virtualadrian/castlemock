@@ -51,7 +51,7 @@
     <c:when test="${webSocketProject.topics.size() > 0}">
         <form:form action="${websocket_topic_update_url}/" method="POST"  commandName="webSocketTopicModifierCommand">
             <div class="table-frame">
-                <table class="entityTable">
+                <table class="entityTable sortable">
                     <tr>
                         <th><spring:message code="websocket.websocketproject.column.selected"/></th>
                         <th><spring:message code="websocket.websocketproject.column.topic"/></th>

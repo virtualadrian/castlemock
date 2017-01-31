@@ -44,7 +44,7 @@
     <c:when test="${webSocketTopic.broadcasters.size() > 0}">
         <form:form action="${webSocket_resource_update_url}/" method="POST"  commandName="webSocketBroadcasterModifierCommand">
             <div class="table-frame">
-                <table class="entityTable">
+                <table class="entityTable sortable">
                     <col width="10%">
                     <col width="90%">
                     <tr>
@@ -77,7 +77,7 @@
     <c:when test="${webSocketTopic.resources.size() > 0}">
         <form:form action="${webSocket_resource_update_url}/" method="POST"  commandName="webSocketResourceModifierCommand">
             <div class="table-frame">
-                <table class="entityTable">
+                <table class="entityTable sortable">
                     <col width="10%">
                     <col width="20%">
                     <col width="30%">
